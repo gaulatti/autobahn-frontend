@@ -16,4 +16,26 @@ header {
   font-optical-sizing: auto;
   line-height: 24px;
   padding: 24px;
+  line-height: 40px;
+
+  .menu {
+    & > a.logo-link {
+      width: 160px;
+      max-width: 160px;
+      min-width: 160px;
+      height: 40px;
+      margin-right: 1rem;
+      display: block;
+    }
+  }
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.menuContainer {
+  height: 40px;
+
+  a:not(:last-child) {
+    margin-right: 1rem;
+  }
 }

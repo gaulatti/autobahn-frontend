@@ -1,0 +1,3 @@
+const HistoryInteractiveChart = () => <></>;
+
+export { HistoryInteractiveChart };

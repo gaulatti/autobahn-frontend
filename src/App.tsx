@@ -4,6 +4,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import { Home } from './pages';
 import { Logout } from './pages/auth/logout';
+import { UsersAdmin } from './pages/admin/users';
+import { ProjectsAdmin } from './pages/admin/projects';
+import { SchedulesAdmin } from './pages/admin/schedules';
 
 function App() {
   const [authenticatedUser, setAuthenticatedUser] = useState(false);
@@ -25,8 +28,20 @@ function App() {
       element: <Home />,
     },
     {
+      path: '/admin/users',
+      element: <UsersAdmin />,
+    },
+    {
+      path: '/admin/projects',
+      element: <ProjectsAdmin />,
+    },
+    {
+      path: '/admin/schedules',
+      element: <SchedulesAdmin />,
+    },
+    {
       path: 'logout',
-      element: <Logout />
+      element: <Logout />,
     },
   ]);
 
