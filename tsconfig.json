@@ -1,5 +1,11 @@
 {
   "files": [],
+  "compilerOptions": {
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"

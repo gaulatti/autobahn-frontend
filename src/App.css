@@ -4,6 +4,7 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: 'Radio Canada Big', sans-serif;
 }
 
 section {
@@ -12,7 +13,6 @@ section {
 }
 
 header {
-  font-family: 'Radio Canada Big', sans-serif;
   font-optical-sizing: auto;
   line-height: 24px;
   padding: 24px;
