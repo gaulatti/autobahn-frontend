@@ -1,23 +1,18 @@
-import { ReduxAction } from "../dispatchers/base";
-import { SetEnumsAction } from "../dispatchers/enums";
-import defaultStore, { State } from "../store";
-import { Reducer } from "./base";
+import { Enum } from '../../models/enum';
+import { ReduxAction } from '../dispatchers/base';
+import defaultStore, { State } from '../store';
+import { Reducer } from './base';
 
-const setEnumsReducer = (state: State, action: SetEnumsAction): State => {
+const setEnumsReducer = (state: State, action: ReduxAction): State => {
   return {
     ...state,
-    enums: action.payload,
+    enums: action.payload as Enum[],
   };
 };
 
-const reducerCatalog: Reducer[] = [
-  { action: "SET_ENUMS", handler: setEnumsReducer },
-];
+const reducerCatalog: Reducer[] = [{ action: 'SET_ENUMS', handler: setEnumsReducer }];
 
-export const enumsReducer = (
-  state: State = defaultStore,
-  action: ReduxAction
-) => {
+export const enumsReducer = (state: State = defaultStore, action: ReduxAction) => {
   const handler = reducerCatalog.find((i) => i.action === action.type)?.handler;
 
   return handler ? handler(state, action) : state;

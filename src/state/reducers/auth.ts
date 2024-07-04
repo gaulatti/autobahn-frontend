@@ -1,27 +1,25 @@
-import { User } from "../../models/user";
-import defaultStore, { State } from "../store";
+import { User } from '../../models/user';
+import { ReduxAction } from '../dispatchers/base';
+import defaultStore, { State } from '../store';
 
-const authReducer = (
-  state: State = defaultStore,
-  action: { type: string; payload: User }
-) => {
+const authReducer = (state: State = defaultStore, action: ReduxAction) => {
   switch (action.type) {
-    case "LOGIN":
+    case 'LOGIN':
       return {
         ...state,
-        auth: { ...state.auth, currentUser: action.payload, loaded: true },
+        auth: { ...state.auth, currentUser: action.payload as User, loaded: true },
       };
-    case "LOGOUT":
+    case 'LOGOUT':
       return {
         ...state,
         auth: { ...state.auth, currentUser: undefined, loaded: false },
       };
 
-    case "SET_CURRENT_USER":
+    case 'SET_CURRENT_USER':
       return {
         ...state,
-        auth: { ...state.auth, currentUser: action.payload, loaded: true },
-      }
+        auth: { ...state.auth, currentUser: action.payload as User, loaded: true },
+      };
     default:
       return state;
   }

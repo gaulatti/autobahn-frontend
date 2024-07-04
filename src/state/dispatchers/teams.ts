@@ -1,4 +1,4 @@
-import { Team } from "../../models/team";
+import { Team } from '../../models/team';
 import { ReduxAction } from './base';
 
 /**
@@ -6,11 +6,8 @@ import { ReduxAction } from './base';
  *
  * This is executed after as part of kickoff.
  */
-export interface SetTeamsAction extends ReduxAction {
-  payload: Team[];
-}
-export const setTeams = (teams: Team[]): SetTeamsAction => {
-  return { type: "SET_TEAMS", payload: teams };
+export const setTeams = (teams: Team[]): ReduxAction => {
+  return { type: 'SET_TEAMS', payload: teams };
 };
 
 /**
@@ -19,11 +16,8 @@ export const setTeams = (teams: Team[]): SetTeamsAction => {
  * This could be executed as part of:
  * 1. Kickoff
  */
-export interface SetCurrentTeamAction extends ReduxAction {
-  payload: string;
-}
-export const setCurrentTeam = (id: string): SetCurrentTeamAction => {
-  return { type: "SET_CURRENT_TEAM", payload: id };
+export const setCurrentTeam = (id: string): ReduxAction => {
+  return { type: 'SET_CURRENT_TEAM', payload: id };
 };
 
 /**
@@ -33,5 +27,5 @@ export const setCurrentTeam = (id: string): SetCurrentTeamAction => {
  * which then will execute setCurrentTeam.
  */
 export const setDefaultTeam = (): ReduxAction => {
-  return { type: "SET_DEFAULT_TEAM" };
+  return { type: 'SET_DEFAULT_TEAM' };
 };

@@ -1,23 +1,20 @@
 import { put, select } from 'redux-saga/effects';
 import { Team } from '../../models/team';
-import {
-  SetTeamsAction,
-  setDefaultTeam as defaultTeamDispatcher,
-  setCurrentTeam,
-} from '../../state/dispatchers/teams';
+import { ReduxAction } from '../../state/dispatchers/base';
+import { setDefaultTeam as defaultTeamDispatcher, setCurrentTeam } from '../../state/dispatchers/teams';
 import { getTeams } from '../../state/selectors/teams';
 
 /**
  * Set Default Team
  */
-function* setTeams({ payload }: SetTeamsAction) {
-  const currentTeam = payload.find((t) => t.selected);
+function* setTeams({ payload }: ReduxAction) {
+  const currentTeam = (payload as Team[]).find((t) => t.selected);
   if (!currentTeam) {
     yield put(defaultTeamDispatcher());
   }
 }
 
-function* setDefaultTeam({ payload }: SetTeamsAction) {
+function* setDefaultTeam({ payload }: ReduxAction) {
   const teams: Team[] = yield select(getTeams) || payload;
   const firstTeam = teams.find(Boolean);
 
