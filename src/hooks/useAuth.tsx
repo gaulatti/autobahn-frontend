@@ -1,21 +1,23 @@
 import { fetchAuthSession, signOut } from 'aws-amplify/auth';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login as loginDispatcher, logout as logoutDispatcher } from '../state/dispatchers/auth';
 import { currentUser as currentUserSelector, isAuthenticated as isAuthenticatedSelector, isLoaded as isLoadedSelector } from '../state/selectors/auth';
 
+/**
+ * Custom hook for handling authentication logic.
+ */
 const useAuth = () => {
   const { isAuthenticated, isLoaded } = useAuthStatus();
   const dispatch = useDispatch();
 
-  console.log('useauth');
   /**
    * Verify if there's an active user.
    *
    * If not, setting the user as undefined
    * should redirect to the login page.
    */
-  const login = (): void => {
+  const login = useCallback((): void => {
     if (!isAuthenticated) {
 
       fetchAuthSession()
@@ -30,7 +32,7 @@ const useAuth = () => {
           dispatch(loginDispatcher(undefined));
         });
     }
-  };
+  }, [dispatch, isAuthenticated]);
 
   /**
    * Listen to any auth events and do a login
@@ -39,6 +41,14 @@ const useAuth = () => {
   useEffect(login, [isAuthenticated, isLoaded, login]);
 };
 
+/**
+ * Custom hook for handling user logout.
+ * This hook checks if the user is authenticated and loaded,
+ * and performs a logout on the cognito side, and then removes
+ * any references to the user in the local store.
+ *
+ * @returns An object containing the `logout` function.
+ */
 const useLogout = () => {
   const { isAuthenticated, isLoaded } = useAuthStatus();
   const dispatch = useDispatch();

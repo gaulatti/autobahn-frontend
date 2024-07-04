@@ -2,13 +2,19 @@ import { fetchAuthSession, signInWithRedirect } from 'aws-amplify/auth';
 import { useState } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
+import { useLifecycle } from './hooks/useLifecycle';
 import { Home } from './pages';
-import { Logout } from './pages/auth/logout';
-import { UsersAdmin } from './pages/admin/users';
 import { ProjectsAdmin } from './pages/admin/projects';
 import { SchedulesAdmin } from './pages/admin/schedules';
+import { UsersAdmin } from './pages/admin/users';
+import { Logout } from './pages/auth/logout';
 
 function App() {
+  /**
+   * Manages the lifecycle of the application.
+   */
+  useLifecycle();
+
   const [authenticatedUser, setAuthenticatedUser] = useState(false);
 
   /**
