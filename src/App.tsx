@@ -21,7 +21,7 @@ function App() {
         <Route path='/' element={<PrivateRoute element={Home} />} />
         <Route path='/admin/users' element={<PrivateRoute element={UsersAdmin} />} />
         <Route path='/admin/projects' element={<PrivateRoute element={ProjectsAdmin} />} />
-        <Route path='/admin/schedules' element={<PrivateRoute element={SchedulesAdmin} />} />
+        <Route path='/schedules' element={<PrivateRoute element={SchedulesAdmin} />} />
         <Route path='/executions' element={<PrivateRoute element={ExecutionsList} />} />
         <Route path='/logout' element={<PrivateRoute element={Logout} />} />
       </Routes>
