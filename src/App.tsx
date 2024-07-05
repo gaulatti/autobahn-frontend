@@ -1,13 +1,13 @@
-import { fetchAuthSession, signInWithRedirect } from 'aws-amplify/auth';
-import { useState } from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import { PrivateRoute } from './components/auth/private';
 import { useLifecycle } from './hooks/useLifecycle';
 import { Home } from './pages';
 import { ProjectsAdmin } from './pages/admin/projects';
 import { SchedulesAdmin } from './pages/admin/schedules';
 import { UsersAdmin } from './pages/admin/users';
 import { Logout } from './pages/auth/logout';
+import { ExecutionsList } from './pages/executions';
 
 function App() {
   /**
@@ -15,43 +15,18 @@ function App() {
    */
   useLifecycle();
 
-  const [authenticatedUser, setAuthenticatedUser] = useState(false);
-
-  /**
-   * Redirects the user to the sign-in page if they are not signed in.
-   */
-  fetchAuthSession().then((authSession) => {
-    if (!authSession.userSub) {
-      signInWithRedirect({ provider: { custom: 'Okta' } });
-    } else {
-      setAuthenticatedUser(true);
-    }
-  });
-
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <Home />,
-    },
-    {
-      path: '/admin/users',
-      element: <UsersAdmin />,
-    },
-    {
-      path: '/admin/projects',
-      element: <ProjectsAdmin />,
-    },
-    {
-      path: '/admin/schedules',
-      element: <SchedulesAdmin />,
-    },
-    {
-      path: 'logout',
-      element: <Logout />,
-    },
-  ]);
-
-  return authenticatedUser && <RouterProvider router={router} />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<PrivateRoute element={Home} />} />
+        <Route path='/admin/users' element={<PrivateRoute element={UsersAdmin} />} />
+        <Route path='/admin/projects' element={<PrivateRoute element={ProjectsAdmin} />} />
+        <Route path='/admin/schedules' element={<PrivateRoute element={SchedulesAdmin} />} />
+        <Route path='/executions' element={<PrivateRoute element={ExecutionsList} />} />
+        <Route path='/logout' element={<PrivateRoute element={Logout} />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

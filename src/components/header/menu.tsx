@@ -6,7 +6,7 @@ const Menu = () => {
       <NavLink className={({ isActive }) => isActive ? `active` : ''} to='/'>Home</NavLink>
       <NavLink className={({ isActive }) => isActive ? `active` : ''} to='/admin/users'>Users</NavLink>
       <NavLink className={({ isActive }) => isActive ? `active` : ''} to='/admin/schedules'>Schedules</NavLink>
-      <NavLink className={({ isActive }) => isActive ? `active` : ''} to='/admin/executions'>Executions</NavLink>
+      <NavLink className={({ isActive }) => isActive ? `active` : ''} to='/executions'>Executions</NavLink>
     </section>
   );
 };

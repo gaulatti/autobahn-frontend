@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom';
+
 const Logo = () => (
-  <a className='logo-link'>
+  <Link className='logo-link' to='/'>
     <svg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 401 101' style={{ width: '100%', height: '100%' }}>
       <rect x='.5' y='.5' width='400' height='100' style={{ fill: '#c03c2b', stroke: '#c03b2b', strokeMiterlimit: 10 }} />
       <g>
@@ -33,7 +35,7 @@ const Logo = () => (
         />
       </g>
     </svg>
-  </a>
+  </Link>
 );
 
 export { Logo };

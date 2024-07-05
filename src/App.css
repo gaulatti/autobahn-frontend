@@ -32,7 +32,7 @@ header {
   margin-bottom: 1rem;
 }
 
-main { 
+main {
   display: flex;
   justify-content: center;
 }
@@ -47,14 +47,23 @@ main {
   flex: 1;
   justify-content: center;
   text-align: center;
+  transition: all 0.3s;
 
-  & > a {
+  &>a {
     text-decoration: none;
+    transition: all 0.3s;
+
     &.active {
-      color: #333;
+      color: #111;
       font-weight: bold;
     }
-    color: #444;
+
+    &:hover:not(.active) {
+      color: #999;
+    }
+
+    color: #333;
+
     &:not(:last-child) {
       margin-right: 1rem;
     }
