@@ -5,7 +5,7 @@ import { UserMenu } from './user-menu';
 
 const Header = () => {
   return (
-    <header>
+    <header className='flex justify-center items-center border-b border-gray-300 mb-4'>
       <Container>
         <Logo />
         <Menu />

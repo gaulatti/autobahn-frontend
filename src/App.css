@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Radio+Canada:ital,wght@0,300..700;1,300..700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   font-family: 'Radio Canada', sans-serif;
@@ -6,83 +9,12 @@
 
 #root,
 body {
+  flex-direction: column;
   margin: 0;
   padding: 0;
-  display: flex;
-  font-weight: 300;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.foundation-container {
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-}
-
-.stack {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-}
-
-.responsive-chart{
-  margin: 1rem;
-}
-
-header {
-  display: flex;
-  justify-content: center;
-  font-optical-sizing: auto;
-  line-height: 32px;
-  padding: 14px;
-  height: 32px;
-
-  border-bottom: 1px solid #e0e0e0;
-  margin-bottom: 1rem;
-}
-
-main {
-  display: flex;
-  justify-content: center;
 }
 
 .logo-link {
   width: 128px;
   height: 32px;
-}
-
-.menuContainer {
-  flex: 1;
-  justify-content: center;
-  text-align: center;
-  transition: all 0.3s;
-
-  &>a {
-    text-decoration: none;
-    transition: all 0.3s;
-
-    &.active {
-      color: #111;
-      font-weight: bold;
-    }
-
-    &:hover:not(.active) {
-      color: #999;
-    }
-
-    color: #333;
-
-    &:not(:last-child) {
-      margin-right: 1rem;
-    }
-  }
-}
-
-
-.user-menu {
-  flex: 0 0 auto;
 }

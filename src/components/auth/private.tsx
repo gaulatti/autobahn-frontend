@@ -1,6 +1,5 @@
 import { fetchAuthSession, signInWithRedirect } from 'aws-amplify/auth';
 import { ReactNode, useEffect, useState } from 'react';
-import { Navigate, Route } from 'react-router-dom';
 import { Header } from '../header';
 
 const PrivateRoute = (props: { element: () => ReactNode; }) => {
@@ -22,7 +21,7 @@ const PrivateRoute = (props: { element: () => ReactNode; }) => {
   return (
     <>
       <Header />
-      <main>
+      <main className='flex justify-center'>
           { props.element() }
       </main>
     </>

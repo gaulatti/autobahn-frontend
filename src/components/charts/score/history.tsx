@@ -6,7 +6,7 @@ for (let i = 0; i < 13; i++) {
 }
 
 const HistoryScoreChart = () => (
-  <ResponsiveContainer width='100%' height={300} className='responsive-chart'>
+  <ResponsiveContainer width='100%' height={300} className='m-4'>
     <LineChart
       data={data}
       margin={{
