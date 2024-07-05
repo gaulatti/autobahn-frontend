@@ -17,6 +17,7 @@
   "devDependencies": {
     "@apollo/client": "^3.10.8",
     "@aws-amplify/ui-react": "^6.1.12",
+    "@fluentui/react-datepicker-compat": "^0.4.43",
     "@reduxjs/toolkit": "^2.2.6",
     "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",

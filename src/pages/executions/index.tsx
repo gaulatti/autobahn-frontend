@@ -19,6 +19,7 @@ const ExecutionsList = () => {
       <Stack>
         <Trigger />
         a
+        here goes the table
         <AgGridReact rowData={rowData}  />b
       </Stack>
     </Container>

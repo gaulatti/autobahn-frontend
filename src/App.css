@@ -7,7 +7,7 @@
 @tailwind utilities;
 
 * {
-  font-family: 'Radio Canada', sans-serif;
+  font-family: 'Radio Canada', sans-serif !important;
 }
 
 #root,
