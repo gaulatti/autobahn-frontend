@@ -6,7 +6,7 @@ for (let i = 0; i < 13; i++) {
 }
 
 const HistoryScoreChart = () => (
-  <ResponsiveContainer width='100%' height={300}>
+  <ResponsiveContainer width='100%' height={300} className='responsive-chart'>
     <LineChart
       data={data}
       margin={{
@@ -16,7 +16,7 @@ const HistoryScoreChart = () => (
         bottom: 5,
       }}
     >
-      <CartesianGrid strokeDasharray='3 3 ' />
+      <CartesianGrid strokeDasharray='3 3' />
       <XAxis dataKey='name' />
       <YAxis />
       <Tooltip />

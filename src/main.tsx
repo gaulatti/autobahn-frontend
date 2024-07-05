@@ -1,3 +1,4 @@
+import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -21,8 +22,10 @@ const store = getStore(apolloClient);
  */
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <FluentProvider theme={webLightTheme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </FluentProvider>
   </React.StrictMode>
 );
