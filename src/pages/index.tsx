@@ -1,4 +1,5 @@
 import { HistoryScoreChart } from '../components/charts';
+import { Container } from '../components/foundations/container';
 import { Header } from '../components/header';
 
 const Home = () => {
@@ -6,9 +7,9 @@ const Home = () => {
     <>
       <Header />
       <main>
-          <section>
+          <Container>
               <HistoryScoreChart />
-          </section>
+          </Container>
       </main>
     </>
   );
