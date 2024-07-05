@@ -7,6 +7,7 @@ import App from './App.tsx';
 import { config } from './config.ts';
 import { getStore } from './state/index.ts';
 import { apolloClient } from './utils/helpers/apollo.ts';
+
 /**
  * Configures Amplify with the provided configuration.
  */
