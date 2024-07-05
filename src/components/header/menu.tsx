@@ -5,13 +5,10 @@ const MenuLink = ({ to, title }: { to: string; title: string }) => {
   return (
     <NavLink
       className={({ isActive }) =>
-        classNames(
-          'no-underline transition-all duration-300 text-gray-800 mr-4',
-          {
-            'text-gray-900 font-bold': isActive,
-            'hover:text-gray-600': !isActive,
-          }
-        )
+        classNames('no-underline transition-all duration-300 text-gray-800 mr-4', {
+          'text-gray-900 font-bold': isActive,
+          'hover:text-gray-600': !isActive,
+        })
       }
       to={to}
     >
