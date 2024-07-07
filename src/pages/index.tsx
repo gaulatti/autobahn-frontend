@@ -47,7 +47,7 @@ const Home = () => {
   const data0 = {
     nodes: [
       {
-        name: 'Visit',
+        name: 'Time to Interactive',
       },
       {
         name: 'Direct-Favourite',
@@ -128,9 +128,9 @@ const Home = () => {
         <Divider>Detailed Stats</Divider>
         <div className='flex w-full my-4 flex-col'>
           <h1 className='p-4'>Latency Distribution</h1>
-          <ResponsiveContainer width='100%' height={500} className='m-4'>
+          <ResponsiveContainer width='100%' height={300} className='m-4'>
             <Sankey
-              height={500}
+              height={300}
               data={data0}
               node={{ stroke: '#77c878', strokeWidth: 2 }}
               nodePadding={50}
