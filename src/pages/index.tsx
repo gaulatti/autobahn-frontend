@@ -1,82 +1,80 @@
-import { Divider, Field, Select, Title1 } from '@fluentui/react-components';
+import { Divider, Field, Select } from '@fluentui/react-components';
 import { DatePicker } from '@fluentui/react-datepicker-compat';
+import { Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Sankey, Tooltip } from 'recharts';
 import { HistoryScoreChart } from '../components/charts';
 import { Container } from '../components/foundations/container';
 import { Stack } from '../components/foundations/stack';
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, ResponsiveContainer, Sankey, Tooltip } from 'recharts';
+
+const data = [
+  {
+    subject: 'Homepage',
+    LCP: 150,
+    FCP: 110,
+    fullMark: 200,
+  },
+  {
+    subject: 'Content',
+    LCP: 199,
+    FCP: 130,
+    fullMark: 200,
+  },
+  {
+    subject: 'About Us',
+    LCP: 186,
+    FCP: 130,
+    fullMark: 200,
+  },
+  {
+    subject: 'Media Player',
+    LCP: 169,
+    FCP: 100,
+    fullMark: 200,
+  },
+  {
+    subject: 'Gallery',
+    LCP: 185,
+    FCP: 90,
+    fullMark: 200,
+  },
+  {
+    subject: 'History',
+    LCP: 85,
+    FCP: 45,
+    fullMark: 200,
+  },
+];
+
+const dataSinglePageLoad = {
+  nodes: [
+    { name: 'Time to Interactive' },
+    { name: 'Largest Contentful Paint' },
+    { name: 'First Contentful Paint' },
+    { name: 'First Input Delay' },
+    { name: 'Extra Tasks' },
+    { name: 'Network Latency' },
+    { name: 'Server Processing' },
+    { name: 'Client Rendering' },
+    { name: 'Input Delay' },
+    { name: 'Interactive Time' },
+  ],
+  links: [
+    { source: 0, target: 1, value: 2700 },
+    { source: 1, target: 2, value: 1000 },
+    { source: 4, target: 3, value: 30 },
+    { source: 0, target: 4, value: 1000 },
+
+    { source: 1, target: 5, value: 1200 },
+    { source: 1, target: 7, value: 500 },
+
+    { source: 2, target: 5, value: 700 },
+    { source: 2, target: 7, value: 300 },
+
+    { source: 3, target: 8, value: 30 },
+
+    { source: 4, target: 9, value: 1000 },
+  ],
+};
 const Home = () => {
-  const data = [
-    {
-      subject: 'Homepage',
-      LCP: 150,
-      FCP: 110,
-      fullMark: 200,
-    },
-    {
-      subject: 'Content',
-      LCP: 199,
-      FCP: 130,
-      fullMark: 200,
-    },
-    {
-      subject: 'About Us',
-      LCP: 186,
-      FCP: 130,
-      fullMark: 200,
-    },
-    {
-      subject: 'Media Player',
-      LCP: 169,
-      FCP: 100,
-      fullMark: 200,
-    },
-    {
-      subject: 'Gallery',
-      LCP: 185,
-      FCP: 90,
-      fullMark: 200,
-    },
-    {
-      subject: 'History',
-      LCP: 85,
-      FCP: 45,
-      fullMark: 200,
-    },
-  ];
-
-  const dataSinglePageLoad = {
-    nodes: [
-      { name: 'Total Latency' },
-      { name: 'Largest Contentful Paint' },
-      { name: 'First Contentful Paint' },
-      { name: 'First Input Delay' },
-      { name: 'Time to Interactive' },
-      { name: 'Network Latency' },
-      { name: 'Server Processing' },
-      { name: 'Client Rendering' },
-      { name: 'Input Delay' },
-      { name: 'Interactive Time' },
-    ],
-    links: [
-      { source: 0, target: 1, value: 4000 },
-      { source: 1, target: 2, value: 1500 },
-      { source: 0, target: 3, value: 30 },
-      { source: 0, target: 4, value: 1000 },
-
-      { source: 1, target: 5, value: 1200 },
-      { source: 1, target: 6, value: 800 },
-      { source: 1, target: 7, value: 500 },
-
-      { source: 2, target: 5, value: 700 },
-      { source: 2, target: 6, value: 500 },
-      { source: 2, target: 7, value: 300 },
-
-      { source: 3, target: 8, value: 30 },
-
-      { source: 4, target: 9, value: 1000 },
-    ],
-  };
-
   return (
     <Container>
       <Stack>
