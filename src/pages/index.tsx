@@ -44,47 +44,39 @@ const Home = () => {
     },
   ];
 
-  const data0 = {
+  const dataSinglePageLoad = {
     nodes: [
-      {
-        name: 'Time to Interactive',
-      },
-      {
-        name: 'Direct-Favourite',
-      },
-      {
-        name: 'Page-Click',
-      },
-      {
-        name: 'Detail-Favourite',
-      },
-      {
-        name: 'Lost',
-      },
+      { name: 'Total Latency' },
+      { name: 'Largest Contentful Paint' },
+      { name: 'First Contentful Paint' },
+      { name: 'First Input Delay' },
+      { name: 'Time to Interactive' },
+      { name: 'Network Latency' },
+      { name: 'Server Processing' },
+      { name: 'Client Rendering' },
+      { name: 'Input Delay' },
+      { name: 'Interactive Time' },
     ],
     links: [
-      {
-        source: 0,
-        target: 1,
-        value: 3728.3,
-      },
-      {
-        source: 0,
-        target: 2,
-        value: 354170,
-      },
-      {
-        source: 2,
-        target: 3,
-        value: 62429,
-      },
-      {
-        source: 2,
-        target: 4,
-        value: 291741,
-      },
+      { source: 0, target: 1, value: 4000 },
+      { source: 1, target: 2, value: 1500 },
+      { source: 0, target: 3, value: 30 },
+      { source: 0, target: 4, value: 1000 },
+
+      { source: 1, target: 5, value: 1200 },
+      { source: 1, target: 6, value: 800 },
+      { source: 1, target: 7, value: 500 },
+
+      { source: 2, target: 5, value: 700 },
+      { source: 2, target: 6, value: 500 },
+      { source: 2, target: 7, value: 300 },
+
+      { source: 3, target: 8, value: 30 },
+
+      { source: 4, target: 9, value: 1000 },
     ],
   };
+
   return (
     <Container>
       <Stack>
@@ -131,7 +123,7 @@ const Home = () => {
           <ResponsiveContainer width='100%' height={300} className='m-4'>
             <Sankey
               height={300}
-              data={data0}
+              data={dataSinglePageLoad}
               node={{ stroke: '#77c878', strokeWidth: 2 }}
               nodePadding={50}
               margin={{
