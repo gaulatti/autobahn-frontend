@@ -1,4 +1,4 @@
-import { fetchAuthSession, signOut } from 'aws-amplify/auth';
+import { fetchUserAttributes, signOut } from 'aws-amplify/auth';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login as loginDispatcher, logout as logoutDispatcher } from '../state/dispatchers/auth';
@@ -19,16 +19,13 @@ const useAuth = () => {
    */
   const login = useCallback((): void => {
     if (!isAuthenticated) {
-
-      fetchAuthSession()
-        .then((attributes) => {
-          const { accessToken: { payload: { sub, username } } } = attributes.tokens!
-          if (sub && username) {
-            dispatch(loginDispatcher({ id: sub, username: username as string }));
+      fetchUserAttributes()
+        .then(({ sub, given_name, email }) => {
+          if (sub && given_name && email) {
+            dispatch(loginDispatcher({ id: sub, username: email }));
           }
         })
-        .catch((e) => {
-          console.error(e);
+        .catch(() => {
           dispatch(loginDispatcher(undefined));
         });
     }

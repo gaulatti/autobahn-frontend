@@ -8,6 +8,7 @@ import { SchedulesAdmin } from './pages/admin/schedules';
 import { UsersAdmin } from './pages/admin/users';
 import { Logout } from './pages/auth/logout';
 import { ExecutionsList } from './pages/executions';
+import { Login } from './pages/auth/login';
 
 function App() {
   /**
@@ -24,6 +25,7 @@ function App() {
         <Route path='/schedules' element={<PrivateRoute element={SchedulesAdmin} />} />
         <Route path='/executions' element={<PrivateRoute element={ExecutionsList} />} />
         <Route path='/logout' element={<PrivateRoute element={Logout} />} />
+        <Route path='/login' element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

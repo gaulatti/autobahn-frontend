@@ -1,4 +1,4 @@
-import { fetchAuthSession, signInWithRedirect } from 'aws-amplify/auth';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { ReactNode, useEffect, useState } from 'react';
 import { Header } from '../header';
 
@@ -9,7 +9,7 @@ const PrivateRoute = (props: { element: () => ReactNode; }) => {
     fetchAuthSession().then((authSession) => {
       setIsAuthenticated(!!authSession.userSub);
       if (!authSession.userSub) {
-        signInWithRedirect({ provider: { custom: 'Okta' } });
+        window.location.href = '/login';
       }
     });
   }, []);
