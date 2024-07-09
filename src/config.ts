@@ -16,7 +16,7 @@ const config: Config = {
         loginWith: {
           oauth: {
             domain: import.meta.env.VITE_USER_POOL_DOMAIN,
-            scopes: ['openid','email'],
+            scopes: ['email', 'openid', 'profile', 'aws.cognito.signin.user.admin'],
             redirectSignIn: [`https://${import.meta.env.VITE_PROD_FQDN}`, 'http://localhost:5173'],
             redirectSignOut: [`https://${import.meta.env.VITE_PROD_FQDN}/logout`, 'http://localhost:5173/logout'],
             responseType: 'code',
