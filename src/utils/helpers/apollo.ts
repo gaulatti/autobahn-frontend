@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 const httpLink = createHttpLink({
-  uri: 'https://apoquindo.oxozon.io/graphql',
+  uri: import.meta.env.VITE_API_FQDN,
 });
 
 const authLink = setContext(async (_, { headers }) => {
