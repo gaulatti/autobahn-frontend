@@ -1,14 +1,11 @@
-// import { kickoffQuery } from "../../graphql/queries/kickoff.graphql"
-// import { store } from "../../state"
-import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 import { setEnums } from '../../state/dispatchers/enums';
 import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
-
-import { kickoffQuery } from '../../graphql/queries/kickoff.graphql';
+import { setKickoffReady } from '../../state/dispatchers/lifecycle';
+import { put } from 'redux-saga/effects';
+import { getKickoff } from '../../graphql/queries/kickoff.graphql';
+import { setCurrentUser } from '../../state/dispatchers/auth';
 import { setTeams } from '../../state/dispatchers/teams';
 import { SagaContext } from '../sagas';
-import { put } from 'redux-saga/effects';
-import { setCurrentUser } from '../../state/dispatchers/auth';
 /**
  * Load initial data once the essential information changes.
  *
@@ -18,22 +15,15 @@ import { setCurrentUser } from '../../state/dispatchers/auth';
 function* kickoff(context: SagaContext) {
   const { apolloClient: client } = context;
   const {
-    data: {
-      kickoff,
-      invitationStatuses,
-      roles,
-      socialMediaTypes,
-      statuses,
-    },
-  } = yield client?.query({ query: kickoffQuery });
+    data: { kickoff, invitationStatuses, roles, socialMediaTypes, statuses },
+  } = yield client?.query({ query: getKickoff });
   const { teams, me } = kickoff;
-  yield put(setCurrentUser(me))
+  yield put(setCurrentUser(me));
 
   /**
    * Set Feature Flags
    */
-  yield put(setFeatureFlags([]));
-  // store.dispatch(setFeatureFlags(kickoff.features))
+  yield put(setFeatureFlags(kickoff.features));
 
   /**
    * Set Teams
@@ -43,14 +33,7 @@ function* kickoff(context: SagaContext) {
   /**
    * Set Enums
    */
-  yield put(
-    setEnums([
-      invitationStatuses,
-      roles,
-      socialMediaTypes,
-      statuses,
-    ])
-  );
+  yield put(setEnums([invitationStatuses, roles, socialMediaTypes, statuses]));
 
   yield put(setKickoffReady());
 }

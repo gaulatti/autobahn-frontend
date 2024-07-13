@@ -7,6 +7,7 @@ import App from './App.tsx';
 import { config } from './config.ts';
 import { getStore } from './state/index.ts';
 import { apolloClient } from './utils/helpers/apollo.ts';
+import { ApolloProvider } from '@apollo/client';
 
 /**
  * Configures Amplify with the provided configuration.
@@ -24,9 +25,11 @@ const store = getStore(apolloClient);
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <FluentProvider theme={webLightTheme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <ApolloProvider client={apolloClient}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ApolloProvider>
     </FluentProvider>
   </React.StrictMode>
 );
