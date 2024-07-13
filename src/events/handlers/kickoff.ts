@@ -9,21 +9,20 @@ import { SagaContext } from '../sagas';
 /**
  * Load initial data once the essential information changes.
  *
- * This can be helpful when:
- * 1. The user is set (after login).
+ * This can be helpful when the user is set (after login).
  */
 function* kickoff(context: SagaContext) {
   const { apolloClient: client } = context;
   const {
-    data: { kickoff, invitationStatuses, roles, socialMediaTypes, statuses },
+    data: { kickoff },
   } = yield client?.query({ query: getKickoff });
-  const { teams, me } = kickoff;
+  const { teams, me, features } = kickoff;
   yield put(setCurrentUser(me));
 
   /**
    * Set Feature Flags
    */
-  yield put(setFeatureFlags(kickoff.features));
+  yield put(setFeatureFlags(features));
 
   /**
    * Set Teams
@@ -33,7 +32,7 @@ function* kickoff(context: SagaContext) {
   /**
    * Set Enums
    */
-  yield put(setEnums([invitationStatuses, roles, socialMediaTypes, statuses]));
+  yield put(setEnums([]));
 
   yield put(setKickoffReady());
 }
