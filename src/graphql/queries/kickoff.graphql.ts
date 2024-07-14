@@ -1,45 +1,11 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-export const getKickoff = gql`
+const getKickoff = gql`
   query getKickoff {
     kickoff {
       teams {
         id
         name
-        created_at
-        updated_at
-        deleted_at
-        memberships {
-          id
-          user {
-            id
-            name
-          }
-          role
-        }
-        assignments {
-          id
-          role
-        }
-        beacons {
-          id
-          uuid
-          url
-          provider
-          mode
-          fcp
-          lcp
-          tti
-          si
-          cls
-          performance_score
-          pleasantness_score
-          status
-          created_at
-          updated_at
-          ended_at
-          deleted_at
-        }
         projects {
           name
           targets {
@@ -62,25 +28,9 @@ export const getKickoff = gql`
         name
         last_name
         email
-        created_at
-        updated_at
-        deleted_at
-        memberships {
-          id
-          team {
-            id
-            name
-          }
-          role
-        }
-        assignments {
-          id
-          project {
-            name
-          }
-          role
-        }
       }
     }
   }
 `;
+
+export { getKickoff };
