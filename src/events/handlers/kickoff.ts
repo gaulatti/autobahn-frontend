@@ -15,7 +15,7 @@ function* kickoff(context: SagaContext) {
   const {
     data: { kickoff },
   } = yield client?.query({ query: getKickoff });
-  const { me, features, enums } = kickoff;
+  const { me, features } = kickoff;
   yield put(setCurrentUser(me));
 
   /**

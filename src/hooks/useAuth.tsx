@@ -21,9 +21,9 @@ const useAuth = () => {
     if (!isAuthenticated) {
       fetchUserAttributes()
         .then((attributes: FetchUserAttributesOutput) => {
-          const { sub, given_name, email } = attributes
-          if (sub && given_name && email) {
-            dispatch(loginDispatcher({ id: sub, username: email }));
+          const { sub: id, family_name: last_name, given_name: name, email } = attributes;
+          if (id && name && last_name && email) {
+            dispatch(loginDispatcher({ id, name, last_name, email }));
           }
         })
         .catch(() => {
