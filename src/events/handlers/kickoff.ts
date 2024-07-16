@@ -42,11 +42,11 @@ function* kickoff(context: SagaContext) {
    * TODO: Set Enums
    * https://github.com/gaulatti/whos-that-girl/issues/16
    */
-  const parsedEnums: Enum[] = [];
-  Object.entries(JSON.parse(enums)).map(([key, value]) => {
-    parsedEnums.push(new Enum(key, value as string[]));
-  });
-  yield put(setEnums(parsedEnums));
+  // const parsedEnums: Enum[] = [];
+  // Object.entries(JSON.parse(enums)).map(([key, value]) => {
+  //   parsedEnums.push(new Enum(key, value as string[]));
+  // });
+  // yield put(setEnums(parsedEnums));
 
   /**
    * Set Kickoff Ready
