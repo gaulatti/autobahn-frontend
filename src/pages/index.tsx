@@ -4,6 +4,7 @@ import { Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, 
 import { HistoryScoreChart } from '../components/charts';
 import { Container } from '../components/foundations/container';
 import { Stack } from '../components/foundations/stack';
+import { Trigger } from '../components/trigger';
 
 const data = [
   {
@@ -115,9 +116,10 @@ const Home = () => {
           </div>
         </div>
         <HistoryScoreChart />
+        <Trigger />
         <Divider>Detailed Stats</Divider>
         <div className='flex w-full my-4 flex-col'>
-          <h1 className='p-4'>Latency Distribution</h1>
+          <h1 className='p-4 text-center'>Latency Distribution</h1>
           <ResponsiveContainer width='100%' height={300} className='m-4'>
             <Sankey
               height={300}
@@ -136,7 +138,7 @@ const Home = () => {
             </Sankey>
           </ResponsiveContainer>
         </div>
-        <h1 className='p-4'>Project Metrics</h1>
+        <h1 className='p-4 text-center'>Project Metrics</h1>
         <div className='flex flex-wrap w-full my-4'>
           <div className='flex-1 min-w-[50%] md:min-w-[25%]'>
             <ResponsiveContainer width='100%' height={300} className='m-4'>

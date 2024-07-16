@@ -23,16 +23,15 @@ body {
   height: 32px;
 }
 
-h1 {
+h1, .fui-Title1 {
   font-family: 'Noto Sans' !important;
-  font-weight: 200;
-  font-size: 3rem;
-  line-height: 4rem;
-  text-align: center;
+  font-weight: 200 !important;
+  font-size: 3rem !important;
+  line-height: 4rem !important;
 }
 
 .user-menu {
   & .user-menu-avatar {
-    margin-right: .5rem;
+    margin-right: 1rem;
   }
 }
