@@ -1,17 +1,9 @@
-class EnumValue {
-  public name: string;
-
-  constructor(name: string) {
-    this.name = name;
-  }
-}
-
 export class Enum {
   public name: string;
-  public enumValues: EnumValue[];
+  public enumValues: string[];
 
-  constructor(name: string, enumValues: EnumValue[]) {
+  constructor(name: string, enumValues: string[]) {
     this.name = name;
-    this.enumValues = enumValues;
+    this.enumValues = enumValues
   }
 }

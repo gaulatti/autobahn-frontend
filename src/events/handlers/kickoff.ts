@@ -6,6 +6,7 @@ import { getKickoff } from '../../graphql/queries/kickoff.graphql';
 import { setCurrentUser } from '../../state/dispatchers/auth';
 import { setTeams } from '../../state/dispatchers/teams';
 import { SagaContext } from '../sagas';
+import { Enum } from '../../models/enum';
 /**
  * Load initial data once the essential information changes.
  *
@@ -16,7 +17,7 @@ function* kickoff(context: SagaContext) {
   const {
     data: { kickoff },
   } = yield client?.query({ query: getKickoff });
-  const { teams, me, features } = kickoff;
+  const { me, features, enums } = kickoff;
   yield put(setCurrentUser(me));
 
   /**
@@ -27,13 +28,29 @@ function* kickoff(context: SagaContext) {
   /**
    * Set Teams
    */
-  yield put(setTeams(teams));
+  const mergedTeams = me.memberships.map((membership: any) => {
+    const { team, ...rest } = membership;
+    return {
+      ...team,
+      ...rest,
+    };
+  });
+
+  yield put(setTeams(mergedTeams));
 
   /**
-   * Set Enums
+   * TODO: Set Enums
+   * https://github.com/gaulatti/whos-that-girl/issues/16
    */
-  yield put(setEnums([]));
+  const parsedEnums: Enum[] = [];
+  Object.entries(JSON.parse(enums)).map(([key, value]) => {
+    parsedEnums.push(new Enum(key, value as string[]));
+  });
+  yield put(setEnums(parsedEnums));
 
+  /**
+   * Set Kickoff Ready
+   */
   yield put(setKickoffReady());
 }
 
