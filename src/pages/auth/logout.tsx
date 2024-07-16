@@ -1,13 +1,13 @@
-import { signOut } from 'aws-amplify/auth';
-import { useEffect } from 'react';
+import { useLogout } from '../../hooks/useAuth';
 
 /**
  * Renders a component that logs out the user.
  */
 const Logout = () => {
-  useEffect(() => {
-    signOut();
-  }, []);
+  const { logout } = useLogout();
+  logout();
+
+  window.location.href = '/';
 
   return <></>;
 };

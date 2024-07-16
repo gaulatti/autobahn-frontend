@@ -1,12 +1,10 @@
-import { setEnums } from '../../state/dispatchers/enums';
-import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
-import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 import { put } from 'redux-saga/effects';
 import { getKickoff } from '../../graphql/queries/kickoff.graphql';
 import { setCurrentUser } from '../../state/dispatchers/auth';
+import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
+import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 import { setTeams } from '../../state/dispatchers/teams';
 import { SagaContext } from '../sagas';
-import { Enum } from '../../models/enum';
 /**
  * Load initial data once the essential information changes.
  *

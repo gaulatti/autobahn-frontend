@@ -30,3 +30,9 @@ h1 {
   line-height: 4rem;
   text-align: center;
 }
+
+.user-menu {
+  & .user-menu-avatar {
+    margin-right: .5rem;
+  }
+}
