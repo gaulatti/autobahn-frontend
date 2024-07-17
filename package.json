@@ -18,6 +18,7 @@
     "@apollo/client": "^3.10.8",
     "@aws-amplify/ui-react": "^6.1.12",
     "@fluentui/react-datepicker-compat": "^0.4.43",
+    "@fluentui/react-nav-preview": "^0.5.2",
     "@reduxjs/toolkit": "^2.2.6",
     "@types/gravatar": "^1.8.6",
     "@types/node": "^20.14.9",
