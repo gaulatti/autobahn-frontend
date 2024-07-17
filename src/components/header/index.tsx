@@ -24,11 +24,11 @@ import {
   NavSubItemGroup,
 } from '@fluentui/react-nav-preview';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useAuthStatus } from '../../hooks/useAuth';
 import { Container } from '../foundations/container';
 import { Logo } from './logo';
-import { UserMenu } from './user-menu';
+import { UserPersona } from './persona';
 const Dashboard = bundleIcon(Board20Filled, Board20Regular);
 const Users = bundleIcon(PersonLightbulb20Filled, PersonLightbulb20Regular);
 const Projects = bundleIcon(DocumentCatchUpFilled, DocumentCatchUpRegular);
@@ -78,10 +78,13 @@ const Header = () => {
    * @param path - The path to navigate to.
    */
   const handleNavigate = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, path: string) => {
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, pathname: string, params?: Record<string, string>) => {
       event.preventDefault();
       setIsOpen(false);
-      navigate(path);
+      navigate({
+        pathname,
+        search: params && createSearchParams(params).toString(),
+      });
     },
     [navigate, setIsOpen]
   );
@@ -101,7 +104,7 @@ const Header = () => {
               <NavSubItem value='3' onClick={(event) => handleNavigate(event, '/admin/users')}>
                 List of Users
               </NavSubItem>
-              <NavSubItem value='4' onClick={(event) => handleNavigate(event, '/admin/users/new')}>
+              <NavSubItem value='4' onClick={(event) => handleNavigate(event, '/admin/users/create')}>
                 Create New
               </NavSubItem>
             </NavSubItemGroup>
@@ -112,7 +115,7 @@ const Header = () => {
               <NavSubItem value='6' onClick={(event) => handleNavigate(event, '/admin/projects')}>
                 Projects
               </NavSubItem>
-              <NavSubItem value='7' onClick={(event) => handleNavigate(event, '/admin/projects/new')}>
+              <NavSubItem value='7' onClick={(event) => handleNavigate(event, '/admin/projects/create')}>
                 Create New
               </NavSubItem>
             </NavSubItemGroup>
@@ -123,7 +126,7 @@ const Header = () => {
               <NavSubItem value='9' onClick={(event) => handleNavigate(event, '/admin/teams')}>
                 Teams
               </NavSubItem>
-              <NavSubItem value='10' onClick={(event) => handleNavigate(event, '/admin/teams/new')}>
+              <NavSubItem value='10' onClick={(event) => handleNavigate(event, '/admin/teams/create')}>
                 Create New
               </NavSubItem>
             </NavSubItemGroup>
@@ -140,7 +143,7 @@ const Header = () => {
       <Container>
         {renderHamburgerWithToolTip()}
         <Logo />
-        <UserMenu />
+        <UserPersona />
       </Container>
     </header>
   );

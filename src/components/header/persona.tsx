@@ -3,7 +3,7 @@ import { url } from 'gravatar';
 import { useEffect, useState } from 'react';
 import { useAuthStatus } from '../../hooks/useAuth';
 
-const UserMenu = () => {
+const UserPersona = () => {
   const { currentUser } = useAuthStatus();
 
   const [avatar, setAvatar] = useState<string | undefined>(undefined);
@@ -31,4 +31,4 @@ const UserMenu = () => {
   );
 };
 
-export { UserMenu };
+export { UserPersona };
