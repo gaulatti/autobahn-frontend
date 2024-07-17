@@ -14,6 +14,7 @@ import {
   Hamburger,
   NavCategory,
   NavCategoryItem,
+  NavDivider,
   NavDrawer,
   NavDrawerBody,
   NavDrawerHeader,
@@ -24,6 +25,7 @@ import {
 } from '@fluentui/react-nav-preview';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStatus } from '../../hooks/useAuth';
 import { Container } from '../foundations/container';
 import { Logo } from './logo';
 import { UserMenu } from './user-menu';
@@ -34,6 +36,7 @@ const Teams = bundleIcon(PeopleTeamRegular, PeopleTeamFilled);
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { currentUser } = useAuthStatus();
 
   useEffect(() => {
     /**
@@ -125,6 +128,13 @@ const Header = () => {
               </NavSubItem>
             </NavSubItemGroup>
           </NavCategory>
+          <NavDivider />
+          <NavSectionHeader>
+            {currentUser?.name} {currentUser?.last_name}
+          </NavSectionHeader>
+          <NavSubItem value='9' onClick={(event) => handleNavigate(event, '/logout')}>
+            Logout
+          </NavSubItem>
         </NavDrawerBody>
       </NavDrawer>
       <Container>
