@@ -100,6 +100,3 @@ const UsersAdmin = () => {
 };
 
 export { UsersAdmin };
-function setIsOpen(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
