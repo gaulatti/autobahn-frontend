@@ -9,6 +9,8 @@ const Logout = () => {
   logout();
 
   navigate('/');
+
+  return <></>
 };
 
 export { Logout };

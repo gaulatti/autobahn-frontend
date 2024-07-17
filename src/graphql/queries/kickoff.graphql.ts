@@ -23,7 +23,7 @@ const getKickoff = gql`
           }
         }
       }
-          enums
+      enums
     }
   }
 `;
