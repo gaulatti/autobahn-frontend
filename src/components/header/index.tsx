@@ -22,7 +22,7 @@ import {
   NavSubItem,
   NavSubItemGroup,
 } from '@fluentui/react-nav-preview';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Container } from '../foundations/container';
 import { Logo } from './logo';
@@ -33,6 +33,22 @@ const Projects = bundleIcon(DocumentCatchUpFilled, DocumentCatchUpRegular);
 const Teams = bundleIcon(PeopleTeamRegular, PeopleTeamFilled);
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClick = (event: any) => {
+      if (event.target.classList.contains('fui-OverlayDrawer__backdrop') && isOpen) {
+        setIsOpen(false)
+      }
+    };
+
+    // Add event listener
+    document.addEventListener('click', handleClick);
+
+    // Clean up event listener on component unmount
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, [setIsOpen, isOpen]);
 
   const renderHamburgerWithToolTip = () => {
     return (
@@ -47,17 +63,17 @@ const Header = () => {
       <NavDrawer defaultSelectedValue='2' defaultSelectedCategoryValue='1' open={isOpen}>
         <NavDrawerHeader>{renderHamburgerWithToolTip()}</NavDrawerHeader>
         <NavDrawerBody>
-          <NavItem icon={<Dashboard />} value='1'>
+          <NavItem icon={<Dashboard />} value='1' onClick={() => setIsOpen(!isOpen)}>
             <Link to='/'>Dashboard</Link>
           </NavItem>
           <NavSectionHeader>Management</NavSectionHeader>
           <NavCategory value='2'>
             <NavCategoryItem icon={<Users />}>Users</NavCategoryItem>
             <NavSubItemGroup>
-              <NavSubItem value='3'>
+              <NavSubItem value='3' onClick={() => setIsOpen(!isOpen)}>
                 <Link to='/admin/users'>List of Users</Link>
               </NavSubItem>
-              <NavSubItem value='4'>
+              <NavSubItem value='4' onClick={() => setIsOpen(!isOpen)}>
                 <Link to='/admin/users/new'>Create New</Link>
               </NavSubItem>
             </NavSubItemGroup>
@@ -65,10 +81,10 @@ const Header = () => {
           <NavCategory value='5'>
             <NavCategoryItem icon={<Projects />}>Projects</NavCategoryItem>
             <NavSubItemGroup>
-              <NavSubItem value='6'>
+              <NavSubItem value='6' onClick={() => setIsOpen(!isOpen)}>
                 <Link to='/admin/projects'>List of Projects</Link>
               </NavSubItem>
-              <NavSubItem value='7'>
+              <NavSubItem value='7' onClick={() => setIsOpen(!isOpen)}>
                 <Link to='/admin/projects/new'>Create New</Link>
               </NavSubItem>
             </NavSubItemGroup>
@@ -76,10 +92,10 @@ const Header = () => {
           <NavCategory value='8'>
             <NavCategoryItem icon={<Teams />}>Teams</NavCategoryItem>
             <NavSubItemGroup>
-              <NavSubItem value='9'>
+              <NavSubItem value='9' onClick={() => setIsOpen(!isOpen)}>
                 <Link to='/admin/teams'>List of Teams</Link>
               </NavSubItem>
-              <NavSubItem value='10'>
+              <NavSubItem value='10' onClick={() => setIsOpen(!isOpen)}>
                 <Link to='/admin/teams/new'>Create New</Link>
               </NavSubItem>
             </NavSubItemGroup>
