@@ -124,7 +124,7 @@ const Home = () => {
             <Sankey
               height={300}
               data={dataSinglePageLoad}
-              node={{ stroke: '#77c878', strokeWidth: 2 }}
+              node={{ stroke: '#2980b9', strokeWidth: 2, fill: '#2980b9' }}
               nodePadding={50}
               margin={{
                 left: 50,
@@ -132,7 +132,7 @@ const Home = () => {
                 top: 25,
                 bottom: 25,
               }}
-              link={{ stroke: '#77c878' }}
+              link={{ stroke: '#c0392b' }}
             >
               <Tooltip />
             </Sankey>
