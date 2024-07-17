@@ -23,7 +23,6 @@ const HistoryScoreChart = () => (
       <Legend />
       <Line type='monotone' dataKey='m' name='Mobile' stroke='#d35400' activeDot={{ r: 8 }}></Line>
       <Line type='monotone' dataKey='d' name='Desktop' stroke='#2980b9' activeDot={{ r: 8 }} />
-      <Line type='monotone' dataKey='amt' name='Total' stroke='#2c3e50' activeDot={{ r: 8 }} />
     </LineChart>
   </ResponsiveContainer>
 );
