@@ -3,12 +3,12 @@ import {
   Board20Filled,
   Board20Regular,
   bundleIcon,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  PeopleTeamRegular,
-  PeopleTeamFilled,
   DocumentCatchUpFilled,
   DocumentCatchUpRegular,
+  PeopleTeamFilled,
+  PeopleTeamRegular,
+  PersonLightbulb20Filled,
+  PersonLightbulb20Regular,
 } from '@fluentui/react-icons';
 import {
   Hamburger,
