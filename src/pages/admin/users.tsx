@@ -48,7 +48,7 @@ const UsersAdmin = () => {
           </BreadcrumbItem>
         </Breadcrumb>
         <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
-          <AgGridReact rowData={data} columnDefs={colDefs} />
+          <AgGridReact rowData={data} columnDefs={colDefs}  pagination={true} paginationPageSize={10}/>
         </div>
       </Stack>
     </Container>
