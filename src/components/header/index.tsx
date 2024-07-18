@@ -136,7 +136,10 @@ const Header = () => {
           <NavSectionHeader>
             {currentUser?.name} {currentUser?.last_name}
           </NavSectionHeader>
-          <NavSubItem value='9' onClick={(event) => handleNavigate(event, '/logout')}>
+          <NavSubItem value='11' onClick={(event) => handleNavigate(event, '/settings')}>
+            Settings
+          </NavSubItem>
+          <NavSubItem value='12' onClick={(event) => handleNavigate(event, '/logout')}>
             Logout
           </NavSubItem>
         </NavDrawerBody>
