@@ -40,12 +40,13 @@ const Header = () => {
 
   useEffect(() => {
     /**
-     * Handles the click event on the component.
-     * Closes the component if the click target has the class 'fui-OverlayDrawer__backdrop' and the component is open.
-     * @param event - The click event object.
+     * Handles the click event for the header component.
+     * Closes the overlay drawer if the click target is the backdrop and the drawer is open.
+     * @param event - The click event.
      */
-    const handleClick = (event: any) => {
-      if (event.target.classList.contains('fui-OverlayDrawer__backdrop') && isOpen) {
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (target.classList.contains('fui-OverlayDrawer__backdrop') && isOpen) {
         setIsOpen(false);
       }
     };
