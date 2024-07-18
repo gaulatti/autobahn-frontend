@@ -114,7 +114,7 @@ const Header = () => {
             <NavCategoryItem icon={<Projects />}>Projects</NavCategoryItem>
             <NavSubItemGroup>
               <NavSubItem value='6' onClick={(event) => handleNavigate(event, '/admin/projects')}>
-                Projects
+                List of Projects
               </NavSubItem>
               <NavSubItem value='7' onClick={(event) => handleNavigate(event, '/admin/projects/create')}>
                 Create New
@@ -125,7 +125,7 @@ const Header = () => {
             <NavCategoryItem icon={<Teams />}>Teams</NavCategoryItem>
             <NavSubItemGroup>
               <NavSubItem value='9' onClick={(event) => handleNavigate(event, '/admin/teams')}>
-                Teams
+                List of Teams
               </NavSubItem>
               <NavSubItem value='10' onClick={(event) => handleNavigate(event, '/admin/teams/create')}>
                 Create New
