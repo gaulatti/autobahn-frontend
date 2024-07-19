@@ -1,27 +1,10 @@
-import {
-  Breadcrumb,
-  BreadcrumbButton,
-  BreadcrumbDivider,
-  BreadcrumbItem,
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
-  Title1,
-} from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbButton, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
-import { Dismiss24Regular } from "@fluentui/react-icons";
 const UsersAdmin = () => {
-  const { pathname } = useLocation();
-  const action = pathname.split('/').pop();
-  const navigate = useNavigate();
-  // const [isDrawerOpen, setIsDrawerOpen] = useState(action === 'create');
-
   type TData = {
     mail: string;
     role: string;
@@ -43,34 +26,6 @@ const UsersAdmin = () => {
   return (
     <Container>
       <Stack>
-        {action === 'create' && (
-          <Drawer
-            type='overlay'
-            separator
-            open={true}
-            position='end'
-            // onOpenChange={(_, { open }) => setIsOpen(open)}
-          >
-            <DrawerHeader>
-              <DrawerHeaderTitle
-                action={
-                  <Button
-                    appearance='subtle'
-                    aria-label='Close'
-                    icon={<Dismiss24Regular />}
-                    onClick={() => navigate('/admin/users')}
-                  />
-                }
-              >
-                Default Drawer
-              </DrawerHeaderTitle>
-            </DrawerHeader>
-
-            <DrawerBody>
-              <p>Drawer content</p>
-            </DrawerBody>
-          </Drawer>
-        )}
         <Title1 className='text-left'>Users</Title1>
         <Breadcrumb aria-label='Breadcrumb default example'>
           <BreadcrumbItem>

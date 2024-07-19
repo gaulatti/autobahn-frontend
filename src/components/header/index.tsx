@@ -1,43 +1,24 @@
 import { Tooltip } from '@fluentui/react-components';
-import {
-  Board20Filled,
-  Board20Regular,
-  bundleIcon,
-  DocumentCatchUpFilled,
-  DocumentCatchUpRegular,
-  PeopleTeamFilled,
-  PeopleTeamRegular,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-} from '@fluentui/react-icons';
-import {
-  Hamburger,
-  NavCategory,
-  NavCategoryItem,
-  NavDivider,
-  NavDrawer,
-  NavDrawerBody,
-  NavDrawerHeader,
-  NavItem,
-  NavSectionHeader,
-  NavSubItem,
-  NavSubItemGroup,
-} from '@fluentui/react-nav-preview';
-import { useCallback, useEffect, useState } from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
-import { useAuthStatus } from '../../hooks/useAuth';
+import { Hamburger } from '@fluentui/react-nav-preview';
+import { useEffect, useState } from 'react';
 import { Container } from '../foundations/container';
 import { Logo } from './logo';
+import { NavigationMenu } from './menu';
 import { UserPersona } from './persona';
-const Dashboard = bundleIcon(Board20Filled, Board20Regular);
-const Users = bundleIcon(PersonLightbulb20Filled, PersonLightbulb20Regular);
-const Projects = bundleIcon(DocumentCatchUpFilled, DocumentCatchUpRegular);
-const Teams = bundleIcon(PeopleTeamRegular, PeopleTeamFilled);
+/**
+ * Represents the header component of the application.
+ * The header contains a navigation menu, a hamburger icon, a logo, and a user persona.
+ */
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const { currentUser } = useAuthStatus();
 
+  /**
+   * Represents the state of the overlay drawer.
+   */
+  const [isOpen, setIsOpen] = useState(false);
+
+  /**
+   * Handles the click event for the header component.
+   */
   useEffect(() => {
     /**
      * Handles the click event for the header component.
@@ -72,78 +53,9 @@ const Header = () => {
     );
   };
 
-  /**
-   * Handles the navigation when a button is clicked.
-   *
-   * @param event - The click event.
-   * @param path - The path to navigate to.
-   */
-  const handleNavigate = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, pathname: string, params?: Record<string, string>) => {
-      event.preventDefault();
-      setIsOpen(false);
-      navigate({
-        pathname,
-        search: params && createSearchParams(params).toString(),
-      });
-    },
-    [navigate, setIsOpen]
-  );
-
   return (
     <header className='flex justify-center items-center border-b border-gray-300 mb-4'>
-      <NavDrawer defaultSelectedValue='2' defaultSelectedCategoryValue='1' open={isOpen}>
-        <NavDrawerHeader>{renderHamburgerWithToolTip()}</NavDrawerHeader>
-        <NavDrawerBody>
-          <NavItem icon={<Dashboard />} value='1' onClick={(event) => handleNavigate(event, '/')}>
-            Dashboard
-          </NavItem>
-          <NavSectionHeader>Management</NavSectionHeader>
-          <NavCategory value='2'>
-            <NavCategoryItem icon={<Users />}>Users</NavCategoryItem>
-            <NavSubItemGroup>
-              <NavSubItem value='3' onClick={(event) => handleNavigate(event, '/admin/users')}>
-                List of Users
-              </NavSubItem>
-              <NavSubItem value='4' onClick={(event) => handleNavigate(event, '/admin/users/create')}>
-                Create New
-              </NavSubItem>
-            </NavSubItemGroup>
-          </NavCategory>
-          <NavCategory value='5'>
-            <NavCategoryItem icon={<Projects />}>Projects</NavCategoryItem>
-            <NavSubItemGroup>
-              <NavSubItem value='6' onClick={(event) => handleNavigate(event, '/admin/projects')}>
-                List of Projects
-              </NavSubItem>
-              <NavSubItem value='7' onClick={(event) => handleNavigate(event, '/admin/projects/create')}>
-                Create New
-              </NavSubItem>
-            </NavSubItemGroup>
-          </NavCategory>
-          <NavCategory value='8'>
-            <NavCategoryItem icon={<Teams />}>Teams</NavCategoryItem>
-            <NavSubItemGroup>
-              <NavSubItem value='9' onClick={(event) => handleNavigate(event, '/admin/teams')}>
-                List of Teams
-              </NavSubItem>
-              <NavSubItem value='10' onClick={(event) => handleNavigate(event, '/admin/teams/create')}>
-                Create New
-              </NavSubItem>
-            </NavSubItemGroup>
-          </NavCategory>
-          <NavDivider />
-          <NavSectionHeader>
-            {currentUser?.name} {currentUser?.last_name}
-          </NavSectionHeader>
-          <NavSubItem value='11' onClick={(event) => handleNavigate(event, '/settings')}>
-            Settings
-          </NavSubItem>
-          <NavSubItem value='12' onClick={(event) => handleNavigate(event, '/logout')}>
-            Logout
-          </NavSubItem>
-        </NavDrawerBody>
-      </NavDrawer>
+      <NavigationMenu isOpen={isOpen} setIsOpen={setIsOpen} />
       <Container>
         {renderHamburgerWithToolTip()}
         <Logo />
@@ -154,3 +66,4 @@ const Header = () => {
 };
 
 export { Header };
+

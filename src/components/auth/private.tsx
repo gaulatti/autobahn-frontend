@@ -1,10 +1,11 @@
-import { fetchAuthSession } from 'aws-amplify/auth';
-import { ReactNode, useEffect, useState } from 'react';
-import { Header } from '../header';
-import { useSelector } from 'react-redux';
-import { getKickoffReady } from '../../state/selectors/lifecycle';
 import { Spinner } from '@fluentui/react-components';
-import { useNavigate } from 'react-router-dom';
+import { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { useAuthStatus } from '../../hooks/useAuth';
+import { getKickoffReady } from '../../state/selectors/lifecycle';
+import { getTeams } from '../../state/selectors/teams';
+import { Header } from '../header';
 
 /**
  * A private route component that checks if the user is authenticated and if the kickoff is ready.
@@ -15,41 +16,37 @@ import { useNavigate } from 'react-router-dom';
  * @param props.element - The element to render when the user is authenticated and the kickoff is ready.
  * @returns The private route component.
  */
-const PrivateRoute = (props: { element: () => ReactNode; }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const PrivateRoute = (props: { element: () => ReactNode }) => {
+  const { isAuthenticated, isLoaded } = useAuthStatus();
+  const teams = useSelector(getTeams);
   const isKickoffReady = useSelector(getKickoffReady);
-  const navigate = useNavigate()
 
   /**
-   * Fetches the auth session and updates the app state accordingly.
+   * Renders the login page if the user is not authenticated.
    */
-  useEffect(() => {
-    fetchAuthSession().then((authSession) => {
-      setIsAuthenticated(!!authSession.userSub);
-      if (!authSession.userSub) {
-        navigate('/login');
-      }
-    });
-  }, [navigate]);
+  if (isLoaded && !isAuthenticated) {
+    return <Navigate to='/login' replace />;
+  }
+
+  /**
+   * Renders the Private Layout if the user is authenticated and the kickoff is ready.
+   */
+  if (isLoaded && isAuthenticated && isKickoffReady) {
+    return (
+      <>
+        <Header />
+        {teams.length ? <main className='flex justify-center'>{props.element()}</main> : <>no teams</>}
+      </>
+    );
+  }
 
   /**
    * Renders a loading spinner if the user is not authenticated or the kickoff is not ready.
    */
-  if (!isAuthenticated || !isKickoffReady) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Spinner size='huge' />
-      </div>
-    );
-  }
-
   return (
-    <>
-      <Header />
-      <main className='flex justify-center'>
-          { props.element() }
-      </main>
-    </>
+    <div className='flex justify-center items-center h-screen'>
+      <Spinner size='huge' />
+    </div>
   );
 };
 
