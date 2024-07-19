@@ -27,8 +27,8 @@ function App() {
         <Route path='/schedules' element={<PrivateRoute element={SchedulesAdmin} />} />
         <Route path='/schedules/create' element={<PrivateRoute element={SchedulesAdmin} />} />
         <Route path='/executions' element={<PrivateRoute element={ExecutionsList} />} />
-        <Route path='/logout' element={<PrivateRoute element={Logout} />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/logout' element={<Logout />} />
       </Routes>
     </BrowserRouter>
   );
