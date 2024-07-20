@@ -8,6 +8,7 @@ import { config } from './config.ts';
 import { getStore } from './state/index.ts';
 import { apolloClient } from './utils/helpers/apollo.ts';
 import { ApolloProvider } from '@apollo/client';
+import { PersistGate } from 'redux-persist/integration/react';
 
 /**
  * Configures Amplify with the provided configuration.
@@ -17,7 +18,7 @@ Amplify.configure(config.aws);
 /**
  * Creates the Redux store.
  */
-const store = getStore(apolloClient);
+const { store, persistor } = getStore(apolloClient);
 
 /**
  * Renders the application.
@@ -27,7 +28,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <FluentProvider theme={webLightTheme}>
       <ApolloProvider client={apolloClient}>
         <Provider store={store}>
-          <App />
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
         </Provider>
       </ApolloProvider>
     </FluentProvider>
