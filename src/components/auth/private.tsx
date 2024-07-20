@@ -16,7 +16,7 @@ import { Header } from '../header';
  * @param props.element - The element to render when the user is authenticated and the kickoff is ready.
  * @returns The private route component.
  */
-const PrivateRoute = (props: { element: () => ReactNode }) => {
+const PrivateRoute = (props: { private: () => ReactNode; public?: () => ReactNode }) => {
   const { isAuthenticated, isLoaded } = useAuthStatus();
   const teams = useSelector(getTeams);
   const isKickoffReady = useSelector(getKickoffReady);
@@ -35,7 +35,7 @@ const PrivateRoute = (props: { element: () => ReactNode }) => {
     return (
       <>
         <Header />
-        {teams.length ? <main className='flex justify-center'>{props.element()}</main> : <>no teams</>}
+        {teams.length ? <main className='flex justify-center'>{props.private()}</main> : <>no teams</>}
       </>
     );
   }

@@ -28,7 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <FluentProvider theme={webLightTheme}>
       <ApolloProvider client={apolloClient}>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate persistor={persistor}>
             <App />
           </PersistGate>
         </Provider>

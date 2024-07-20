@@ -1,47 +1,7 @@
-import { fetchAuthSession, fetchUserAttributes, FetchUserAttributesOutput, signOut } from 'aws-amplify/auth';
-import { useCallback, useEffect } from 'react';
+import { signOut } from 'aws-amplify/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { login as loginDispatcher, logout as logoutDispatcher, setAuthLoaded } from '../state/dispatchers/auth';
+import { logout as logoutDispatcher } from '../state/dispatchers/auth';
 import { currentUser as currentUserSelector, isAuthenticated as isAuthenticatedSelector, isLoaded as isLoadedSelector } from '../state/selectors/auth';
-
-/**
- * Custom hook for handling authentication logic.
- */
-const useAuth = () => {
-  const { isAuthenticated, isLoaded } = useAuthStatus();
-  const dispatch = useDispatch();
-
-  /**
-   * Verify if there's an active user.
-   *
-   * If not, setting the user as undefined
-   * should redirect to the login page as
-   * the layout is constantly monitoring
-   * the user state.
-   */
-  const login = useCallback((): void => {
-
-    fetchAuthSession().then(({ userSub }) => {
-      if (userSub) {
-        fetchUserAttributes()
-          .then((attributes: FetchUserAttributesOutput) => {
-            const { sub: id, family_name: last_name, given_name: name, email } = attributes;
-            if (id && name && last_name && email) {
-              dispatch(loginDispatcher({ id, name, last_name, email }));
-            }
-          })
-      } else {
-        dispatch(setAuthLoaded());
-      }
-    });
-  }, [dispatch]);
-
-  /**
-   * Listen to any auth events and do a login
-   * attempt if needed.
-   */
-  useEffect(login, [isAuthenticated, isLoaded, login]);
-};
 
 /**
  * Custom hook for handling user logout.
@@ -97,4 +57,4 @@ const useAuthStatus = () => {
   };
 };
 
-export { useAuth, useAuthStatus, useLogout };
+export { useAuthStatus, useLogout };
