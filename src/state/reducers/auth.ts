@@ -21,7 +21,7 @@ const authReducer = (state: State = defaultStore, action: ReduxAction) => {
       if (action.payload) {
         return {
           ...state,
-          auth: { ...state.auth, loaded: false },
+          auth: { ...state.auth, loaded: state.auth.loaded || false },
         };
       }
       return state;

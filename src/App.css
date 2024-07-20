@@ -35,3 +35,8 @@ h1, .fui-Title1 {
     margin-right: 1rem;
   }
 }
+
+.login {
+  background-size: cover;
+  background-position: center;
+}

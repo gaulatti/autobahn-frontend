@@ -1,10 +1,10 @@
 import { Button, Card } from '@fluentui/react-components';
 import { signInWithRedirect } from 'aws-amplify/auth';
-import { SVGProps } from 'react';
+import { SVGProps, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { JSX } from 'react/jsx-runtime';
 import { useAuthStatus } from '../../hooks/useAuth';
-
+import background from '../../assets/background.svg';
 const loginWithGoogle = () => {
   signInWithRedirect({ provider: 'Google' });
 };
@@ -32,37 +32,47 @@ const ChromeIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) =>
   );
 };
 
+/**
+ * Login component for user authentication.
+ * Renders a login page with background image and sign-in options.
+ */
 const Login = () => {
   const { isAuthenticated, isLoaded } = useAuthStatus();
+  const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
 
+  /**
+   * Verify the background is loaded before rendering the page.
+   */
+  useEffect(() => {
+    const img = new Image();
+    img.src = background;
+    img.onload = () => setIsBackgroundLoaded(true);
+  }, []);
+
+  /**
+   * Redirect the user to the home page if they are authenticated.
+   */
   if (isLoaded && isAuthenticated) {
     return <Navigate to='/' />;
   }
 
   return (
-    <div className='relative h-screen w-full'>
-      <img
-        src='https://media.cnn.com/api/v1/images/stellar/prod/181107112022-long-island-city-restricted.jpg?q=w_3442,h_2297,x_0,y_0,c_fill'
-        alt='Background image'
-        className='object-cover'
-      />
-      <div className='absolute inset-0 bg-black/50 flex items-center justify-center px-4'>
-        <div className='w-full max-w-3xl'>
-          <Card className='mx-auto space-y-6 p-8 md:p-12 lg:p-16'>
-            <div className='space-y-4 text-center'>
-              <h1 className='text-4xl font-bold md:text-5xl'>Welcome Back</h1>
-              <p className='text-muted-foreground text-lg'>Sign in to your account to continue</p>
-            </div>
-            <div className='space-y-4'>
-              <Button className='w-full' onClick={loginWithGoogle}>
-                <ChromeIcon className='mr-2 h-5 w-5' />
-                Sign in with Google
-              </Button>
-            </div>
-          </Card>
+    isBackgroundLoaded && (
+      <div className='relative h-screen w-full login' style={{ backgroundImage: `url(${background})` }}>
+        <div className='absolute inset-0 bg-black/50 flex items-center justify-center px-4'>
+          <div className='w-full max-w-3xl'>
+            <Card className='mx-auto space-y-6 p-8 md:p-12 lg:p-16'>
+              <div className='space-y-4'>
+                <Button className='w-full' onClick={loginWithGoogle}>
+                  <ChromeIcon className='mr-2 h-5 w-5' />
+                  Sign in with Google
+                </Button>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    )
   );
 };
 
@@ -70,13 +80,10 @@ export { Login };
 
 // <div className='surface-0 text-700 text-center'>
 // <div className='grid-nogutter'>
-//   <div className='col-12 lg:col-4 lg:col-offset-4 grid flex-column justify-content-around' style={{ height: '100vh' }}>
-//     <Card className='shadow-2'>
-//       <Image src='/logo192.png' width='192px' height='192px' alt='Alcántara' style={{ textAlign: 'center' }} />
-//       <h1 style={{ textAlign: 'center', fontFamily: 'Berlin', fontSize: '32px', fontWeight: 'bold' }}>Alcántara</h1>
+//   <div className='col-12 lg:col-4 lg:col-offset-4 grid flex-column justify-content-around' style={{ { h'eight': ,1strokeWidth }}}}      <Card className='shadow-2'>
+//       <Image src='/logo192.png' width='192px' height='192px' alt='Alcántara' style={{ { t'extAlign': ,cstrokeWidth }}}} //       <h1 style={{ { t'extAlign': ,cstrokeWidth fo}} mily: 'Berlin', fontSize: '32px', fontWeight: 'bold' }}>Alcántara</h1>
 //       <Divider align='center'>Please join us by using any of the following providers.</Divider>
-//       <div className='p-3 flex flex-column' style={{ borderRadius: '6px' }}>
-//         <Button className='my-2' onClick={loginWithGoogle} label='Login with Google' />
+//       <div className='p-3 flex flex-column' style={{ { b'orderRadius': ,6strokeWidth }}}}          <Button className='my-2' onClick={loginWithGoogle} label='Login with Google' />
 //         <Button onClick={loginWithApple} label='Login with Apple' />
 //       </div>
 //     </Card>
