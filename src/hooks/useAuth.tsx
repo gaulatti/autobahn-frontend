@@ -15,7 +15,9 @@ const useAuth = () => {
    * Verify if there's an active user.
    *
    * If not, setting the user as undefined
-   * should redirect to the login page.
+   * should redirect to the login page as
+   * the layout is constantly monitoring
+   * the user state.
    */
   const login = useCallback((): void => {
     if (!isAuthenticated) {
@@ -27,7 +29,7 @@ const useAuth = () => {
           }
         })
         .catch(() => {
-          dispatch(loginDispatcher(undefined));
+          console.error('User not authenticated');
         });
     }
   }, [dispatch, isAuthenticated]);
