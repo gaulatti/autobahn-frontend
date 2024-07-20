@@ -13,7 +13,7 @@ const reducers = (state: State = defaultStore, action: ReduxAction) => {
    * Allowing multiple contextual reducers
    */
   reducerStack.forEach((reducer) => {
-    state = reducer(state, action);
+    state = reducer(state, action)!;
   });
 
   return state;
