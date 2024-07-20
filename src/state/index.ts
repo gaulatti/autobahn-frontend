@@ -5,6 +5,8 @@ import { lifecycle } from '../events/sagas';
 import { reducers } from './reducers';
 import localForage from 'localforage';
 import { Persistor, persistReducer, persistStore } from 'redux-persist';
+import { createLogger } from 'redux-logger';
+
 let store: Store;
 let persistor: Persistor;
 
@@ -25,10 +27,11 @@ const getStore = (apolloClient: ApolloClient<NormalizedCacheObject>) => {
     const sagaMiddleware = createSagaMiddleware();
 
     const persistedReducer = persistReducer(persistConfig, reducers);
+    const logger = createLogger({});
 
     store = configureStore({
       reducer: persistedReducer,
-      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware).concat(logger),
     });
 
     sagaMiddleware.run(lifecycle, { apolloClient });
