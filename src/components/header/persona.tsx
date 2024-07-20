@@ -3,10 +3,18 @@ import { url } from 'gravatar';
 import { useEffect, useState } from 'react';
 import { useAuthStatus } from '../../hooks/useAuth';
 
+/**
+ * Renders the user persona component.
+ * This component displays the user's avatar, name, and email.
+ */
 const UserPersona = () => {
   const { currentUser } = useAuthStatus();
 
-  const [avatar, setAvatar] = useState<string | undefined>(undefined);
+  const [avatar, setAvatar] = useState<string>();
+
+  /**
+   * Sets the avatar URL when the user is loaded.
+   */
   useEffect(() => {
     if (currentUser) {
       setAvatar(url(currentUser.email));
@@ -14,6 +22,7 @@ const UserPersona = () => {
   }, [currentUser, setAvatar]);
 
   return (
+    avatar &&
     currentUser && (
       <div className='user-menu'>
         <Persona
@@ -22,7 +31,7 @@ const UserPersona = () => {
           presence={{ status: 'available' }}
           avatar={{
             image: {
-              src: `https:${avatar}`
+              src: `https:${avatar}`,
             },
           }}
         />
