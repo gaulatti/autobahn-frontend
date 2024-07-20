@@ -1,7 +1,7 @@
 import { fetchUserAttributes, FetchUserAttributesOutput, signOut } from 'aws-amplify/auth';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login as loginDispatcher, logout as logoutDispatcher } from '../state/dispatchers/auth';
+import { login as loginDispatcher, logout as logoutDispatcher, setAuthLoaded } from '../state/dispatchers/auth';
 import { currentUser as currentUserSelector, isAuthenticated as isAuthenticatedSelector, isLoaded as isLoadedSelector } from '../state/selectors/auth';
 
 /**
@@ -29,7 +29,7 @@ const useAuth = () => {
           }
         })
         .catch(() => {
-          console.error('User not authenticated');
+          dispatch(setAuthLoaded());
         });
     }
   }, [dispatch, isAuthenticated]);

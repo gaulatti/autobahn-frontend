@@ -2,6 +2,13 @@ import { User } from '../../models/user';
 import { ReduxAction } from '../dispatchers/base';
 import defaultStore, { State } from '../store';
 
+/**
+ * Reducer function for handling authentication state.
+ *
+ * @param state - The current state of the authentication.
+ * @param action - The action object that contains the type and payload.
+ * @returns The new state after applying the action.
+ */
 const authReducer = (state: State = defaultStore, action: ReduxAction) => {
   switch (action.type) {
     case 'LOGIN':
@@ -9,10 +16,14 @@ const authReducer = (state: State = defaultStore, action: ReduxAction) => {
         ...state,
         auth: { ...state.auth, currentUser: action.payload as User, loaded: true },
       };
+
     case 'LOGOUT':
+      return undefined;
+
+    case 'SET_AUTH_LOADED':
       return {
         ...state,
-        auth: { ...state.auth, currentUser: undefined, loaded: false },
+        auth: { ...state.auth, loaded: true },
       };
 
     case 'SET_CURRENT_USER':
@@ -20,6 +31,7 @@ const authReducer = (state: State = defaultStore, action: ReduxAction) => {
         ...state,
         auth: { ...state.auth, currentUser: action.payload as User, loaded: true },
       };
+
     default:
       return state;
   }

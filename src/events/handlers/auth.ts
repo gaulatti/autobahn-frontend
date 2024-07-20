@@ -1,6 +1,7 @@
 import { put, select } from 'redux-saga/effects';
 import { setKickoff } from '../../state/dispatchers/lifecycle';
 import { currentUser as currentUserSelector } from '../../state/selectors/auth';
+import { clearPersistedStorage } from '../../state';
 
 function* login(): unknown {
   try {
@@ -16,4 +17,12 @@ function* login(): unknown {
   }
 }
 
-export { login };
+function* logout(): unknown {
+  try {
+    yield clearPersistedStorage();
+  } catch (e) {
+    console.error('Error when setting logout', e);
+  }
+}
+
+export { login, logout };

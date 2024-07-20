@@ -37,4 +37,8 @@ const setCurrentUser = (user: User): ReduxAction => {
   return { type: 'SET_CURRENT_USER', payload: user };
 };
 
-export { login, logout, setCurrentUser };
+const setAuthLoaded = (): ReduxAction => {
+  return { type: 'SET_AUTH_LOADED' };
+};
+
+export { login, logout, setCurrentUser, setAuthLoaded };

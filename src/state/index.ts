@@ -10,6 +10,9 @@ import { createLogger } from 'redux-logger';
 let store: Store;
 let persistor: Persistor;
 
+/**
+ * Configures the localForage instance to be used as the storage engine for the redux-persist.
+ */
 localForage.config({
   driver: localForage.INDEXEDDB,
   name: 'madonna',
@@ -17,11 +20,29 @@ localForage.config({
   storeName: 'madonna',
 });
 
+/**
+ * Configuration for the redux-persist.
+ */
 const persistConfig = {
   key: 'root',
   storage: localForage,
 };
 
+/**
+ * Clears the persisted storage by purging the persistor and clearing the localForage.
+ */
+export const clearPersistedStorage = () => {
+  persistor.purge();
+  localForage.clear().then(() => {
+    console.log('Cleared persisted storage');
+  });
+};
+
+/**
+ * Retrieves the Redux store and persistor.
+ * @param apolloClient - The Apollo Client instance.
+ * @returns An object containing the Redux store and persistor.
+ */
 const getStore = (apolloClient: ApolloClient<NormalizedCacheObject>) => {
   if (!store) {
     const sagaMiddleware = createSagaMiddleware();
