@@ -1,4 +1,4 @@
-import { fetchUserAttributes, FetchUserAttributesOutput, signOut } from 'aws-amplify/auth';
+import { fetchAuthSession, fetchUserAttributes, FetchUserAttributesOutput, signOut } from 'aws-amplify/auth';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login as loginDispatcher, logout as logoutDispatcher, setAuthLoaded } from '../state/dispatchers/auth';
@@ -20,19 +20,21 @@ const useAuth = () => {
    * the user state.
    */
   const login = useCallback((): void => {
-    if (!isAuthenticated) {
-      fetchUserAttributes()
-        .then((attributes: FetchUserAttributesOutput) => {
-          const { sub: id, family_name: last_name, given_name: name, email } = attributes;
-          if (id && name && last_name && email) {
-            dispatch(loginDispatcher({ id, name, last_name, email }));
-          }
-        })
-        .catch(() => {
-          dispatch(setAuthLoaded());
-        });
-    }
-  }, [dispatch, isAuthenticated]);
+
+    fetchAuthSession().then(({ userSub }) => {
+      if (userSub) {
+        fetchUserAttributes()
+          .then((attributes: FetchUserAttributesOutput) => {
+            const { sub: id, family_name: last_name, given_name: name, email } = attributes;
+            if (id && name && last_name && email) {
+              dispatch(loginDispatcher({ id, name, last_name, email }));
+            }
+          })
+      } else {
+        dispatch(setAuthLoaded());
+      }
+    });
+  }, [dispatch]);
 
   /**
    * Listen to any auth events and do a login

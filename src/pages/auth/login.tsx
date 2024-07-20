@@ -1,6 +1,7 @@
 import { Button, Card } from '@fluentui/react-components';
 import { signInWithRedirect } from 'aws-amplify/auth';
-import { SVGProps, useEffect } from 'react';
+import { SVGProps } from 'react';
+import { Navigate } from 'react-router-dom';
 import { JSX } from 'react/jsx-runtime';
 import { useAuthStatus } from '../../hooks/useAuth';
 
@@ -34,15 +35,11 @@ const ChromeIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) =>
 const Login = () => {
   const { isAuthenticated, isLoaded } = useAuthStatus();
 
-  useEffect(() => {
-    if (isLoaded && isAuthenticated) {
-      window.location.href = '/';
-    }
-  }, [isAuthenticated, isLoaded]);
+  if (isLoaded && isAuthenticated) {
+    return <Navigate to='/' />;
+  }
 
-  return isAuthenticated || !isLoaded ? (
-    <></>
-  ) : (
+  return (
     <div className='relative h-screen w-full'>
       <img
         src='https://media.cnn.com/api/v1/images/stellar/prod/181107112022-long-island-city-restricted.jpg?q=w_3442,h_2297,x_0,y_0,c_fill'

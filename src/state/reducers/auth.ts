@@ -17,6 +17,15 @@ const authReducer = (state: State = defaultStore, action: ReduxAction) => {
         auth: { ...state.auth, currentUser: action.payload as User, loaded: true },
       };
 
+    case 'persist/REHYDRATE':
+      if (action.payload) {
+        return {
+          ...state,
+          auth: { ...state.auth, loaded: false },
+        };
+      }
+      return state;
+
     case 'LOGOUT':
       return undefined;
 
