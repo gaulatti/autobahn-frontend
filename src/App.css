@@ -40,3 +40,7 @@ h1, .fui-Title1 {
   background-size: cover;
   background-position: center;
 }
+
+.logo-link {
+  margin-left: 1rem;
+}

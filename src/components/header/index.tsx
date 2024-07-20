@@ -57,8 +57,10 @@ const Header = () => {
     <header className='flex justify-center items-center border-b border-gray-300 mb-4'>
       <NavigationMenu isOpen={isOpen} setIsOpen={setIsOpen} />
       <Container>
-        {renderHamburgerWithToolTip()}
-        <Logo />
+        <div className='flex items-center'>
+          {renderHamburgerWithToolTip()}
+          <Logo />
+        </div>
         <UserPersona />
       </Container>
     </header>
@@ -66,4 +68,3 @@ const Header = () => {
 };
 
 export { Header };
-
