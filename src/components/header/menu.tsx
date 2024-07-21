@@ -113,9 +113,6 @@ const NavigationMenu = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Rea
                 <NavSubItem value='3' onClick={(event) => handleNavigate(event, '/admin/users')}>
                   List of Users
                 </NavSubItem>
-                <NavSubItem value='4' onClick={(event) => handleNavigate(event, '/admin/users/create')}>
-                  Create New
-                </NavSubItem>
               </NavSubItemGroup>
             </NavCategory>
             <NavCategory value='5'>

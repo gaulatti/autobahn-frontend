@@ -14,8 +14,8 @@ import { MoreHorizontal24Filled } from '@fluentui/react-icons';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
-import { Container } from '../../components/foundations/container';
-import { Stack } from '../../components/foundations/stack';
+import { Container } from '../../../components/foundations/container';
+import { Stack } from '../../../components/foundations/stack';
 const ProjectsAdmin = () => {
   type TData = {
     id: number;
@@ -76,7 +76,7 @@ const ProjectsAdmin = () => {
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <Link to='/admin/projects'>Projects</Link>
+            <b>Projects</b>
           </BreadcrumbItem>
         </Breadcrumb>
         <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>

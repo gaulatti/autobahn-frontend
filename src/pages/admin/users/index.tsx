@@ -2,8 +2,8 @@ import { Breadcrumb, BreadcrumbButton, BreadcrumbDivider, BreadcrumbItem, Title1
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
-import { Container } from '../../components/foundations/container';
-import { Stack } from '../../components/foundations/stack';
+import { Container } from '../../../components/foundations/container';
+import { Stack } from '../../../components/foundations/stack';
 const UsersAdmin = () => {
   type TData = {
     mail: string;
@@ -42,7 +42,7 @@ const UsersAdmin = () => {
           <BreadcrumbDivider />
           <BreadcrumbItem>
             <BreadcrumbButton>
-              <Link to='/admin/users'>Users</Link>
+            <b>Users</b>
             </BreadcrumbButton>
           </BreadcrumbItem>
         </Breadcrumb>

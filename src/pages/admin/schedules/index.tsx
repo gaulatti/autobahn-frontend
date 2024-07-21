@@ -1,7 +1,7 @@
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Container } from '../../components/foundations/container';
-import { Stack } from '../../components/foundations/stack';
+import { Container } from '../../../components/foundations/container';
+import { Stack } from '../../../components/foundations/stack';
 import { Title1, Breadcrumb, BreadcrumbItem, BreadcrumbButton, BreadcrumbDivider } from '@fluentui/react-components';
 import { Link } from 'react-router-dom';
 
@@ -49,7 +49,7 @@ const SchedulesAdmin = () => {
           <BreadcrumbDivider />
           <BreadcrumbItem>
             <BreadcrumbButton>
-              <Link to='/schedules'>Schedules</Link>
+            <b>Schedules</b>
             </BreadcrumbButton>
           </BreadcrumbItem>
         </Breadcrumb>
