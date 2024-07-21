@@ -27,7 +27,7 @@ const authReducer = (state: State = defaultStore, action: ReduxAction) => {
       return state;
 
     case 'LOGOUT':
-      return {};
+      return undefined;
 
     case 'SET_AUTH_LOADED':
       return {
