@@ -52,7 +52,7 @@ const getStore = (apolloClient: ApolloClient<NormalizedCacheObject>) => {
 
     store = configureStore({
       reducer: persistedReducer,
-      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware).concat(logger),
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(sagaMiddleware).concat(logger),
     });
 
     sagaMiddleware.run(lifecycle, { apolloClient });

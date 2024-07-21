@@ -5,6 +5,10 @@ import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
 import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 import { setTeams } from '../../state/dispatchers/teams';
 import { SagaContext } from '../sagas';
+import { setEnums } from '../../state/dispatchers/enums';
+import { Enum } from '../../models/enum';
+import { Team } from '../../models/team';
+import { Membership } from '../../models/membership';
 /**
  * Load initial data once the essential information changes.
  *
@@ -15,7 +19,7 @@ function* kickoff(context: SagaContext) {
   const {
     data: { kickoff },
   } = yield client?.query({ query: getKickoff });
-  const { me, features } = kickoff;
+  const { me, features, enums } = kickoff;
   yield put(setCurrentUser(me));
 
   /**
@@ -26,7 +30,7 @@ function* kickoff(context: SagaContext) {
   /**
    * Set Teams
    */
-  const mergedTeams = me.memberships.map((membership: any) => {
+  const mergedTeams = me.memberships.map((membership: Membership | { team: Team }) => {
     const { team, ...rest } = membership;
     return {
       ...team,
@@ -37,14 +41,13 @@ function* kickoff(context: SagaContext) {
   yield put(setTeams(mergedTeams));
 
   /**
-   * TODO: Set Enums
-   * https://github.com/gaulatti/whos-that-girl/issues/16
+   * Set Enums
    */
-  // const parsedEnums: Enum[] = [];
-  // Object.entries(JSON.parse(enums)).map(([key, value]) => {
-  //   parsedEnums.push(new Enum(key, value as string[]));
-  // });
-  // yield put(setEnums(parsedEnums));
+  const parsedEnums: Enum[] = [];
+  Object.entries(JSON.parse(enums)).map(([key, value]) => {
+    parsedEnums.push(new Enum(key, value as string[]));
+  });
+  yield put(setEnums(parsedEnums));
 
   /**
    * Set Kickoff Ready
