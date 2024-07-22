@@ -7,27 +7,26 @@ import { Stack } from '../../../components/foundations/stack';
 import { useQuery } from '@apollo/client';
 import { getTeams } from '../../../graphql/queries/teams/index.graphql';
 const TeamsAdmin = () => {
+  const { loading, error, data: queryData } = useQuery(getTeams);
 
-  const { loading, error, data } = useQuery(getTeams);
+  console.log({ loading, error, queryData });
+  type TData = {
+    mail: string;
+    role: string;
+  };
 
-  // console.log(data)
-  // type TData = {
-  //   mail: string;
-  //   role: string;
-  // };
+  const data: TData[] = [];
+  for (let i = 0; i < 13; i++) {
+    data.push({
+      mail: `mail${i}@mail.com`,
+      role: 'admin',
+    });
+  }
 
-  // const data: TData[] = [];
-  // for (let i = 0; i < 13; i++) {
-  //   data.push({
-  //     mail: `mail${i}@mail.com`,
-  //     role: 'admin',
-  //   });
-  // }
-
-  // const colDefs: ColDef<TData>[] = [
-  //   { field: 'mail', headerName: 'E-Mail', flex: 1 },
-  //   { field: 'role', headerName: 'Role', flex: 1 },
-  // ];
+  const colDefs: ColDef<TData>[] = [
+    { field: 'mail', headerName: 'E-Mail', flex: 1 },
+    { field: 'role', headerName: 'Role', flex: 1 },
+  ];
 
   return (
     <Container>
@@ -48,13 +47,13 @@ const TeamsAdmin = () => {
           <BreadcrumbDivider />
           <BreadcrumbItem>
             <BreadcrumbButton>
-            <b>Teams</b>
+              <b>Teams</b>
             </BreadcrumbButton>
           </BreadcrumbItem>
         </Breadcrumb>
-        {/* <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
+        <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
           <AgGridReact rowData={data} columnDefs={colDefs} pagination={true} paginationPageSize={10} />
-        </div> */}
+        </div>
       </Stack>
     </Container>
   );
