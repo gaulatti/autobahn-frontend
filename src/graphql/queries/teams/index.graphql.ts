@@ -2,21 +2,24 @@ import { gql } from "@apollo/client";
 
 export const getTeams = gql`
   query getTeams {
-    projects {
+    teams {
       name
-      team {
-        id
-        name
-      }
-      targets {
-        id
-        name
-      }
-      assignments {
-        id
-        role
-      }
     }
+    # projects {
+    #   name
+    #   team {
+    #     id
+    #     name
+    #   }
+    #   targets {
+    #     id
+    #     name
+    #   }
+    #   assignments {
+    #     id
+    #     role
+    #   }
+    # }
   }
 `;
 

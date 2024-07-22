@@ -5,6 +5,8 @@ import { HistoryScoreChart } from '../components/charts';
 import { Container } from '../components/foundations/container';
 import { Stack } from '../components/foundations/stack';
 import { Trigger } from '../components/trigger';
+import { useQuery } from '@apollo/client';
+import { getTeams } from '../graphql/queries/teams/index.graphql';
 
 const data = [
   {
@@ -76,6 +78,8 @@ const dataSinglePageLoad = {
   ],
 };
 const Home = () => {
+  const { loading, error, data: date } = useQuery(getTeams);
+  console.log({date})
   return (
     <Container>
       <Stack>
