@@ -1,50 +1,56 @@
+import { fetchAuthSession } from 'aws-amplify/auth';
+import axios from 'axios';
 import { put } from 'redux-saga/effects';
-import { getKickoff } from '../../graphql/queries/kickoff.graphql';
-import { setCurrentUser } from '../../state/dispatchers/auth';
-import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
-import { setKickoffReady } from '../../state/dispatchers/lifecycle';
-import { setTeams } from '../../state/dispatchers/teams';
-import { SagaContext } from '../sagas';
-import { setEnums } from '../../state/dispatchers/enums';
 import { Enum } from '../../models/enum';
-import { Team } from '../../models/team';
-import { Membership } from '../../models/membership';
+import { setCurrentUser } from '../../state/dispatchers/auth';
+import { setEnums } from '../../state/dispatchers/enums';
+import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 /**
  * Load initial data once the essential information changes.
  *
  * This can be helpful when the user is set (after login).
  */
-function* kickoff(context: SagaContext) {
-  const { apolloClient: client } = context;
-  const {
-    data: { kickoff },
-  } = yield client?.query({ query: getKickoff });
-  const { me, features, enums } = kickoff;
+
+const fetchWithAuth = async (url: string) => {
+  const { tokens } = await fetchAuthSession();
+
+  const response = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${tokens!.idToken}`,
+    },
+  });
+  return response.data;
+};
+function* kickoff(): Generator<any, void, any> {
+  const kickoff = yield fetchWithAuth('https://2tal2o89zh.execute-api.us-east-1.amazonaws.com/prod/');
+  const { me, enums } = kickoff;
+
   yield put(setCurrentUser(me));
 
-  /**
-   * Set Feature Flags
-   */
-  yield put(setFeatureFlags(features));
+  // TODO: Add Teams and Feature Flags
+  // /**
+  //  * Set Feature Flags
+  //  */
+  // yield put(setFeatureFlags(features));
 
-  /**
-   * Set Teams
-   */
-  const mergedTeams = me.memberships.map((membership: Membership | { team: Team }) => {
-    const { team, ...rest } = membership;
-    return {
-      ...team,
-      ...rest,
-    };
-  });
+  // /**
+  //  * Set Teams
+  //  */
+  // const mergedTeams = me.memberships.map((membership: Membership | { team: Team }) => {
+  //   const { team, ...rest } = membership;
+  //   return {
+  //     ...team,
+  //     ...rest,
+  //   };
+  // });
 
-  yield put(setTeams(mergedTeams));
+  // yield put(setTeams(mergedTeams));
 
   /**
    * Set Enums
    */
   const parsedEnums: Enum[] = [];
-  Object.entries(JSON.parse(enums)).map(([key, value]) => {
+  Object.entries(enums).map(([key, value]) => {
     parsedEnums.push(new Enum(key, value as string[]));
   });
   yield put(setEnums(parsedEnums));
