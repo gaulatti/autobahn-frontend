@@ -1,11 +1,10 @@
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { Store, configureStore } from '@reduxjs/toolkit';
+import localForage from 'localforage';
+import { createLogger } from 'redux-logger';
+import { Persistor, persistReducer, persistStore } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
 import { lifecycle } from '../events/sagas';
 import { reducers } from './reducers';
-import localForage from 'localforage';
-import { Persistor, persistReducer, persistStore } from 'redux-persist';
-import { createLogger } from 'redux-logger';
 
 let store: Store;
 let persistor: Persistor;
@@ -40,10 +39,9 @@ export const clearPersistedStorage = () => {
 
 /**
  * Retrieves the Redux store and persistor.
- * @param apolloClient - The Apollo Client instance.
  * @returns An object containing the Redux store and persistor.
  */
-const getStore = (apolloClient: ApolloClient<NormalizedCacheObject>) => {
+const getStore = () => {
   if (!store) {
     const sagaMiddleware = createSagaMiddleware();
 
@@ -55,7 +53,7 @@ const getStore = (apolloClient: ApolloClient<NormalizedCacheObject>) => {
       middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(sagaMiddleware).concat(logger),
     });
 
-    sagaMiddleware.run(lifecycle, { apolloClient });
+    sagaMiddleware.run(lifecycle);
 
     persistor = persistStore(store);
   }

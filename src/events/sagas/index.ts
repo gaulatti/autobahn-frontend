@@ -2,15 +2,11 @@ import { fork } from 'redux-saga/effects';
 import { authLifecycle } from './auth';
 import { kickoffLifecycle } from './kickoff';
 import { teamsLifecycle } from './teams';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 
-export type SagaContext = {
-  apolloClient: ApolloClient<NormalizedCacheObject>;
-};
 
-function* lifecycle(context: SagaContext) {
+function* lifecycle() {
   yield fork(authLifecycle);
-  yield fork(kickoffLifecycle, context);
+  yield fork(kickoffLifecycle);
   yield fork(teamsLifecycle);
 }
 

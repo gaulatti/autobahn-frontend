@@ -4,12 +4,9 @@ import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../../components/foundations/container';
 import { Stack } from '../../../components/foundations/stack';
-import { useQuery } from '@apollo/client';
-import { getTeams } from '../../../graphql/queries/teams/index.graphql';
-const TeamsAdmin = () => {
-  const { loading, error, data: queryData } = useQuery(getTeams);
 
-  console.log({ loading, error, queryData });
+const TeamsAdmin = () => {
+
   type TData = {
     mail: string;
     role: string;

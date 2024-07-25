@@ -17,7 +17,6 @@
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
-    "@apollo/client": "^3.10.8",
     "@aws-amplify/ui-react": "^6.1.12",
     "@fluentui/react-datepicker-compat": "^0.4.43",
     "@fluentui/react-nav-preview": "^0.5.2",
