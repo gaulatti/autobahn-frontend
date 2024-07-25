@@ -46,10 +46,10 @@ const AuthenticatedRouter = () => {
    * is authenticated and the kickoff is ready.
    */
   if (isAuthenticated && isLoaded && isKickoffReady) {
-    return teams.length ? (
-      <>
-        <Header />
-        <main className='flex justify-center'>
+    return <>
+      <Header />
+      <main className='flex justify-center'>
+        {teams.length ? (
           <Routes>
             <Route path='/admin/projects/create' element={<CreateProject />} />
             <Route path='/admin/projects' element={<ProjectsAdmin />} />
@@ -61,11 +61,11 @@ const AuthenticatedRouter = () => {
             <Route path='/executions' element={<ExecutionsList />} />
             <Route path='/' element={<Home />} />
           </Routes>
-        </main>
-      </>
-    ) : (
-      <>no teams</>
-    );
+        ) : (
+          <>no teams</>
+        )}
+      </main>
+    </>;
   }
 
   /**
