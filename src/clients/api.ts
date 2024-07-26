@@ -16,7 +16,7 @@ export enum Method {
  * @param data - The data to send with the request (optional).
  * @returns A Promise that resolves to the response data.
  */
-const sendRequest = async (method: Method, url: string = '', data?: unknown) => {
+const sendRequest = async (method: Method, url: string = '', data?: any) => {
   const { tokens } = await fetchAuthSession();
   const fullURL = `${import.meta.env.VITE_API_FQDN}${url}`;
   const config = {
@@ -48,10 +48,10 @@ const sendRequest = async (method: Method, url: string = '', data?: unknown) => 
  * @param postData - The data to be sent with the request.
  * @returns An object containing the response data, loading state, and error state.
  */
-const useAPI = (method: Method, url?: string, postData?: unknown) => {
-  const [data, setData] = useState<unknown>();
+const useAPI = (method: Method, url?: string, postData?: any) => {
+  const [data, setData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | unknown>(null);
+  const [error, setError] = useState<Error | any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
