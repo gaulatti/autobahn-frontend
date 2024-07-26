@@ -9,25 +9,19 @@ import { Membership } from '../../models/membership';
 import { Team } from '../../models/team';
 import { setTeams } from '../../state/dispatchers/teams';
 import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
+import { Method, sendRequest } from '../../clients/api';
 /**
  * Load initial data once the essential information changes.
  *
  * This can be helpful when the user is set (after login).
  */
-const fetchWithAuth = async (url: string) => {
-  const { tokens } = await fetchAuthSession();
 
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${tokens!.idToken}`,
-    },
-  });
-  return response.data;
-};
 function* kickoff(): Generator<any, void, any> {
-  const kickoff = yield fetchWithAuth(import.meta.env.VITE_API_FQDN);
-  const { me, enums, features } = kickoff;
+  const { me, enums, features } = yield sendRequest(Method.GET);
 
+  /**
+   * Set Current User
+   */
   yield put(setCurrentUser(me));
 
   /**
