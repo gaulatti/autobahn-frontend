@@ -1,11 +1,15 @@
-import { Card, CardHeader, Body1, Caption1, CardPreview, CardFooter, Button, Title2, Label, Input, Spinner } from '@fluentui/react-components';
+import { Card, CardHeader, Body1, Caption1, CardPreview, CardFooter, Button, Title2, Label, Input, Spinner, Select } from '@fluentui/react-components';
 import { AddFilled } from '@fluentui/react-icons';
 import { useCallback, useState } from 'react';
 import { Method, sendRequest } from '../../clients/api';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentTeam, getTeams } from '../../state/selectors/teams';
+import { useSelector } from 'react-redux';
 
 const Trigger = () => {
   const navigate = useNavigate();
+  const teams = useSelector(getTeams);
+  const currentTeam = useSelector(getCurrentTeam)!;
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   /**
@@ -18,9 +22,10 @@ const Trigger = () => {
       const form = e.currentTarget;
       const formElements = form.elements as typeof form.elements & {
         url: { value: string };
+        team: { value: number };
       };
 
-      sendRequest(Method.POST, 'executions', { url: formElements.url.value }).then(() => {
+      sendRequest(Method.POST, 'executions', { url: formElements.url.value, team: formElements.team.value }).then(() => {
         navigate('/executions');
         setIsLoading(false);
       });
@@ -53,9 +58,20 @@ const Trigger = () => {
           </Body1>
         </CardPreview>
         <CardFooter>
-          <Button type='submit' icon={<AddFilled fontSize={16} />}>
-            Trigger
-          </Button>
+          <section className='flex justify-between w-full'>
+            <div>
+              <Select id='team' defaultValue={currentTeam.id}>
+                {teams.map((team) => (
+                  <option key={team.id} value={team.id}>
+                    {team.name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <Button type='submit' icon={<AddFilled fontSize={16} />}>
+              Trigger
+            </Button>
+          </section>
         </CardFooter>
       </Card>
     </form>
