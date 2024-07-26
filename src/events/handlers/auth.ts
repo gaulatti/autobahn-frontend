@@ -1,11 +1,10 @@
+import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
 import { put, select } from 'redux-saga/effects';
+import { clearPersistedStorage } from '../../state';
+import { login as loginDispatcher, setAuthLoaded } from '../../state/dispatchers/auth';
 import { setKickoff } from '../../state/dispatchers/lifecycle';
 import { currentUser as currentUserSelector } from '../../state/selectors/auth';
-import { clearPersistedStorage } from '../../state';
 import { getKickoffReady } from '../../state/selectors/lifecycle';
-import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
-import { setAuthLoaded } from '../../state/dispatchers/auth';
-import { login as loginDispatcher } from '../../state/dispatchers/auth';
 
 /**
  * Checks the user's session and dispatches the appropriate actions based on the session status.
@@ -13,11 +12,12 @@ import { login as loginDispatcher } from '../../state/dispatchers/auth';
  */
 function* checkSession(): unknown {
   const { userSub } = yield fetchAuthSession();
+  const isKickoffReady = yield select(getKickoffReady);
 
   /**
    * If the user is authenticated, fetch the user attributes and dispatch the login action.
    */
-  if (userSub) {
+  if (userSub && !isKickoffReady) {
     const { sub: id, family_name: last_name, given_name: name, email } = yield fetchUserAttributes();
 
     /**
@@ -67,4 +67,5 @@ function* logout(): unknown {
   }
 }
 
-export { login, logout, checkSession };
+export { checkSession, login, logout };
+
