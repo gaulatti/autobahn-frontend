@@ -25,7 +25,7 @@ const fetchWithAuth = async (url: string) => {
   return response.data;
 };
 function* kickoff(): Generator<any, void, any> {
-  const kickoff = yield fetchWithAuth('https://2tal2o89zh.execute-api.us-east-1.amazonaws.com/prod/');
+  const kickoff = yield fetchWithAuth(import.meta.env.VITE_API_FQDN);
   const { me, enums, features } = kickoff;
 
   yield put(setCurrentUser(me));
