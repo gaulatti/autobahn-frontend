@@ -1,15 +1,13 @@
-import { fetchAuthSession } from 'aws-amplify/auth';
-import axios from 'axios';
 import { put } from 'redux-saga/effects';
+import { Method, sendRequest } from '../../clients/api';
 import { Enum } from '../../models/enum';
-import { setCurrentUser } from '../../state/dispatchers/auth';
-import { setEnums } from '../../state/dispatchers/enums';
-import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 import { Membership } from '../../models/membership';
 import { Team } from '../../models/team';
-import { setTeams } from '../../state/dispatchers/teams';
+import { setCurrentUser } from '../../state/dispatchers/auth';
+import { setEnums } from '../../state/dispatchers/enums';
 import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
-import { Method, sendRequest } from '../../clients/api';
+import { setKickoffReady } from '../../state/dispatchers/lifecycle';
+import { setTeams } from '../../state/dispatchers/teams';
 /**
  * Load initial data once the essential information changes.
  *
