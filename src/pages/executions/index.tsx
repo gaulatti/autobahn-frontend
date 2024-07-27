@@ -1,6 +1,5 @@
 import {
   Breadcrumb,
-  BreadcrumbButton,
   BreadcrumbDivider,
   BreadcrumbItem,
   Menu,
@@ -9,7 +8,7 @@ import {
   MenuPopover,
   MenuTrigger,
   Title1,
-  ToolbarButton,
+  ToolbarButton
 } from '@fluentui/react-components';
 import { MoreHorizontal24Filled } from '@fluentui/react-icons';
 import { ColDef } from 'ag-grid-community';
@@ -73,15 +72,11 @@ const ExecutionsList = () => {
         <Title1 className='text-left'>Beacon Executions</Title1>
         <Breadcrumb aria-label='Breadcrumb default example'>
           <BreadcrumbItem>
-            <BreadcrumbButton>
               <Link to='/'>Home</Link>
-            </BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <BreadcrumbButton>
-              <Link to='/executions'>Executions</Link>
-            </BreadcrumbButton>
+            <b>Executions</b>
           </BreadcrumbItem>
         </Breadcrumb>
         <Trigger setRefresh={setRefresh} />

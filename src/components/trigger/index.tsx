@@ -1,10 +1,10 @@
-import { Card, CardHeader, Body1, Caption1, CardPreview, CardFooter, Button, Title2, Label, Input, Spinner, Select } from '@fluentui/react-components';
+import { Body1, Button, Caption1, Card, CardFooter, CardHeader, CardPreview, Input, Label, Select, Spinner, Title2 } from '@fluentui/react-components';
 import { AddFilled } from '@fluentui/react-icons';
 import { useCallback, useState } from 'react';
-import { Method, sendRequest } from '../../clients/api';
-import { useNavigate } from 'react-router-dom';
-import { getCurrentTeam, getTeams } from '../../state/selectors/teams';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Method, sendRequest } from '../../clients/api';
+import { getCurrentTeam, getTeams } from '../../state/selectors/teams';
 
 /**
  * Represents a component that triggers the execution of Lighthouse against a user-specified URL.

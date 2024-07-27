@@ -1,10 +1,5 @@
 import { Tooltip } from '@fluentui/react-components';
-import {
-  Board20Regular,
-  DocumentCatchUpRegular,
-  PeopleTeamFilled,
-  PersonLightbulb20Regular
-} from '@fluentui/react-icons';
+import { Board20Regular, DocumentCatchUp20Regular, PeopleTeam20Regular, PersonLightbulb20Regular, TaskListSquareRtl20Regular } from '@fluentui/react-icons';
 import {
   Hamburger,
   NavCategory,
@@ -106,20 +101,24 @@ const NavigationMenu = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Rea
             <NavItem icon={<Board20Regular />} value='1' onClick={(event) => handleNavigate(event, '/')}>
               Dashboard
             </NavItem>
+            <NavSectionHeader>Beacons</NavSectionHeader>
+            <NavItem icon={<TaskListSquareRtl20Regular />} value='1' onClick={(event) => handleNavigate(event, '/executions')}>
+              Executions List
+            </NavItem>
             <NavSectionHeader>Management</NavSectionHeader>
             <NavCategory value='2'>
               <NavCategoryItem icon={<PersonLightbulb20Regular />}>Users</NavCategoryItem>
               <NavSubItemGroup>
                 <NavSubItem value='3' onClick={(event) => handleNavigate(event, '/admin/users')}>
-                  List of Users
+                  Users List
                 </NavSubItem>
               </NavSubItemGroup>
             </NavCategory>
             <NavCategory value='5'>
-              <NavCategoryItem icon={<DocumentCatchUpRegular />}>Projects</NavCategoryItem>
+              <NavCategoryItem icon={<DocumentCatchUp20Regular />}>Projects</NavCategoryItem>
               <NavSubItemGroup>
                 <NavSubItem value='6' onClick={(event) => handleNavigate(event, '/admin/projects')}>
-                  List of Projects
+                  Projects List
                 </NavSubItem>
                 <NavSubItem value='7' onClick={(event) => handleNavigate(event, '/admin/projects/create')}>
                   Create New
@@ -127,10 +126,10 @@ const NavigationMenu = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Rea
               </NavSubItemGroup>
             </NavCategory>
             <NavCategory value='8'>
-              <NavCategoryItem icon={<PeopleTeamFilled />}>Teams</NavCategoryItem>
+              <NavCategoryItem icon={<PeopleTeam20Regular />}>Teams</NavCategoryItem>
               <NavSubItemGroup>
                 <NavSubItem value='9' onClick={(event) => handleNavigate(event, '/admin/teams')}>
-                  List of Teams
+                  Teams List
                 </NavSubItem>
                 <NavSubItem value='10' onClick={(event) => handleNavigate(event, '/admin/teams/create')}>
                   Create New

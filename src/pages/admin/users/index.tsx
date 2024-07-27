@@ -1,4 +1,4 @@
-import { Breadcrumb, BreadcrumbButton, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from 'react-router-dom';
@@ -29,21 +29,15 @@ const UsersAdmin = () => {
         <Title1 className='text-left'>Users</Title1>
         <Breadcrumb aria-label='Breadcrumb default example'>
           <BreadcrumbItem>
-            <BreadcrumbButton>
-              <Link to='/'>Home</Link>
-            </BreadcrumbButton>
+            <Link to='/'>Home</Link>
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <BreadcrumbButton>
-              <Link to='/admin'>Admin</Link>
-            </BreadcrumbButton>
+            <Link to='/admin'>Admin</Link>
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <BreadcrumbButton>
             <b>Users</b>
-            </BreadcrumbButton>
           </BreadcrumbItem>
         </Breadcrumb>
         <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
