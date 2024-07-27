@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
  * @param {React.Dispatch<React.SetStateAction<number>>} props.setRefresh - The function to refresh the component.
  * @returns {JSX.Element} The rendered Trigger component.
  */
-const Trigger = ({ setRefresh }: { setRefresh: React.Dispatch<React.SetStateAction<number>> }): JSX.Element => {
+const Trigger = ({ setRefresh }: { setRefresh?: React.Dispatch<React.SetStateAction<number>> }): JSX.Element => {
   const navigate = useNavigate();
   const teams = useSelector(getTeams);
   const currentTeam = useSelector(getCurrentTeam)!;

@@ -1,4 +1,3 @@
-import { Enum } from '../../models/enum';
 import { ReduxAction } from '../dispatchers/base';
 import defaultStore, { State } from '../store';
 import { Reducer } from './base';
@@ -6,7 +5,7 @@ import { Reducer } from './base';
 const setEnumsReducer = (state: State, action: ReduxAction): State => {
   return {
     ...state,
-    enums: action.payload as Enum[],
+    enums: action.payload as Record<string, string[]>,
   };
 };
 
