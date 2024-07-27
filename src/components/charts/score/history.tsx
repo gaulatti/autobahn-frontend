@@ -1,11 +1,7 @@
+import { Title3 } from '@fluentui/react-components';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const data: Record<string, string | number>[] = [];
-for (let i = 0; i < 13; i++) {
-  data.push({ name: `${i}`, m: Math.random() * 5000, d: Math.random() * 5000, amt: Math.random() * 5000 });
-}
-
-const HistoryScoreChart = () => (
+const HistoryScoreChart = ({ data }: { data?: any[] }) => (
   <ResponsiveContainer width='100%' height={300} className='m-4'>
     <LineChart
       data={data}
@@ -18,11 +14,12 @@ const HistoryScoreChart = () => (
     >
       <CartesianGrid strokeDasharray='3 3' />
       <XAxis dataKey='name' />
-      <YAxis />
+      <YAxis domain={[0, 'auto']}/>
       <Tooltip />
       <Legend />
-      <Line type='monotone' dataKey='m' name='Mobile' stroke='#d35400' activeDot={{ r: 8 }}></Line>
-      <Line type='monotone' dataKey='d' name='Desktop' stroke='#2980b9' activeDot={{ r: 8 }} />
+      <Title3>Performance Score</Title3>
+      <Line type='monotone' isAnimationActive={false} dataKey='m' name='Mobile' stroke='#d35400' activeDot={{ r: 8 }}></Line>
+      <Line type='monotone' isAnimationActive={false} dataKey='d' name='Desktop' stroke='#2980b9' activeDot={{ r: 8 }} />
     </LineChart>
   </ResponsiveContainer>
 );
