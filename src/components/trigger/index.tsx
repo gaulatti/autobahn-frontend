@@ -6,7 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { getCurrentTeam, getTeams } from '../../state/selectors/teams';
 import { useSelector } from 'react-redux';
 
-const Trigger = () => {
+/**
+ * Represents a component that triggers the execution of Lighthouse against a user-specified URL.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {React.Dispatch<React.SetStateAction<number>>} props.setRefresh - The function to refresh the component.
+ * @returns {JSX.Element} The rendered Trigger component.
+ */
+const Trigger = ({ setRefresh }: { setRefresh: React.Dispatch<React.SetStateAction<number>> }): JSX.Element => {
   const navigate = useNavigate();
   const teams = useSelector(getTeams);
   const currentTeam = useSelector(getCurrentTeam)!;
@@ -25,12 +33,19 @@ const Trigger = () => {
         team: { value: number };
       };
 
+      /**
+       * Send request to trigger execution
+       */
       sendRequest(Method.POST, 'executions', { url: formElements.url.value, team: formElements.team.value }).then(() => {
-        navigate('/executions');
+        if (setRefresh) {
+          setRefresh(new Date().getTime());
+        } else {
+          navigate('/executions');
+        }
         setIsLoading(false);
       });
     },
-    [navigate, setIsLoading]
+    [navigate, setIsLoading, setRefresh]
   );
 
   return (

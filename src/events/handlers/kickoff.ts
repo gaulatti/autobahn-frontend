@@ -1,13 +1,13 @@
 import { put } from 'redux-saga/effects';
 import { Method, sendRequest } from '../../clients/api';
-import { Enum } from '../../models/enum';
 import { Membership } from '../../models/membership';
 import { Team } from '../../models/team';
 import { setCurrentUser } from '../../state/dispatchers/auth';
-import { setEnums } from '../../state/dispatchers/enums';
 import { setFeatureFlags } from '../../state/dispatchers/featureFlags';
-import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 import { setTeams } from '../../state/dispatchers/teams';
+import { pascalToCamelCase } from '../../utils/strings';
+import { setEnums } from '../../state/dispatchers/enums';
+import { setKickoffReady } from '../../state/dispatchers/lifecycle';
 /**
  * Load initial data once the essential information changes.
  *
@@ -43,9 +43,9 @@ function* kickoff(): Generator<any, void, any> {
   /**
    * Set Enums
    */
-  const parsedEnums: Enum[] = [];
+  const parsedEnums: Record<string, string[]> = {};
   Object.entries(enums).map(([key, value]) => {
-    parsedEnums.push(new Enum(key, value as string[]));
+    parsedEnums[pascalToCamelCase(key)] = value as string[];
   });
   yield put(setEnums(parsedEnums));
 

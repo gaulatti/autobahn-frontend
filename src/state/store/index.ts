@@ -1,4 +1,4 @@
-import { Enum } from "../../models/enum";
+
 import { FeatureFlag } from "../../models/feature_flag";
 import { Team } from "../../models/team";
 import auth, { AuthStore } from "./auth";
@@ -10,7 +10,7 @@ export interface State {
   auth: AuthStore;
   featureFlags: FeatureFlag[];
   teams: Team[];
-  enums: Enum[];
+  enums: Record<string, string[]>;
   kickoffReady: boolean;
 }
 

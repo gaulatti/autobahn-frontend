@@ -44,11 +44,12 @@ const sendRequest = async (method: Method, url: string = '', data?: any) => {
  * Custom hook for making API requests.
  *
  * @param method - The HTTP method for the request.
- * @param url - The URL for the request.
- * @param postData - The data to be sent with the request.
+ * @param dependencies - Additional dependencies to include in the useEffect hook.
+ * @param url - The URL for the API request.
+ * @param postData - The data to be sent in the request body.
  * @returns An object containing the response data, loading state, and error state.
  */
-const useAPI = (method: Method, url?: string, postData?: any) => {
+const useAPI = (method: Method, dependencies: any[], url?: string, postData?: any) => {
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | any>(null);
@@ -67,7 +68,7 @@ const useAPI = (method: Method, url?: string, postData?: any) => {
     };
 
     fetchData();
-  }, [url, method, postData]);
+  }, [url, method, postData, ...dependencies]);
 
   return { data, loading, error };
 };

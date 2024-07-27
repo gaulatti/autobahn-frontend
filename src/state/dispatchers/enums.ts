@@ -1,4 +1,3 @@
-import { Enum } from '../../models/enum';
 import { ReduxAction } from './base';
 
 /**
@@ -6,6 +5,6 @@ import { ReduxAction } from './base';
  *
  * This is executed after as part of kickoff.
  */
-export const setEnums = (enums: Enum[]): ReduxAction => {
+export const setEnums = (enums: Record<string, string[]>): ReduxAction => {
   return { type: 'SET_ENUMS', payload: enums };
 };
