@@ -2,15 +2,8 @@ import {
   Breadcrumb,
   BreadcrumbDivider,
   BreadcrumbItem,
-  Menu,
-  MenuItem,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
-  Title1,
-  ToolbarButton
+  Title1
 } from '@fluentui/react-components';
-import { MoreHorizontal24Filled } from '@fluentui/react-icons';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
@@ -47,22 +40,7 @@ const ExecutionsList = () => {
       field: 'results',
       headerName: 'Actions',
       flex: 1,
-      cellRenderer: (params: { data: TData }) => {
-        return (
-          <Menu>
-            <MenuTrigger disableButtonEnhancement>
-              <ToolbarButton aria-label='More' icon={<MoreHorizontal24Filled />} />
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                <MenuItem>
-                  <Link to={`/executions/${params.data.uuid}`}>View Results</Link>
-                </MenuItem>
-              </MenuList>
-            </MenuPopover>
-          </Menu>
-        );
-      },
+      cellRenderer: (params: { data: TData }) => <b><Link to={`/executions/${params.data.uuid}`}>View Results</Link></b>,
     },
   ];
 
