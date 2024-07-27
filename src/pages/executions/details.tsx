@@ -3,12 +3,6 @@ import {
   BreadcrumbDivider,
   BreadcrumbItem,
   Button,
-  Card,
-  CardFooter,
-  CardHeader,
-  CardPreview,
-  Divider,
-  InfoLabel,
   Spinner,
   Table,
   TableBody,
@@ -17,8 +11,7 @@ import {
   TableHeaderCell,
   TableRow,
   Title1,
-  Title2,
-  Title3,
+  Title3
 } from '@fluentui/react-components';
 
 import { DocumentSearchRegular } from '@fluentui/react-icons';
