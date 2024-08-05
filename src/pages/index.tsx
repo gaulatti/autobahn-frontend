@@ -5,6 +5,7 @@ import { HistoryScoreChart } from '../components/charts';
 import { Container } from '../components/foundations/container';
 import { Stack } from '../components/foundations/stack';
 import { Trigger } from '../components/trigger';
+import useWebSocket from 'react-use-websocket';
 
 const data = [
   {
@@ -75,7 +76,11 @@ const dataSinglePageLoad = {
     { source: 4, target: 9, value: 1000 },
   ],
 };
+
 const Home = () => {
+  console.log(import.meta.env.VITE_WEBSOCKET_API_FQDN)
+  const { sendMessage, lastMessage, readyState } = useWebSocket(import.meta.env.VITE_WEBSOCKET_API_FQDN);
+  console.log({ lastMessage, readyState });
   return (
     <Container>
       <Stack>
