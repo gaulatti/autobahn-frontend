@@ -7,7 +7,7 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+*:not([class*="icon"]) {
   font-family: 'Radio Canada', sans-serif !important;
 }
 
