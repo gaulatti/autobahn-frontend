@@ -10,11 +10,24 @@ const ExecutionDetails = () => {
   const { uuid } = useParams();
   const { pathname } = useLocation();
 
+  /**
+   * The viewport mode from the URL.
+   */
   const viewportMode = useMemo(() => {
     return pathname.split('/').pop();
   }, [pathname]);
 
+  /**
+   *  Fetch the execution data from the API.
+   */
   const { data, loading } = useAPI(Method.GET, [], `executions/${uuid}/${viewportMode}`);
+
+  /**
+   * The parsed report data from the API response.
+   */
+  const report = useMemo(() => {
+    return data ? JSON.parse(data.report) : null;
+  }, [data]);
 
   return (
     <Container>
@@ -43,7 +56,7 @@ const ExecutionDetails = () => {
               <Spinner size='huge' />
             </div>
           )}
-          {data ? <React2LighthouseViewer json={data} /> : <></>}
+          {report ? <React2LighthouseViewer json={report} /> : <></>}
         </section>
       </Stack>
     </Container>

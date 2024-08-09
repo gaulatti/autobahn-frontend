@@ -38,7 +38,7 @@ const ExecutionResults = () => {
 
   const records = useMemo(() => {
     if (data) {
-      return { desktop: data.find((item: any) => item.mode === 1), mobile: data.find((item: any) => item.mode === 0) };
+      return { desktop: data.results.find((item: any) => item.mode === 1), mobile: data.results.find((item: any) => item.mode === 0) };
     }
   }, [data]);
 

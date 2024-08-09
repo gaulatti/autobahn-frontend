@@ -19,6 +19,7 @@ export enum Method {
 const sendRequest = async (method: Method, url: string = '', data?: any) => {
   const { tokens } = await fetchAuthSession();
   const fullURL = `${import.meta.env.VITE_API_FQDN}${url}`;
+
   const config = {
     headers: {
       Authorization: `Bearer ${tokens!.idToken}`,
@@ -26,7 +27,7 @@ const sendRequest = async (method: Method, url: string = '', data?: any) => {
   };
 
   if (method === Method.GET) {
-    const response = await axios.get(fullURL, config);
+    const response = await axios.get(fullURL, {params: data, ...config});
     return response.data;
   } else if (method === Method.POST) {
     const response = await axios.post(fullURL, data, config);

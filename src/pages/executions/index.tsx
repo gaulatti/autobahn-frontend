@@ -92,10 +92,18 @@ const ExecutionsList = () => {
       rowCount: undefined,
 
       getRows: async (params: IGetRowsParams) => {
-        console.log(params);
+        console.log(JSON.stringify(params));
         setLoading(true);
-        const rowsThisPage = await sendRequest(Method.GET, 'executions');
-        params.successCallback(rowsThisPage, -1);
+        const queryParams = {
+          sort: params.sortModel.map((sort) => `${sort.colId},${sort.sort}`).join(';'),
+          filters: JSON.stringify(params.filterModel),
+          startRow: params.startRow,
+          endRow: params.endRow,
+        };
+
+        const result = await sendRequest(Method.GET, 'executions', queryParams);
+
+        params.successCallback(result.beacons.rows, result.beacons.count);
         setLoading(false);
       },
     }),
@@ -125,7 +133,7 @@ const ExecutionsList = () => {
             columnDefs={colDefs}
             pagination={true}
             paginationPageSize={20}
-            sortingOrder={['desc', 'asc', null]}
+            // sortingOrder={['desc', 'asc', null]}
           />
         </div>
       </Stack>
