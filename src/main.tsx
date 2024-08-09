@@ -3,7 +3,6 @@ import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 import App from './App.tsx';
 import { config } from './config.ts';
 import { getStore } from './state/index.ts';
@@ -16,7 +15,7 @@ Amplify.configure(config.aws);
 /**
  * Creates the Redux store.
  */
-const { store, persistor } = getStore();
+const { store } = getStore();
 
 /**
  * Renders the application.
@@ -25,9 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <FluentProvider theme={webLightTheme}>
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
           <App />
-        </PersistGate>
       </Provider>
     </FluentProvider>
   </React.StrictMode>

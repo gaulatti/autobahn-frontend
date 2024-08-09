@@ -1,6 +1,5 @@
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
 import { put, select } from 'redux-saga/effects';
-import { clearPersistedStorage } from '../../state';
 import { login as loginDispatcher, setAuthLoaded } from '../../state/dispatchers/auth';
 import { setKickoff } from '../../state/dispatchers/lifecycle';
 import { currentUser as currentUserSelector } from '../../state/selectors/auth';
@@ -55,17 +54,5 @@ function* login(): unknown {
   }
 }
 
-/**
- * Logs out the user by clearing persisted storage.
- * @returns A generator object.
- */
-function* logout(): unknown {
-  try {
-    yield clearPersistedStorage();
-  } catch (e) {
-    console.error('Error when setting logout', e);
-  }
-}
-
-export { checkSession, login, logout };
+export { checkSession, login };
 

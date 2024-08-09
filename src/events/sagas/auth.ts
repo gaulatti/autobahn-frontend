@@ -1,13 +1,13 @@
 import { takeLatest } from '@redux-saga/core/effects';
-import { checkSession, login, logout } from '../handlers/auth';
+import { checkSession, login } from '../handlers/auth';
+import { fork } from 'redux-saga/effects';
 
 /**
  * Handles the authentication lifecycle.
  */
 function* authLifecycle() {
-  yield takeLatest('persist/REHYDRATE', checkSession);
+  yield fork(checkSession);
   yield takeLatest('LOGIN', login);
-  yield takeLatest('LOGOUT', logout);
 }
 
 export { authLifecycle };
