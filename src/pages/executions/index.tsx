@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
-import { Trigger } from '../../components/trigger';
+import { WebSocketManager } from '../../engines/sockets';
 import { getEnums } from '../../state/selectors/enums';
+import { Trigger } from '../../components/trigger';
 
 type TData = {
   uuid: string;
@@ -27,13 +28,20 @@ const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', 
 
 const ExecutionsList = () => {
   const enums = useSelector(getEnums);
-  const [refresh, setRefresh] = useState<number>(0);
+  const [refreshCells, setRefreshCells] = useState<number>(0);
   const gridRef = useRef<AgGridReact>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  /**
+   * This useEffect is used to listen to the WebSocketManager for REFRESH_EXECUTIONS_TABLE action
+   */
   useEffect(() => {
-    gridRef.current?.api?.refreshCells();
-  }, [refresh]);
+    WebSocketManager.getInstance().addListener((message: { action: string}) => {
+      if(message.action === "REFRESH_EXECUTIONS_TABLE") {
+        setRefreshCells(Math.random())
+      }
+    })
+  }, [])
 
   const colDefs: ColDef<TData>[] = [
     {
@@ -92,7 +100,6 @@ const ExecutionsList = () => {
       rowCount: undefined,
 
       getRows: async (params: IGetRowsParams) => {
-        console.log(JSON.stringify(params));
         setLoading(true);
         const queryParams = {
           sort: params.sortModel.map((sort) => `${sort.colId},${sort.sort}`).join(';'),
@@ -107,7 +114,7 @@ const ExecutionsList = () => {
         setLoading(false);
       },
     }),
-    []
+    [refreshCells]
   );
 
   return (
@@ -123,7 +130,7 @@ const ExecutionsList = () => {
             <b>Executions</b>
           </BreadcrumbItem>
         </Breadcrumb>
-        <Trigger setRefresh={setRefresh} />
+        <Trigger />
         <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
           <AgGridReact
             datasource={dataSource}
@@ -133,7 +140,7 @@ const ExecutionsList = () => {
             columnDefs={colDefs}
             pagination={true}
             paginationPageSize={20}
-            // sortingOrder={['desc', 'asc', null]}
+            sortingOrder={['desc', 'asc', null]}
           />
         </div>
       </Stack>

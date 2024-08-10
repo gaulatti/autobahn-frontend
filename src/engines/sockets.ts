@@ -15,7 +15,7 @@
  * ```
  */
 class WebSocketManager {
-  private socket: WebSocket = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_API_FQDN}/prod`);
+  private socket: WebSocket;
   private isConnected: boolean = false;
   private messageQueue: object[] = [];
   private reconnectInterval: number = 5000;
@@ -28,9 +28,9 @@ class WebSocketManager {
    *
    * @returns The singleton instance of WebSocketManager.
    */
-  public static getInstance = () => {
+  public static getInstance = (token?: string) => {removeEventListener
     if (!WebSocketManager.instance) {
-      WebSocketManager.instance = new WebSocketManager();
+      WebSocketManager.instance = new WebSocketManager(token!);
     }
 
     return WebSocketManager.instance;
@@ -41,7 +41,9 @@ class WebSocketManager {
    * This private constructor is called internally to initialize the class.
    * It automatically calls the `connect` method to establish a connection.
    */
-  private constructor() {
+  private constructor(token: string) {
+    this.socket = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_API_FQDN}/prod?Authorization=${encodeURIComponent(token)}`);
+
     this.connect();
   }
 

@@ -4,14 +4,20 @@ import { login as loginDispatcher, setAuthLoaded } from '../../state/dispatchers
 import { setKickoff } from '../../state/dispatchers/lifecycle';
 import { currentUser as currentUserSelector } from '../../state/selectors/auth';
 import { getKickoffReady } from '../../state/selectors/lifecycle';
+import { WebSocketManager } from '../../engines/sockets';
 
 /**
  * Checks the user's session and dispatches the appropriate actions based on the session status.
  * @returns An unknown value.
  */
 function* checkSession(): unknown {
-  const { userSub } = yield fetchAuthSession();
+  const { userSub, tokens: { accessToken} } = yield fetchAuthSession();
   const isKickoffReady = yield select(getKickoffReady);
+
+  /**
+   * Initialize the WebSocketManager with the access token.
+   */
+  WebSocketManager.getInstance(accessToken.toString())
 
   /**
    * If the user is authenticated, fetch the user attributes and dispatch the login action.
