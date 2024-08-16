@@ -1,4 +1,4 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Label, Spinner, Title1 } from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Spinner, Title1 } from '@fluentui/react-components';
 import { ColDef, IDatasource, IGetRowsParams, ValueGetterParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
@@ -8,9 +8,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
+import { Trigger } from '../../components/trigger';
 import { WebSocketManager } from '../../engines/sockets';
 import { getEnums } from '../../state/selectors/enums';
-import { Trigger } from '../../components/trigger';
 
 type TData = {
   uuid: string;
@@ -25,7 +25,7 @@ type TData = {
 /**
  * Colors are matching the ENUM values from the backend
  */
-const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', '#c0392b'];
+const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', '#c0392b', '#f6b93b'];
 
 const ExecutionsList = () => {
   const enums = useSelector(getEnums);
@@ -34,8 +34,8 @@ const ExecutionsList = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const retryExecution = useCallback(async (uuid: string) => {
-    await sendRequest(Method.POST, `executions/${uuid}/retry`);
+  const retryExecution = useCallback(async (mode: number, uuid: string) => {
+    await sendRequest(Method.POST, `executions/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
   }, []);
 
   const viewResults = useCallback(
@@ -84,10 +84,9 @@ const ExecutionsList = () => {
           case 4:
             return 'Done';
           case 5:
-            if (params.data.retries > 3) {
-              return <Label>Retrying ({params.data.retries}/3)</Label>;
-            }
-            return <Label>Failed</Label>;
+            return 'Failed';
+          case 6:
+            return `Retrying (${params.data.retries})`;
         }
       },
       cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
@@ -101,9 +100,9 @@ const ExecutionsList = () => {
       cellRenderer: (params: { data: TData }) => {
         switch (params.data?.mode) {
           case 0:
-            return <Label>Mobile</Label>;
+            return 'Mobile';
           case 1:
-            return <Label>Desktop</Label>;
+            return 'Desktop';
         }
       },
       cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
@@ -127,15 +126,13 @@ const ExecutionsList = () => {
       cellRenderer: (params: { data: TData }) => {
         switch (params.data?.status) {
           case 0:
+          case 6:
             return <Spinner size='extra-tiny' />;
           case 5:
-            if (params.data.retries > 3) {
-              return <Spinner size='extra-tiny' />;
-            }
             return (
-                <Button onClick={() => retryExecution(params.data?.uuid)} className='w-full'>
-                  Retry
-                </Button>
+              <Button onClick={() => retryExecution(params.data?.mode, params.data?.uuid)} className='w-full'>
+                Retry
+              </Button>
             );
           default:
             return (
