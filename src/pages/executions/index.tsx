@@ -195,6 +195,8 @@ const ExecutionsList = () => {
             pagination={true}
             paginationPageSize={20}
             sortingOrder={['desc', 'asc', null]}
+            enableCellTextSelection={true}
+            ensureDomOrder={true}
             autoSizeStrategy={{ type: 'fitCellContents', colIds: ['created_at', 'status', 'results'] }}
           />
         </div>
