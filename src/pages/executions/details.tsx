@@ -32,7 +32,7 @@ const ExecutionDetails = () => {
   return (
     <Container>
       <Stack>
-        <Title1 className='text-left'>Beacon Execution Detail</Title1>
+        <Title1 className='text-left'>Execution Detail</Title1>
         <Breadcrumb aria-label='Breadcrumb default example'>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>

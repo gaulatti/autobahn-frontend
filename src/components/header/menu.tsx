@@ -101,7 +101,7 @@ const NavigationMenu = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Rea
             <NavItem icon={<Board20Regular />} value='1' onClick={(event) => handleNavigate(event, '/')}>
               Dashboard
             </NavItem>
-            <NavSectionHeader>Beacons</NavSectionHeader>
+            <NavSectionHeader>Executions</NavSectionHeader>
             <NavItem icon={<TaskListSquareRtl20Regular />} value='1' onClick={(event) => handleNavigate(event, '/executions')}>
               Executions List
             </NavItem>

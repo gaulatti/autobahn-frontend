@@ -177,7 +177,7 @@ const ExecutionsList = () => {
   return (
     <Container>
       <Stack>
-        <Title1 className='text-left'>Beacon Executions</Title1>
+        <Title1 className='text-left'>Executions</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>
