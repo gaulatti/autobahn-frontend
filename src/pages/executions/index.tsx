@@ -1,10 +1,10 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Spinner, Title1 } from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Label, Spinner, Title1 } from '@fluentui/react-components';
 import { ColDef, IDatasource, IGetRowsParams, ValueGetterParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
@@ -19,6 +19,7 @@ type TData = {
   status: number;
   mode: number;
   results: string;
+  retries: number;
 };
 
 /**
@@ -31,17 +32,29 @@ const ExecutionsList = () => {
   const [refreshCells, setRefreshCells] = useState<number>(0);
   const gridRef = useRef<AgGridReact>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const retryExecution = useCallback(async (uuid: string) => {
+    await sendRequest(Method.POST, `executions/${uuid}/retry`);
+  }, []);
+
+  const viewResults = useCallback(
+    (uuid: string) => {
+      navigate(`/executions/${uuid}`);
+    },
+    [navigate]
+  );
 
   /**
    * This useEffect is used to listen to the WebSocketManager for REFRESH_EXECUTIONS_TABLE action
    */
   useEffect(() => {
-    WebSocketManager.getInstance().addListener((message: { action: string}) => {
-      if(message.action === "REFRESH_EXECUTIONS_TABLE") {
-        setRefreshCells(Math.random())
+    WebSocketManager.getInstance().addListener((message: { action: string }) => {
+      if (message.action === 'REFRESH_EXECUTIONS_TABLE') {
+        setRefreshCells(Math.random());
       }
-    })
-  }, [])
+    });
+  }, []);
 
   const colDefs: ColDef<TData>[] = [
     {
@@ -58,7 +71,26 @@ const ExecutionsList = () => {
       headerName: 'Status',
       valueGetter: (params: ValueGetterParams<TData, any>) => params.data && enums.beaconStatus[params.data.status],
       filter: true,
-      cellStyle: { display: 'flex' },
+      cellRenderer: (params: { data: TData }) => {
+        switch (params.data?.status) {
+          case 0:
+            return 'Pending';
+          case 1:
+            return 'Running';
+          case 2:
+            return 'Lighthouse Finished';
+          case 3:
+            return 'Pleasantness Finished';
+          case 4:
+            return 'Done';
+          case 5:
+            if (params.data.retries > 3) {
+              return <Label>Retrying ({params.data.retries}/3)</Label>;
+            }
+            return <Label>Failed</Label>;
+        }
+      },
+      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
     },
     {
       field: 'mode',
@@ -66,6 +98,15 @@ const ExecutionsList = () => {
       flex: 1,
       valueGetter: (params: ValueGetterParams<TData, any>) => params.data && enums.viewportMode[params.data.mode],
       filter: true,
+      cellRenderer: (params: { data: TData }) => {
+        switch (params.data?.mode) {
+          case 0:
+            return <Label>Mobile</Label>;
+          case 1:
+            return <Label>Desktop</Label>;
+        }
+      },
+      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
     },
     {
       field: 'created_at',
@@ -76,20 +117,34 @@ const ExecutionsList = () => {
       filter: 'agDateColumnFilter',
       initialSort: 'desc',
       sortingOrder: ['desc', 'asc'],
+      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
     },
     {
       field: 'results',
       headerName: 'Actions',
       pinned: 'right',
-      cellRenderer: (params: { data: TData }) =>
-        params.data &&
-        (params.data.status === 0 ? (
-          <Spinner size='extra-tiny' />
-        ) : (
-          <b>
-            <Link to={`/executions/${params.data?.uuid}`}>View Results</Link>
-          </b>
-        )),
+      resizable: false,
+      cellRenderer: (params: { data: TData }) => {
+        switch (params.data?.status) {
+          case 0:
+            return <Spinner size='extra-tiny' />;
+          case 5:
+            if (params.data.retries > 3) {
+              return <Spinner size='extra-tiny' />;
+            }
+            return (
+                <Button onClick={() => retryExecution(params.data?.uuid)} className='w-full'>
+                  Retry
+                </Button>
+            );
+          default:
+            return (
+              <Button onClick={() => viewResults(params.data?.uuid)} className='w-full'>
+                View Results
+              </Button>
+            );
+        }
+      },
       cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
       sortable: false,
     },
@@ -100,6 +155,8 @@ const ExecutionsList = () => {
       rowCount: undefined,
 
       getRows: async (params: IGetRowsParams) => {
+        console.log(`Grid updated at ${refreshCells}`);
+
         setLoading(true);
         const queryParams = {
           sort: params.sortModel.map((sort) => `${sort.colId},${sort.sort}`).join(';'),
@@ -141,6 +198,7 @@ const ExecutionsList = () => {
             pagination={true}
             paginationPageSize={20}
             sortingOrder={['desc', 'asc', null]}
+            autoSizeStrategy={{ type: 'fitCellContents', colIds: ['created_at', 'status', 'results'] }}
           />
         </div>
       </Stack>
