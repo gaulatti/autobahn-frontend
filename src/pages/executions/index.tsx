@@ -1,25 +1,33 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Spinner, Title1 } from '@fluentui/react-components';
-import { ColDef, IDatasource, IGetRowsParams, ValueGetterParams } from 'ag-grid-community';
+import {
+  Breadcrumb,
+  BreadcrumbDivider,
+  BreadcrumbItem,
+  Button,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  Spinner,
+  Title1,
+} from '@fluentui/react-components';
+import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
 import { Trigger } from '../../components/trigger';
 import { WebSocketManager } from '../../engines/sockets';
-import { getEnums } from '../../state/selectors/enums';
 
 type TData = {
   uuid: string;
   url: string;
   created_at: string;
-  status: number;
-  mode: number;
   results: string;
-  retries: number;
+  heartbeats: { mode: number; status: number; retries: number }[];
 };
 
 /**
@@ -28,7 +36,6 @@ type TData = {
 const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', '#c0392b', '#f6b93b'];
 
 const ExecutionsList = () => {
-  const enums = useSelector(getEnums);
   const [refreshCells, setRefreshCells] = useState<number>(0);
   const gridRef = useRef<AgGridReact>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,7 +63,7 @@ const ExecutionsList = () => {
     });
   }, []);
 
-  const colDefs: ColDef<TData>[] = [
+  const colDefs: (ColDef | ColGroupDef)[] = [
     {
       field: 'uuid',
       headerName: 'UUID',
@@ -67,45 +74,61 @@ const ExecutionsList = () => {
     },
     { field: 'url', headerName: 'URL', flex: 1, filter: true },
     {
-      field: 'status',
       headerName: 'Status',
-      valueGetter: (params: ValueGetterParams<TData, any>) => params.data && enums.beaconStatus[params.data.status],
-      filter: true,
-      cellRenderer: (params: { data: TData }) => {
-        switch (params.data?.status) {
-          case 0:
-            return 'Pending';
-          case 1:
-            return 'Running';
-          case 2:
-            return 'Lighthouse Finished';
-          case 3:
-            return 'Pleasantness Finished';
-          case 4:
-            return 'Done';
-          case 5:
-            return 'Failed';
-          case 6:
-            return `Retrying (${params.data.retries})`;
-        }
-      },
-      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    },
-    {
-      field: 'mode',
-      headerName: 'Mode',
-      flex: 1,
-      valueGetter: (params: ValueGetterParams<TData, any>) => params.data && enums.viewportMode[params.data.mode],
-      filter: true,
-      cellRenderer: (params: { data: TData }) => {
-        switch (params.data?.mode) {
-          case 0:
-            return 'Mobile';
-          case 1:
-            return 'Desktop';
-        }
-      },
-      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      children: [
+        {
+          field: 'status',
+          headerName: 'Desktop',
+          width: 150,
+          filter: true,
+          cellRenderer: (params: { data: TData }) => {
+            const current = params.data?.heartbeats?.find((i) => i.mode == 1);
+            switch (current?.status) {
+              case 0:
+                return 'Pending';
+              case 1:
+                return 'Running';
+              case 2:
+                return 'Lighthouse Finished';
+              case 3:
+                return 'Pleasantness Finished';
+              case 4:
+                return 'Done';
+              case 5:
+                return 'Failed';
+              case 6:
+                return `Retrying (${current?.retries})`;
+            }
+          },
+          cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        },
+        {
+          field: 'status',
+          headerName: 'Mobile',
+          width: 150,
+          filter: true,
+          cellRenderer: (params: { data: TData }) => {
+            const current = params.data?.heartbeats?.find((i) => i.mode == 0);
+            switch (current?.status) {
+              case 0:
+                return 'Pending';
+              case 1:
+                return 'Running';
+              case 2:
+                return 'Lighthouse Finished';
+              case 3:
+                return 'Pleasantness Finished';
+              case 4:
+                return 'Done';
+              case 5:
+                return 'Failed';
+              case 6:
+                return `Retrying (${current?.retries})`;
+            }
+          },
+          cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        },
+      ],
     },
     {
       field: 'created_at',
@@ -120,30 +143,56 @@ const ExecutionsList = () => {
     },
     {
       field: 'results',
-      headerName: 'Actions',
-      pinned: 'right',
-      resizable: false,
+      headerName: '',
+      width: 150,
       cellRenderer: (params: { data: TData }) => {
-        switch (params.data?.status) {
-          case 0:
-          case 6:
+        const heartbeats = params.data?.heartbeats;
+        if (heartbeats) {
+          const statuses = heartbeats.map((i: { status: number }) => i.status);
+          const mobile = heartbeats.find((i: { mode: number }) => i.mode === 0);
+          const desktop = heartbeats.find((i: { mode: number }) => i.mode === 1);
+
+          if (statuses.every((i: number) => [0, 6].includes(i))) {
             return <Spinner size='extra-tiny' />;
-          case 5:
-            return (
-              <Button onClick={() => retryExecution(params.data?.mode, params.data?.uuid)} className='w-full'>
-                Retry
-              </Button>
-            );
-          default:
+          }
+
+          if (statuses.every((i: number) => i == 4)) {
             return (
               <Button onClick={() => viewResults(params.data?.uuid)} className='w-full'>
                 View Results
               </Button>
             );
+          }
+
+          return (
+            <Menu>
+              <MenuTrigger disableButtonEnhancement>
+                <Button className='w-full'>Actions</Button>
+              </MenuTrigger>
+
+              <MenuPopover>
+                <MenuList>
+                  {statuses?.find((i: number) => i === 4) && (
+                    <MenuItem onClick={() => viewResults(params.data?.uuid)} className='w-full'>
+                      View Partial Results
+                    </MenuItem>
+                  )}
+                  {mobile?.status == 5 && (
+                    <MenuItem onClick={() => retryExecution(0, params.data?.uuid)} className='w-full'>
+                      Retry Mobile
+                    </MenuItem>
+                  )}
+                  {desktop?.status == 5 && (
+                    <MenuItem onClick={() => retryExecution(1, params.data?.uuid)} className='w-full'>
+                      Retry Desktop
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </MenuPopover>
+            </Menu>
+          );
         }
       },
-      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
-      sortable: false,
     },
   ];
 
@@ -164,7 +213,7 @@ const ExecutionsList = () => {
 
         const result = await sendRequest(Method.GET, 'executions', queryParams);
 
-        params.successCallback(result.beacons.rows, result.beacons.count);
+        params.successCallback(result.pulses.rows, result.pulses.count);
         setLoading(false);
       },
     }),
