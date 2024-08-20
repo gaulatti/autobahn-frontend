@@ -21,7 +21,7 @@ import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
 import { Trigger } from '../../components/trigger';
 import { WebSocketManager } from '../../engines/sockets';
-
+import { Link as FluentLink } from '@fluentui/react-components';
 type TData = {
   uuid: string;
   url: string;
@@ -71,6 +71,13 @@ const ExecutionsList = () => {
         const color = params.data && semaphoreColors[params.data!.status];
         return { borderLeftColor: color || '', borderLeftWidth: '5px', borderLeftStyle: 'solid' };
       },
+      cellRenderer: (params: { value: any }) => {
+        return (
+          <FluentLink onClick={() => viewResults(params?.value)} className='w-full'>
+            {params?.value}
+          </FluentLink>
+        );
+      },
     },
     { field: 'url', headerName: 'URL', flex: 1, filter: true },
     {
@@ -80,10 +87,23 @@ const ExecutionsList = () => {
           field: 'status',
           headerName: 'Desktop',
           width: 150,
+          valueGetter: (params) => {
+            return params.data?.heartbeats?.find((i: { mode: number }) => i.mode == 1);
+          },
           filter: true,
-          cellRenderer: (params: { data: TData }) => {
-            const current = params.data?.heartbeats?.find((i) => i.mode == 1);
-            switch (current?.status) {
+          cellStyle: (params) => {
+            const color = params.value && semaphoreColors[params.value!.status];
+            return {
+              borderLeftColor: color || '',
+              borderLeftWidth: '5px',
+              borderLeftStyle: 'solid',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            };
+          },
+          cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
+            switch (params.value?.status) {
               case 0:
                 return 'Pending';
               case 1:
@@ -95,25 +115,31 @@ const ExecutionsList = () => {
               case 4:
                 return 'Done';
               case 5:
-                return 'Failed';
+                return (
+                  <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
+                    Retry
+                  </Button>
+                );
               case 6:
-                return `Retrying (${current?.retries})`;
+                return `Retrying (${params.value?.retries})`;
             }
           },
-          cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
         },
         {
           field: 'status',
           headerName: 'Mobile',
+
           width: 150,
           filter: true,
-          cellRenderer: (params: { data: TData }) => {
-            const current = params.data?.heartbeats?.find((i) => i.mode == 0);
-            switch (current?.status) {
+          valueGetter: (params) => {
+            return params.data?.heartbeats?.find((i: { mode: number }) => i.mode == 0);
+          },
+          cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
+            switch (params.value?.status) {
               case 0:
-                return 'Pending';
+                return <Spinner size='extra-tiny' />;
               case 1:
-                return 'Running';
+                return <Spinner size='extra-tiny' />;
               case 2:
                 return 'Lighthouse Finished';
               case 3:
@@ -121,12 +147,26 @@ const ExecutionsList = () => {
               case 4:
                 return 'Done';
               case 5:
-                return 'Failed';
+                return (
+                  <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
+                    Retry
+                  </Button>
+                );
               case 6:
-                return `Retrying (${current?.retries})`;
+                return <Spinner size='extra-tiny' />;
             }
           },
-          cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+          cellStyle: (params) => {
+            const color = params.value && semaphoreColors[params.value!.status];
+            return {
+              borderLeftColor: color || '',
+              borderLeftWidth: '5px',
+              borderLeftStyle: 'solid',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            };
+          },
         },
       ],
     },
@@ -140,59 +180,6 @@ const ExecutionsList = () => {
       initialSort: 'desc',
       sortingOrder: ['desc', 'asc'],
       cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    },
-    {
-      field: 'results',
-      headerName: '',
-      width: 150,
-      cellRenderer: (params: { data: TData }) => {
-        const heartbeats = params.data?.heartbeats;
-        if (heartbeats) {
-          const statuses = heartbeats.map((i: { status: number }) => i.status);
-          const mobile = heartbeats.find((i: { mode: number }) => i.mode === 0);
-          const desktop = heartbeats.find((i: { mode: number }) => i.mode === 1);
-
-          if (statuses.every((i: number) => [0, 6].includes(i))) {
-            return <Spinner size='extra-tiny' />;
-          }
-
-          if (statuses.every((i: number) => i == 4)) {
-            return (
-              <Button onClick={() => viewResults(params.data?.uuid)} className='w-full'>
-                View Results
-              </Button>
-            );
-          }
-
-          return (
-            <Menu>
-              <MenuTrigger disableButtonEnhancement>
-                <Button className='w-full'>Actions</Button>
-              </MenuTrigger>
-
-              <MenuPopover>
-                <MenuList>
-                  {statuses?.find((i: number) => i === 4) && (
-                    <MenuItem onClick={() => viewResults(params.data?.uuid)} className='w-full'>
-                      View Partial Results
-                    </MenuItem>
-                  )}
-                  {mobile?.status == 5 && (
-                    <MenuItem onClick={() => retryExecution(0, params.data?.uuid)} className='w-full'>
-                      Retry Mobile
-                    </MenuItem>
-                  )}
-                  {desktop?.status == 5 && (
-                    <MenuItem onClick={() => retryExecution(1, params.data?.uuid)} className='w-full'>
-                      Retry Desktop
-                    </MenuItem>
-                  )}
-                </MenuList>
-              </MenuPopover>
-            </Menu>
-          );
-        }
-      },
     },
   ];
 
