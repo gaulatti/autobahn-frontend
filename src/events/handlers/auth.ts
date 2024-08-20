@@ -11,13 +11,16 @@ import { WebSocketManager } from '../../engines/sockets';
  * @returns An unknown value.
  */
 function* checkSession(): unknown {
-  const { userSub, tokens: { accessToken} } = yield fetchAuthSession();
+  const {
+    userSub,
+    tokens: { accessToken },
+  } = yield fetchAuthSession();
   const isKickoffReady = yield select(getKickoffReady);
 
   /**
    * Initialize the WebSocketManager with the access token.
    */
-  WebSocketManager.getInstance(accessToken.toString())
+  WebSocketManager.getInstance(accessToken.toString());
 
   /**
    * If the user is authenticated, fetch the user attributes and dispatch the login action.
@@ -61,4 +64,3 @@ function* login(): unknown {
 }
 
 export { checkSession, login };
-
