@@ -100,9 +100,9 @@ const ExecutionsList = () => {
           cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
             switch (params.value?.status) {
               case 0:
-                return 'Pending';
+                return <Spinner size='extra-tiny' />;
               case 1:
-                return 'Running';
+                return <Spinner size='extra-tiny' />;
               case 2:
                 return 'Lighthouse Finished';
               case 3:
