@@ -111,12 +111,12 @@ const ExecutionsList = () => {
                 return 'Done';
               case 5:
                 return (
-                  <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
+                  <Button onClick={() => retryExecution(1, params?.data?.uuid)} className='w-full'>
                     Retry
                   </Button>
                 );
               case 6:
-                return `Retrying (${params.value?.retries})`;
+                return <Spinner size='extra-tiny' />;
             }
           },
         },
