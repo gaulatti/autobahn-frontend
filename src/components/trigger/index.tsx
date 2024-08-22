@@ -7,6 +7,15 @@ import { Method, sendRequest } from '../../clients/api';
 import { getCurrentTeam, getTeams } from '../../state/selectors/teams';
 
 /**
+ * Checks if the URL starts with 'http://' or 'https://'.
+ * @param {string} url - The URL to validate.
+ * @returns {boolean} - True if the URL is valid, false otherwise.
+ */
+const isValidHttpUrl = (url: string): boolean => {
+  return /^(https?:\/\/)/i.test(url);
+};
+
+/**
  * Represents a component that triggers the execution of Lighthouse against a user-specified URL.
  *
  * @component
@@ -19,6 +28,24 @@ const Trigger = ({ setRefresh }: { setRefresh?: React.Dispatch<React.SetStateAct
   const teams = useSelector(getTeams);
   const currentTeam = useSelector(getCurrentTeam)!;
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  /**
+   * Handle URL blur event to validate and correct the URL
+   */
+  const sanitizeUrl = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    if (!/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//i.test(e.target.value)) {
+      /**
+       * If the URL does not start with a valid protocol, prepend https://
+       */
+      e.target.value = `https://${e.target.value}`;
+    }
+
+    if (!isValidHttpUrl(e.target.value)) {
+      e.target.setCustomValidity('Please enter a valid URL starting with http:// or https://');
+    } else {
+      e.target.setCustomValidity('');
+    }
+  }, []);
 
   /**
    * Handle form submission
@@ -69,7 +96,7 @@ const Trigger = ({ setRefresh }: { setRefresh?: React.Dispatch<React.SetStateAct
             <Label htmlFor='url' className='flex' size='small'>
               Website URL
             </Label>
-            <Input id='url' type='url' required size='large' className='w-full' />
+            <Input id='url' type='url' required size='large' className='w-full' onInput={sanitizeUrl} />
           </Body1>
         </CardPreview>
         <CardFooter>
