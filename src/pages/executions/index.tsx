@@ -66,11 +66,17 @@ const ExecutionsList = () => {
         const color = params.data && semaphoreColors[params.data!.status];
         return { borderLeftColor: color || '', borderLeftWidth: '5px', borderLeftStyle: 'solid' };
       },
-      cellRenderer: (params: { value: any }) => {
-        return (
+      cellRenderer: (params: { value: any; data: any }) => {
+        /**
+         * To display the link, at least one of the heartbeats should be finished
+         */
+        const allowResults = params.data?.heartbeats?.find((i: { status: number }) => i.status === 4);
+        return allowResults ? (
           <FluentLink onClick={() => viewResults(params?.value)} className='w-full'>
             {params?.value}
           </FluentLink>
+        ) : (
+          params?.value
         );
       },
     },
