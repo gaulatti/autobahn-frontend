@@ -80,7 +80,7 @@ const ExecutionsList = () => {
         );
       },
     },
-    { field: 'url', headerName: 'URL', flex: 1, filter: true },
+    { field: 'url', headerName: 'URL', flex: 1, filter: true, valueGetter: (params) => params.data?.url.url },
     {
       headerName: 'Status',
       children: [
