@@ -1,12 +1,4 @@
-import {
-  Breadcrumb,
-  BreadcrumbDivider,
-  BreadcrumbItem,
-  Button,
-  Link as FluentLink,
-  Spinner,
-  Title1
-} from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Link as FluentLink, Spinner, Title1 } from '@fluentui/react-components';
 import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
@@ -80,7 +72,15 @@ const ExecutionsList = () => {
         );
       },
     },
-    { field: 'url', headerName: 'URL', flex: 1, filter: true, valueGetter: (params) => params.data?.url.url },
+    {
+      field: 'url',
+      headerName: 'URL',
+      flex: 1,
+      filter: true,
+      valueGetter: (params) => params.data?.url,
+      cellRenderer: (params: { value: { url: string; uuid: string } }) =>
+        params.value && <FluentLink href={`/stats/url/${params.value.uuid}`}>{params.value.url}</FluentLink>,
+    },
     {
       headerName: 'Status',
       children: [
