@@ -28,7 +28,7 @@ const TeamsAdmin = () => {
     <Container>
       <Stack>
         <Title1 className='text-left'>Teams</Title1>
-        <Breadcrumb aria-label='Breadcrumb default example'>
+        <Breadcrumb>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>
           </BreadcrumbItem>

@@ -80,7 +80,7 @@ const ExecutionResults = () => {
     <Container>
       <Stack>
         <Title1 className='text-left'>Execution Results</Title1>
-        <Breadcrumb aria-label='Breadcrumb default example'>
+        <Breadcrumb>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>
           </BreadcrumbItem>

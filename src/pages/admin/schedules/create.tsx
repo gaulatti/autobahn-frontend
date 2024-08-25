@@ -7,7 +7,7 @@ const CreateSchedule = () => {
     <Container>
       <Stack>
         <Title1 className='text-left'>Create Schedule</Title1>
-        <Breadcrumb aria-label='Breadcrumb default example'>
+        <Breadcrumb>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>
           </BreadcrumbItem>
