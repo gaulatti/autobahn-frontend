@@ -167,7 +167,7 @@ const URLStats = () => {
   return (
     <Container>
       <Stack>
-        <Title1>URL specific stats</Title1>
+        <Title1>URL Stats Aggregate</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>

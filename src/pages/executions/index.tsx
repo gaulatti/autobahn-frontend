@@ -44,25 +44,15 @@ const ExecutionsList = () => {
 
   const colDefs: (ColDef | ColGroupDef)[] = [
     {
-      field: 'uuid',
-      headerName: 'UUID',
-      cellStyle: (params) => {
-        const color = params.data && semaphoreColors[params.data!.status];
-        return { borderLeftColor: color || '', borderLeftWidth: '5px', borderLeftStyle: 'solid' };
+      field: 'created_at',
+      headerName: 'Triggered',
+      cellRenderer: (params: { data: TData }) => {
+        return params.data && moment(params.data!.created_at).fromNow();
       },
-      cellRenderer: (params: { value: any; data: any }) => {
-        /**
-         * To display the link, at least one of the heartbeats should be finished
-         */
-        const allowResults = params.data?.heartbeats?.find((i: { status: number }) => i.status === 4);
-        return allowResults ? (
-          <Link to={`/executions/${params?.value}`} className='w-full'>
-            {params?.value}
-          </Link>
-        ) : (
-          params?.value
-        );
-      },
+      filter: 'agDateColumnFilter',
+      initialSort: 'desc',
+      sortingOrder: ['desc', 'asc'],
+      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
     },
     {
       field: 'url',
@@ -98,9 +88,9 @@ const ExecutionsList = () => {
           cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
             switch (params.value?.status) {
               case 0:
-                return <Spinner size='extra-tiny' />;
+                return 'Pending';
               case 1:
-                return <Spinner size='extra-tiny' />;
+                return 'Running';
               case 2:
                 return 'Lighthouse Finished';
               case 3:
@@ -109,12 +99,12 @@ const ExecutionsList = () => {
                 return 'Done';
               case 5:
                 return (
-                  <Button onClick={() => retryExecution(1, params?.data?.uuid)} className='w-full'>
+                  <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
                     Retry
                   </Button>
                 );
               case 6:
-                return <Spinner size='extra-tiny' />;
+                return 'Retrying';
             }
           },
         },
@@ -130,9 +120,9 @@ const ExecutionsList = () => {
           cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
             switch (params.value?.status) {
               case 0:
-                return <Spinner size='extra-tiny' />;
+                return 'Pending';
               case 1:
-                return <Spinner size='extra-tiny' />;
+                return 'Running';
               case 2:
                 return 'Lighthouse Finished';
               case 3:
@@ -146,7 +136,7 @@ const ExecutionsList = () => {
                   </Button>
                 );
               case 6:
-                return <Spinner size='extra-tiny' />;
+                return 'Retrying';
             }
           },
           cellStyle: (params) => {
@@ -163,16 +153,36 @@ const ExecutionsList = () => {
         },
       ],
     },
+
     {
-      field: 'created_at',
-      headerName: 'Triggered',
-      cellRenderer: (params: { data: TData }) => {
-        return params.data && moment(params.data!.created_at).fromNow();
+      field: 'uuid',
+      headerName: 'Results',
+      cellStyle: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       },
-      filter: 'agDateColumnFilter',
-      initialSort: 'desc',
-      sortingOrder: ['desc', 'asc'],
-      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      cellRenderer: (params: { value: any; data: any }) => {
+        /**
+         * If both heartbeats are failed, we don't want to display the link
+         */
+        const validHeartbeats = params.data?.heartbeats?.filter((i: { status: number }) => i.status != 5);
+        if (!validHeartbeats?.length) {
+          return;
+        }
+
+         /**
+         * To display the link, at least one of the heartbeats should be finished
+         */
+        const allowResults = validHeartbeats?.find((i: { status: number }) => i.status === 4);
+        return allowResults ? (
+          <Link to={`/executions/${params?.value}`} className='w-full'>
+            View Execution Results
+          </Link>
+        ) : (
+          <Spinner size='extra-tiny' />
+        );
+      },
     },
   ];
 
