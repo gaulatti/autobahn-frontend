@@ -4,9 +4,11 @@ import { useParams } from 'react-router-dom';
 import { Stack } from '../../components/foundations/stack';
 import { Link } from '../../components/foundations/link';
 import { URLNavbar } from '../../components/foundations/url-navbar';
+import { Method, useAPI } from '../../clients/api';
 
 const URLStats = () => {
   const { uuid } = useParams();
+  const { loading, data } = useAPI(Method.GET, [], `stats/url/${uuid}`);
 
   return (
     <Container>
