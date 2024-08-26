@@ -1,10 +1,11 @@
 import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Spinner, Title1 } from '@fluentui/react-components';
 import { useMemo } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import React2LighthouseViewer from 'react2-lighthouse-viewer';
 import { Method, useAPI } from '../../clients/api';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
+import { Link } from '../../components/foundations/link';
 
 const ExecutionDetails = () => {
   const { uuid } = useParams();
@@ -33,7 +34,7 @@ const ExecutionDetails = () => {
     <Container>
       <Stack>
         <Title1 className='text-left'>Execution Detail</Title1>
-        <Breadcrumb aria-label='Breadcrumb default example'>
+        <Breadcrumb>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>
           </BreadcrumbItem>

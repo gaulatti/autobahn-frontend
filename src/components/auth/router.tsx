@@ -17,6 +17,7 @@ import { HomePublic } from '../../pages/public';
 import { getKickoffReady } from '../../state/selectors/lifecycle';
 import { getTeams } from '../../state/selectors/teams';
 import { Header } from '../header';
+import { URLStats } from '../../pages/stats/url';
 
 /**
  * Renders the authenticated router component.
@@ -64,6 +65,7 @@ const AuthenticatedRouter = () => {
             <Route path="/executions/:uuid" element={<ExecutionResults />} />
             <Route path="/executions/:uuid/desktop" element={<ExecutionDetails />} />
             <Route path="/executions/:uuid/mobile" element={<ExecutionDetails />} />
+            <Route path="/stats/url/:uuid" element={<URLStats />} />
             <Route path='/' element={<Home />} />
           </Routes>
         ) : (

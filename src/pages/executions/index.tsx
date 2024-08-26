@@ -1,14 +1,14 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Link as FluentLink, Spinner, Title1 } from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Spinner, Title1 } from '@fluentui/react-components';
 import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
 import { Trigger } from '../../components/trigger';
 import { WebSocketManager } from '../../engines/sockets';
+import { Link } from '../../components/foundations/link';
 type TData = {
   uuid: string;
   url: string;
@@ -26,18 +26,10 @@ const ExecutionsList = () => {
   const [refreshCells, setRefreshCells] = useState<number>(0);
   const gridRef = useRef<AgGridReact>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
 
   const retryExecution = useCallback(async (mode: number, uuid: string) => {
     await sendRequest(Method.POST, `executions/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
   }, []);
-
-  const viewResults = useCallback(
-    (uuid: string) => {
-      navigate(`/executions/${uuid}`);
-    },
-    [navigate]
-  );
 
   /**
    * This useEffect is used to listen to the WebSocketManager for REFRESH_EXECUTIONS_TABLE action
@@ -64,9 +56,9 @@ const ExecutionsList = () => {
          */
         const allowResults = params.data?.heartbeats?.find((i: { status: number }) => i.status === 4);
         return allowResults ? (
-          <FluentLink onClick={() => viewResults(params?.value)} className='w-full'>
+          <Link to={`/executions/${params?.value}`} className='w-full'>
             {params?.value}
-          </FluentLink>
+          </Link>
         ) : (
           params?.value
         );
@@ -79,7 +71,7 @@ const ExecutionsList = () => {
       filter: true,
       valueGetter: (params) => params.data?.url,
       cellRenderer: (params: { value: { url: string; uuid: string } }) =>
-        params.value && <FluentLink href={`/stats/url/${params.value.uuid}`}>{params.value.url}</FluentLink>,
+        params.value && <Link to={`/stats/url/${params.value.uuid}`}>{params.value.url}</Link>,
     },
     {
       headerName: 'Status',

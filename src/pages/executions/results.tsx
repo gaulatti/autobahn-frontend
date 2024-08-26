@@ -16,12 +16,14 @@ import {
 
 import { DocumentSearchRegular } from '@fluentui/react-icons';
 import { useCallback, useMemo } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer } from 'recharts';
 import { Method, useAPI } from '../../clients/api';
 import { HistoryScoreChart } from '../../components/charts';
 import { Container } from '../../components/foundations/container';
 import { Stack } from '../../components/foundations/stack';
+import { Link } from '../../components/foundations/link';
+import { URLNavbar } from '../../components/foundations/url-navbar';
 
 const ExecutionResults = () => {
   const { uuid } = useParams();
@@ -99,6 +101,7 @@ const ExecutionResults = () => {
               <Spinner size='huge' />
             </div>
           )}
+          <URLNavbar>{data?.results.url.url}</URLNavbar>
           <HistoryScoreChart data={timeline} />
           <div className='container mx-auto'>
             <div className='flex flex-wrap md:flex-nowrap'>

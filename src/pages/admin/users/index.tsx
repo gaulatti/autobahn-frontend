@@ -1,9 +1,9 @@
 import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Link } from 'react-router-dom';
 import { Container } from '../../../components/foundations/container';
 import { Stack } from '../../../components/foundations/stack';
+import { Link } from '../../../components/foundations/link';
 const UsersAdmin = () => {
   type TData = {
     mail: string;
