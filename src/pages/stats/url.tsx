@@ -1,4 +1,4 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Spinner, Title1 } from '@fluentui/react-components';
 import { Container } from '../../components/foundations/container';
 import { useParams } from 'react-router-dom';
 import { Stack } from '../../components/foundations/stack';
@@ -19,11 +19,15 @@ const URLStats = () => {
             <Link to='/'>Home</Link>
           </BreadcrumbItem>
           <BreadcrumbDivider />
-          <BreadcrumbItem>
-            <Link to='/stats'>Stats</Link>
-          </BreadcrumbItem>
+          <BreadcrumbItem>Stats</BreadcrumbItem>
         </Breadcrumb>
-        <URLNavbar>https://v0.dev/{uuid}</URLNavbar>
+        {loading ? (
+          <div className='spinner-overlay'>
+            <Spinner size='huge' />
+          </div>
+        ) : (
+          <URLNavbar>{data?.urlRecord.url}</URLNavbar>
+        )}
       </Stack>
     </Container>
   );
