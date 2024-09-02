@@ -15,13 +15,12 @@ import {
 } from '@fluentui/react-components';
 
 import { DocumentSearchRegular } from '@fluentui/react-icons';
+import { Container, Section } from '@radix-ui/themes';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer } from 'recharts';
 import { Method, useAPI } from '../../clients/api';
 import { HistoryScoreChart } from '../../components/charts';
-import { Container } from '../../components/foundations/container';
-import { Stack } from '../../components/foundations/stack';
 import { Link } from '../../components/foundations/link';
 import { URLNavbar } from '../../components/foundations/url-navbar';
 
@@ -80,7 +79,7 @@ const ExecutionResults = () => {
 
   return (
     <Container>
-      <Stack>
+      <Section>
         <Title1 className='text-left'>Execution Results</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
@@ -182,7 +181,7 @@ const ExecutionResults = () => {
             </div>
           </div>
         </section>
-      </Stack>
+      </Section>
     </Container>
   );
 };

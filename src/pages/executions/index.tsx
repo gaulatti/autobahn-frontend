@@ -1,14 +1,13 @@
 import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Spinner, Title1 } from '@fluentui/react-components';
+import { Container, Section } from '@radix-ui/themes';
 import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Method, sendRequest } from '../../clients/api';
-import { Container } from '../../components/foundations/container';
-import { Stack } from '../../components/foundations/stack';
+import { Link } from '../../components/foundations/link';
 import { Trigger } from '../../components/trigger';
 import { WebSocketManager } from '../../engines/sockets';
-import { Link } from '../../components/foundations/link';
 type TData = {
   uuid: string;
   url: string;
@@ -212,7 +211,7 @@ const ExecutionsList = () => {
 
   return (
     <Container>
-      <Stack>
+      <Section>
         <Title1 className='text-left'>Executions</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
@@ -239,7 +238,7 @@ const ExecutionsList = () => {
             autoSizeStrategy={{ type: 'fitCellContents', colIds: ['created_at', 'status', 'results'] }}
           />
         </div>
-      </Stack>
+      </Section>
     </Container>
   );
 };

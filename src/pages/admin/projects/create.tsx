@@ -1,12 +1,11 @@
 import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
 
-import { Container } from '../../../components/foundations/container';
-import { Stack } from '../../../components/foundations/stack';
+import { Container, Section } from '@radix-ui/themes';
 import { Link } from '../../../components/foundations/link';
 const CreateProject = () => {
   return (
     <Container>
-      <Stack>
+      <Section>
         <Title1 className='text-left'>Create Project</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
@@ -26,7 +25,7 @@ const CreateProject = () => {
           </BreadcrumbItem>
         </Breadcrumb>
         TODO
-      </Stack>
+      </Section>
     </Container>
   );
 };

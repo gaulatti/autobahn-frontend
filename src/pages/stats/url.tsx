@@ -1,14 +1,13 @@
 import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Spinner, Title1 } from '@fluentui/react-components';
-import { Container } from '../../components/foundations/container';
+import { Container, Section } from '@radix-ui/themes';
+import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import moment from 'moment';
+import { useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Stack } from '../../components/foundations/stack';
+import { Method, sendRequest, useAPI } from '../../clients/api';
 import { Link } from '../../components/foundations/link';
 import { URLNavbar } from '../../components/foundations/url-navbar';
-import { Method, sendRequest, useAPI } from '../../clients/api';
-import { AgGridReact } from 'ag-grid-react';
-import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
-import { useMemo, useRef, useState } from 'react';
-import moment from 'moment';
 const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', '#c0392b', '#f6b93b'];
 
 type TData = {
@@ -166,7 +165,7 @@ const URLStats = () => {
 
   return (
     <Container>
-      <Stack>
+      <Section>
         <Title1>URL Stats Aggregate</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
@@ -199,7 +198,7 @@ const URLStats = () => {
             </div>
           </>
         )}
-      </Stack>
+      </Section>
     </Container>
   );
 };

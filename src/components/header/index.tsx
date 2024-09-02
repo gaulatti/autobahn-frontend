@@ -1,7 +1,7 @@
 import { Tooltip } from '@fluentui/react-components';
 import { Hamburger } from '@fluentui/react-nav-preview';
+import { Container, Flex } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import { Container } from '../foundations/container';
 import { Logo } from './logo';
 import { NavigationMenu } from './menu';
 import { UserPersona } from './persona';
@@ -10,7 +10,6 @@ import { UserPersona } from './persona';
  * The header contains a navigation menu, a hamburger icon, a logo, and a user persona.
  */
 const Header = () => {
-
   /**
    * Represents the state of the overlay drawer.
    */
@@ -54,14 +53,16 @@ const Header = () => {
   };
 
   return (
-    <header className='flex justify-center items-center border-b border-gray-300 mb-4'>
+    <header>
       <NavigationMenu isOpen={isOpen} setIsOpen={setIsOpen} />
       <Container>
-        <div className='flex items-center'>
-          {renderHamburgerWithToolTip()}
-          <Logo />
-        </div>
-        <UserPersona />
+        <Flex justify='between'>
+          <div className='flex items-center'>
+            {renderHamburgerWithToolTip()}
+            <Logo />
+          </div>
+          <UserPersona />
+        </Flex>
       </Container>
     </header>
   );

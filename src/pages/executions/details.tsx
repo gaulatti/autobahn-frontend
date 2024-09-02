@@ -1,10 +1,9 @@
 import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Spinner, Title1 } from '@fluentui/react-components';
+import { Container, Section } from '@radix-ui/themes';
 import { useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import React2LighthouseViewer from 'react2-lighthouse-viewer';
 import { Method, useAPI } from '../../clients/api';
-import { Container } from '../../components/foundations/container';
-import { Stack } from '../../components/foundations/stack';
 import { Link } from '../../components/foundations/link';
 
 const ExecutionDetails = () => {
@@ -32,7 +31,7 @@ const ExecutionDetails = () => {
 
   return (
     <Container>
-      <Stack>
+      <Section>
         <Title1 className='text-left'>Execution Detail</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
@@ -59,7 +58,7 @@ const ExecutionDetails = () => {
           )}
           {report ? <React2LighthouseViewer json={report} /> : <></>}
         </section>
-      </Stack>
+      </Section>
     </Container>
   );
 };

@@ -1,8 +1,7 @@
 import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
+import { Container, Section } from '@radix-ui/themes';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { Container } from '../../../components/foundations/container';
-import { Stack } from '../../../components/foundations/stack';
 import { Link } from '../../../components/foundations/link';
 const UsersAdmin = () => {
   type TData = {
@@ -25,7 +24,7 @@ const UsersAdmin = () => {
 
   return (
     <Container>
-      <Stack>
+      <Section>
         <Title1 className='text-left'>Users</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
@@ -43,7 +42,7 @@ const UsersAdmin = () => {
         <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
           <AgGridReact rowData={data} columnDefs={colDefs} pagination={true} paginationPageSize={10} />
         </div>
-      </Stack>
+      </Section>
     </Container>
   );
 };

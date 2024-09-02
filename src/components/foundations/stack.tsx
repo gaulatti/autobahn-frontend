@@ -1,6 +1,0 @@
-import { ClassAttributes, HTMLAttributes } from 'react';
-
-const Stack = (props: JSX.IntrinsicAttributes & ClassAttributes<HTMLDivElement> & HTMLAttributes<HTMLDivElement>) => {
-  return <div className='stack flex flex-col flex-1 w-full'>{props.children}</div>;
-};
-export { Stack };
