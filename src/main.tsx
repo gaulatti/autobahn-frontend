@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import App from './App.tsx';
 import { config } from './config.ts';
 import { getStore } from './state/index.ts';
+import { Theme } from '@radix-ui/themes';
 
 /**
  * Configures Amplify with the provided configuration.
@@ -22,10 +23,12 @@ const { store } = getStore();
  */
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <FluentProvider theme={webLightTheme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </FluentProvider>
+    <Theme>
+      <FluentProvider theme={webLightTheme}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </FluentProvider>
+    </Theme>
   </React.StrictMode>
 );

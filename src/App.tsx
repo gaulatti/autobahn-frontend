@@ -1,4 +1,3 @@
-import { Theme } from '@radix-ui/themes';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { AuthenticatedRouter } from './components/auth/router';
@@ -7,7 +6,6 @@ import { Logout } from './pages/auth/logout';
 
 function App() {
   return (
-    <Theme>
       <BrowserRouter>
         <Routes>
           <Route path='/logout' element={<Logout />} />
@@ -15,7 +13,6 @@ function App() {
           <Route path='*' element={<AuthenticatedRouter />} />
         </Routes>
       </BrowserRouter>
-    </Theme>
   );
 }
 
