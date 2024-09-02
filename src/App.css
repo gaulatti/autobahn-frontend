@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Radio+Canada:ital,wght@0,300..700;1,300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&family=SUSE:wght@100..800&display=swap');
 @import 'ag-grid-community/styles/ag-grid.css';
 @import 'ag-grid-community/styles/ag-theme-quartz.css';
 @import '@radix-ui/themes/styles.css';
@@ -8,8 +7,8 @@
 @tailwind components;
 @tailwind utilities;
 
-*:not([class*="icon"]) {
-  font-family: 'Radio Canada', sans-serif !important;
+*:not([class*='icon']) {
+  font-family: 'Mukta', sans-serif !important;
 }
 
 #root,
@@ -24,8 +23,8 @@ body {
   height: 32px;
 }
 
-h1, .fui-Title1 {
-  font-family: 'Noto Sans' !important;
+h1,
+.fui-Title1 {
   font-weight: 200 !important;
   font-size: 3rem !important;
   line-height: 4rem !important;
