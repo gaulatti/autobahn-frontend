@@ -1,9 +1,10 @@
-import { Divider, Field, Select } from '@fluentui/react-components';
-import { DatePicker } from '@fluentui/react-datepicker-compat';
-import { Container, Section } from '@radix-ui/themes';
+import { Divider, Field } from '@fluentui/react-components';
+import { Box, Container, Flex, Section, Select } from '@radix-ui/themes';
 import { Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Sankey, Tooltip } from 'recharts';
 import { HistoryScoreChart } from '../components/charts';
 import { Trigger } from '../components/trigger';
+import { DateRangePicker, DateRangePickerValue } from '@tremor/react';
+import { useState } from 'react';
 
 const data = [
   {
@@ -76,45 +77,49 @@ const dataSinglePageLoad = {
 };
 
 const Home = () => {
+  const [dashboardRange, setDashboardRange] = useState<DateRangePickerValue>({
+    from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+    to: new Date(),
+  });
+
+  const [viewportMode, setViewportMode] = useState<string>('hybrid');
   return (
     <Container>
       <Section>
-        <div className='flex flex-wrap w-full my-4'>
-          <div className='flex-1 min-w-[100%] md:min-w-[50%] lg:min-w-[25%]'>
-            <Field label='Metric'>
-              <Select id='metric-select'>
-                <option>Score</option>
-                <option>FCP</option>
-                <option>LCP</option>
-                <option>TTI</option>
-                <option>SI</option>
-              </Select>
-            </Field>
-          </div>
-          <div className='flex-1 min-w-[100%] md:min-w-[50%] lg:min-w-[25%]'>
-            <Field label='Date Range'>
-              <Select id='range-select'>
-                <option>Day</option>
-                <option>Week</option>
-                <option>Month</option>
-              </Select>
-            </Field>
-          </div>
-          <div className='flex-1 min-w-[100%] md:min-w-[50%] lg:min-w-[25%]'>
+        <Flex gap='3' justify='between'>
+          <Box>
             <Field label='Viewport Mode'>
-              <Select id='mode-select'>
-                <option>Desktop + Mobile</option>
-                <option>Desktop</option>
-                <option>Mobile</option>
-              </Select>
+              <Select.Root
+                value={viewportMode}
+                onValueChange={(e) => {
+                  setViewportMode(e);
+                }}
+              >
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Group>
+                    <Select.Label>Viewport Mode</Select.Label>
+                    <Select.Item key='hybrid' value='hybrid'>
+                      Desktop + Mobile (Hybrid)
+                    </Select.Item>
+                    <Select.Item key='mobile' value='mobile'>
+                      Mobile
+                    </Select.Item>
+                    <Select.Item key='desktop' value='desktop'>
+                      Desktop
+                    </Select.Item>
+                  </Select.Group>
+                </Select.Content>
+              </Select.Root>
             </Field>
-          </div>
-          <div className='flex-1 min-w-[100%] md:min-w-[50%] lg:min-w-[25%]'>
-            <Field label='Select a date'>
-              <DatePicker placeholder='Select a date...' />
+          </Box>
+          <Box>
+            <Field label='Date Range'>
+              <DateRangePicker className='mx-auto max-w-sm' enableSelect={false} value={dashboardRange} onValueChange={setDashboardRange} />
             </Field>
-          </div>
-        </div>
+          </Box>
+        </Flex>
+
         <HistoryScoreChart />
         <Trigger />
         <Divider>Detailed Stats</Divider>
