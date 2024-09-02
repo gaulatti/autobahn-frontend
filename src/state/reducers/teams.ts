@@ -14,7 +14,9 @@ const setCurrentTeamReducer = (state: State, action: ReduxAction): State => {
   const { payload } = action;
 
   const newTeams: Team[] = [];
-  state.teams.forEach((d) => newTeams.push({ ...d, selected: d.id === payload }));
+  state.teams.forEach((d) => {
+    newTeams.push({ ...d, selected: d.id == payload });
+  });
 
   return {
     ...state,
