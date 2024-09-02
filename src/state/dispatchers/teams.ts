@@ -16,7 +16,7 @@ export const setTeams = (teams: Team[]): ReduxAction => {
  * This could be executed as part of:
  * 1. Kickoff
  */
-export const setCurrentTeam = (id: string): ReduxAction => {
+export const setCurrentTeam = (id: number): ReduxAction => {
   return { type: 'SET_CURRENT_TEAM', payload: id };
 };
 

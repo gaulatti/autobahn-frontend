@@ -108,7 +108,7 @@ const Trigger = (): JSX.Element => {
             <Select.Root
               defaultValue={currentTeam.id.toString()}
               onValueChange={(e) => {
-                dispatch(setCurrentTeam(e));
+                dispatch(setCurrentTeam(Number(e)));
               }}
             >
               <Select.Trigger />
