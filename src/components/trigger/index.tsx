@@ -1,9 +1,10 @@
-import { Body1, Button, Caption1, Card, CardFooter, CardHeader, CardPreview, Input, Label, Select, Spinner, Title2 } from '@fluentui/react-components';
-import { AddFilled } from '@fluentui/react-icons';
+import { Body1, Caption1, Card, CardFooter, CardHeader, CardPreview, Input, Label, Spinner, Title2 } from '@fluentui/react-components';
+import { Button, Flex, Select } from '@radix-ui/themes';
 import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
+import { setCurrentTeam } from '../../state/dispatchers/teams';
 import { getCurrentTeam, getTeams } from '../../state/selectors/teams';
 
 /**
@@ -23,10 +24,12 @@ const isValidHttpUrl = (url: string): boolean => {
  * @param {React.Dispatch<React.SetStateAction<number>>} props.setRefresh - The function to refresh the component.
  * @returns {JSX.Element} The rendered Trigger component.
  */
-const Trigger = ({ setRefresh }: { setRefresh?: React.Dispatch<React.SetStateAction<number>> }): JSX.Element => {
+const Trigger = (): JSX.Element => {
   const navigate = useNavigate();
+  const location = useLocation();
   const teams = useSelector(getTeams);
   const currentTeam = useSelector(getCurrentTeam)!;
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   /**
@@ -57,22 +60,23 @@ const Trigger = ({ setRefresh }: { setRefresh?: React.Dispatch<React.SetStateAct
       const form = e.currentTarget;
       const formElements = form.elements as typeof form.elements & {
         url: { value: string };
-        team: { value: number };
       };
 
       /**
        * Send request to trigger execution
        */
-      sendRequest(Method.POST, 'executions', { url: formElements.url.value, team: formElements.team.value }).then(() => {
-        if (setRefresh) {
-          setRefresh(new Date().getTime());
-        } else {
+      sendRequest(Method.POST, 'executions', { url: formElements.url.value, team: currentTeam.id }).then(() => {
+        /**
+         * Redirect to executions page after triggering execution
+         */
+        if (location.pathname !== '/executions') {
           navigate('/executions');
         }
+
         setIsLoading(false);
       });
     },
-    [navigate, setIsLoading, setRefresh]
+    [navigate, currentTeam, location]
   );
 
   return (
@@ -100,20 +104,27 @@ const Trigger = ({ setRefresh }: { setRefresh?: React.Dispatch<React.SetStateAct
           </Body1>
         </CardPreview>
         <CardFooter>
-          <section className='flex justify-between w-full'>
-            <div>
-              <Select id='team' defaultValue={currentTeam.id}>
-                {teams.map((team) => (
-                  <option key={team.id} value={team.id}>
-                    {team.name}
-                  </option>
-                ))}
-              </Select>
-            </div>
-            <Button type='submit' icon={<AddFilled fontSize={16} />}>
-              Trigger
-            </Button>
-          </section>
+          <Flex justify='between' className='w-full'>
+            <Select.Root
+              defaultValue={currentTeam.id.toString()}
+              onValueChange={(e) => {
+                dispatch(setCurrentTeam(e));
+              }}
+            >
+              <Select.Trigger />
+              <Select.Content>
+                <Select.Group>
+                  <Select.Label>Team</Select.Label>
+                  {teams.map((team) => (
+                    <Select.Item key={team.id} value={team.id.toString()}>
+                      {team.name}
+                    </Select.Item>
+                  ))}
+                </Select.Group>
+              </Select.Content>
+            </Select.Root>
+            <Button type='submit'>Trigger</Button>
+          </Flex>
         </CardFooter>
       </Card>
     </form>
