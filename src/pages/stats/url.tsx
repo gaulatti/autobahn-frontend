@@ -161,7 +161,9 @@ const URLStats = () => {
 
       sendRequest(Method.GET, `stats/url/${uuid}`, queryParams).then((result) => {
         const {
-          urlRecord: { url, scores, cwvStats },
+          urlRecord: { url },
+          scores,
+          cwvStats,
         } = result;
 
         setUrl(url);
