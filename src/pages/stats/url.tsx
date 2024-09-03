@@ -153,7 +153,6 @@ const URLStats = () => {
 
   useEffect(() => {
     if (uuid && dashboardRange.from && dashboardRange.to) {
-      console.log('uuid', uuid, dashboardRange);
       const queryParams = {
         from: dashboardRange.from!.toISOString(),
         to: dashboardRange.to!.toISOString(),
