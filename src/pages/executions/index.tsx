@@ -211,7 +211,7 @@ const ExecutionsList = () => {
 
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Executions</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

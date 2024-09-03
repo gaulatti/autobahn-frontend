@@ -37,7 +37,7 @@ const SchedulesAdmin = () => {
 
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Schedules</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

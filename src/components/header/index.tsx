@@ -56,7 +56,7 @@ const Header = () => {
     <header>
       <NavigationMenu isOpen={isOpen} setIsOpen={setIsOpen} />
       <Container>
-        <Flex justify='between'>
+        <Flex justify='between' className='my-8'>
           <div className='flex items-center'>
             {renderHamburgerWithToolTip()}
             <Logo />

@@ -75,10 +75,9 @@ const dataSinglePageLoad = {
 };
 
 const Home = () => {
-
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <HistoryScoreChart />
         <Trigger />
         <Divider>Detailed Stats</Divider>

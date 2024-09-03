@@ -79,7 +79,7 @@ const ExecutionResults = () => {
 
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Execution Results</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

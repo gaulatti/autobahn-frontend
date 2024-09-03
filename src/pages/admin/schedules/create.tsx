@@ -4,7 +4,7 @@ import { Link } from '../../../components/foundations/link';
 const CreateSchedule = () => {
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Create Schedule</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

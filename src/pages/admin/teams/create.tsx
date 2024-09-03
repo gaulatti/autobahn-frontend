@@ -4,7 +4,7 @@ import { Link } from '../../../components/foundations/link';
 const CreateTeam = () => {
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Create Team</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

@@ -31,7 +31,7 @@ const ExecutionDetails = () => {
 
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Execution Detail</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

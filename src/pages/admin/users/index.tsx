@@ -24,7 +24,7 @@ const UsersAdmin = () => {
 
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Users</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

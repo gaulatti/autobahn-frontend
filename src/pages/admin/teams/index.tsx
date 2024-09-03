@@ -25,7 +25,7 @@ const TeamsAdmin = () => {
 
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Teams</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

@@ -5,7 +5,7 @@ import { Link } from '../../../components/foundations/link';
 const CreateProject = () => {
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Create Project</Title1>
         <Breadcrumb>
           <BreadcrumbItem>

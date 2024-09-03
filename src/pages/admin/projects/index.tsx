@@ -63,7 +63,7 @@ const ProjectsAdmin = () => {
 
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1 className='text-left'>Projects</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
