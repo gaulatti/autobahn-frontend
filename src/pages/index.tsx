@@ -1,10 +1,8 @@
-import { Divider, Field } from '@fluentui/react-components';
-import { Box, Container, Flex, Section, Select } from '@radix-ui/themes';
+import { Divider } from '@fluentui/react-components';
+import { Container, Section } from '@radix-ui/themes';
 import { Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Sankey, Tooltip } from 'recharts';
 import { HistoryScoreChart } from '../components/charts';
 import { Trigger } from '../components/trigger';
-import { DateRangePicker, DateRangePickerValue } from '@tremor/react';
-import { useState } from 'react';
 
 const data = [
   {
@@ -77,49 +75,10 @@ const dataSinglePageLoad = {
 };
 
 const Home = () => {
-  const [dashboardRange, setDashboardRange] = useState<DateRangePickerValue>({
-    from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-    to: new Date(),
-  });
 
-  const [viewportMode, setViewportMode] = useState<string>('hybrid');
   return (
     <Container>
       <Section>
-        <Flex gap='3' justify='between'>
-          <Box>
-            <Field label='Viewport Mode'>
-              <Select.Root
-                value={viewportMode}
-                onValueChange={(e) => {
-                  setViewportMode(e);
-                }}
-              >
-                <Select.Trigger />
-                <Select.Content>
-                  <Select.Group>
-                    <Select.Label>Viewport Mode</Select.Label>
-                    <Select.Item key='hybrid' value='hybrid'>
-                      Desktop + Mobile (Hybrid)
-                    </Select.Item>
-                    <Select.Item key='mobile' value='mobile'>
-                      Mobile
-                    </Select.Item>
-                    <Select.Item key='desktop' value='desktop'>
-                      Desktop
-                    </Select.Item>
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
-            </Field>
-          </Box>
-          <Box>
-            <Field label='Date Range'>
-              <DateRangePicker className='mx-auto max-w-sm' enableSelect={false} value={dashboardRange} onValueChange={setDashboardRange} />
-            </Field>
-          </Box>
-        </Flex>
-
         <HistoryScoreChart />
         <Trigger />
         <Divider>Detailed Stats</Divider>
