@@ -1,69 +1,13 @@
 import { Flex } from '@radix-ui/themes';
 import { BadgeDelta, Card, LineChart } from '@tremor/react';
 import { classifyChange } from '../../utils/charts';
+import { format } from 'date-fns';
 
-const chartdata = [
-  {
-    date: 'Jan 22',
-    Mobile: 2890,
-    Desktop: 2338,
-  },
-  {
-    date: 'Feb 22',
-    Mobile: 2756,
-    Desktop: 2103,
-  },
-  {
-    date: 'Mar 22',
-    Mobile: 3322,
-    Desktop: 2194,
-  },
-  {
-    date: 'Apr 22',
-    Mobile: 3470,
-    Desktop: 2108,
-  },
-  {
-    date: 'May 22',
-    Mobile: 3475,
-    Desktop: 1812,
-  },
-  {
-    date: 'Jun 22',
-    Mobile: 3129,
-    Desktop: 1726,
-  },
-  {
-    date: 'Jul 22',
-    Mobile: 3490,
-    Desktop: 1982,
-  },
-  {
-    date: 'Aug 22',
-    Mobile: 2903,
-    Desktop: 2012,
-  },
-  {
-    date: 'Sep 22',
-    Mobile: 2643,
-    Desktop: 2342,
-  },
-  {
-    date: 'Oct 22',
-    Mobile: 2837,
-    Desktop: 2473,
-  },
-  {
-    date: 'Nov 22',
-    Mobile: 2954,
-    Desktop: 3848,
-  },
-  {
-    date: 'Dec 22',
-    Mobile: 3239,
-    Desktop: 3736,
-  },
-];
+interface ChartData {
+  date: string;
+  Mobile: number;
+  Desktop: number;
+}
 
 /**
  * Represents the statistics for Core Web Vitals.
@@ -72,12 +16,31 @@ export type CoreWebVitalStats = {
   mobile: {
     value: number;
     variation: number;
+    datapoints: Record<string, number>;
   };
   desktop: {
     value: number;
     variation: number;
+    datapoints: Record<string, number>;
   };
 };
+
+const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
+  const mobileDataPoints = input.mobile.datapoints;
+  const desktopDataPoints = input.desktop.datapoints;
+
+  const allDates = Array.from(
+    new Set([...Object.keys(mobileDataPoints), ...Object.keys(desktopDataPoints)])
+  ).sort();
+
+  const chartdata: ChartData[] = allDates.map((date: string) => ({
+    date: format(new Date(date), 'M/d'),
+    Mobile: mobileDataPoints[date] || 0,
+    Desktop: desktopDataPoints[date] || 0,
+  }));
+
+  return chartdata;
+}
 
 /**
  * Renders a CoreWebVitalCard component.
@@ -88,6 +51,7 @@ export type CoreWebVitalStats = {
  * @returns {JSX.Element} The rendered CoreWebVitalCard component.
  */
 const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalStats }): JSX.Element => {
+  const chartData = transformChartDatapoints(stats);
   return (
     <Card className='mx-auto flex-grow basis-full md:basis-1/2 lg:basis-1/3 max-w-full md:max-w-1/2 lg:max-w-1/3'>
       <Flex gap='3'>
@@ -108,7 +72,7 @@ const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalSt
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
           </div>
         </Flex>
-        <LineChart className='h-64' data={chartdata} index='date' yAxisWidth={65} categories={['Mobile', 'Desktop']} colors={['indigo', 'cyan']} />
+        <LineChart className='h-64' data={chartData} index='date' yAxisWidth={65} categories={['Mobile', 'Desktop']} colors={['indigo', 'cyan']} />
       </Flex>
     </Card>
   );

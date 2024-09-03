@@ -1,10 +1,10 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Field, Spinner, Title1, Title2 } from '@fluentui/react-components';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Button, Field, Spinner, Title1, Title2 } from '@fluentui/react-components';
 import { Box, Container, Flex, Section, Select } from '@radix-ui/themes';
 import { DateRangePicker, DateRangePickerValue, Divider } from '@tremor/react';
 import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { CoreWebVitalCard, CoreWebVitalStats } from '../../components/foundations/cwv-card';
@@ -24,29 +24,32 @@ type TData = {
 const URLStats = () => {
   const { uuid } = useParams();
   const [loadingExecutions, setLoadingExecutions] = useState<boolean>(false);
+  const [statistic, setStatistic] = useState<string>('p90');
+  const [url, setUrl] = useState<string>();
+  const [scores, setScores] = useState<{ name: string; scores: LighthouseScore }[]>([]);
+  const [cwvStats, setCWVStats] = useState<{ name: string; stats: CoreWebVitalStats }[]>([]);
+  const [dashboardRange, setDashboardRange] = useState<DateRangePickerValue>({
+    from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+    to: new Date(),
+  });
+
+  const retryExecution = useCallback(async (mode: number, uuid: string) => {
+    await sendRequest(Method.POST, `executions/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
+  }, []);
+
   const gridRef = useRef<AgGridReact>(null);
 
   const colDefs: (ColDef | ColGroupDef)[] = [
     {
-      field: 'uuid',
-      headerName: 'UUID',
-      cellStyle: (params) => {
-        const color = params.data && semaphoreColors[params.data!.status];
-        return { borderLeftColor: color || '', borderLeftWidth: '5px', borderLeftStyle: 'solid' };
+      field: 'created_at',
+      headerName: 'Triggered',
+      cellRenderer: (params: { data: TData }) => {
+        return params.data && moment(params.data!.created_at).fromNow();
       },
-      cellRenderer: (params: { value: any; data: any }) => {
-        /**
-         * To display the link, at least one of the heartbeats should be finished
-         */
-        const allowResults = params.data?.heartbeats?.find((i: { status: number }) => i.status === 4);
-        return allowResults ? (
-          <Link to={`/executions/${params?.value}`} className='w-full'>
-            {params?.value}
-          </Link>
-        ) : (
-          params?.value
-        );
-      },
+      filter: 'agDateColumnFilter',
+      initialSort: 'desc',
+      sortingOrder: ['desc', 'asc'],
+      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
     },
     {
       headerName: 'Status',
@@ -73,9 +76,9 @@ const URLStats = () => {
           cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
             switch (params.value?.status) {
               case 0:
-                return <Spinner size='extra-tiny' />;
+                return 'Pending';
               case 1:
-                return <Spinner size='extra-tiny' />;
+                return 'Running';
               case 2:
                 return 'Lighthouse Finished';
               case 3:
@@ -83,15 +86,20 @@ const URLStats = () => {
               case 4:
                 return 'Done';
               case 5:
-                return 'Failed';
+                return (
+                  <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
+                    Retry
+                  </Button>
+                );
               case 6:
-                return <Spinner size='extra-tiny' />;
+                return 'Retrying';
             }
           },
         },
         {
           field: 'status',
           headerName: 'Mobile',
+
           width: 150,
           filter: true,
           valueGetter: (params) => {
@@ -100,9 +108,9 @@ const URLStats = () => {
           cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
             switch (params.value?.status) {
               case 0:
-                return <Spinner size='extra-tiny' />;
+                return 'Pending';
               case 1:
-                return <Spinner size='extra-tiny' />;
+                return 'Running';
               case 2:
                 return 'Lighthouse Finished';
               case 3:
@@ -110,9 +118,13 @@ const URLStats = () => {
               case 4:
                 return 'Done';
               case 5:
-                return 'Failed';
+                return (
+                  <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
+                    Retry
+                  </Button>
+                );
               case 6:
-                return <Spinner size='extra-tiny' />;
+                return 'Retrying';
             }
           },
           cellStyle: (params) => {
@@ -130,32 +142,43 @@ const URLStats = () => {
       ],
     },
     {
-      field: 'created_at',
-      headerName: 'Triggered',
-      cellRenderer: (params: { data: TData }) => {
-        return params.data && moment(params.data!.created_at).fromNow();
+      field: 'uuid',
+      headerName: 'Results',
+      cellStyle: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       },
-      filter: 'agDateColumnFilter',
-      initialSort: 'desc',
-      sortingOrder: ['desc', 'asc'],
-      cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      cellRenderer: (params: { value: any; data: any }) => {
+        /**
+         * If both heartbeats are failed, we don't want to display the link
+         */
+        const validHeartbeats = params.data?.heartbeats?.filter((i: { status: number }) => i.status != 5);
+        if (!validHeartbeats?.length) {
+          return;
+        }
+
+        /**
+         * To display the link, at least one of the heartbeats should be finished
+         */
+        const allowResults = validHeartbeats?.find((i: { status: number }) => i.status === 4);
+        return allowResults ? (
+          <Link to={`/executions/${params?.value}`} className='w-full'>
+            View Execution Results
+          </Link>
+        ) : (
+          <Spinner size='extra-tiny' />
+        );
+      },
     },
   ];
-
-  const [url, setUrl] = useState<string>();
-  const [scores, setScores] = useState<{ name: string; scores: LighthouseScore }[]>([]);
-  const [cwvStats, setCWVStats] = useState<{ name: string; stats: CoreWebVitalStats }[]>([]);
-
-  const [dashboardRange, setDashboardRange] = useState<DateRangePickerValue>({
-    from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-    to: new Date(),
-  });
 
   useEffect(() => {
     if (uuid && dashboardRange.from && dashboardRange.to) {
       const queryParams = {
         from: dashboardRange.from!.toISOString(),
         to: dashboardRange.to!.toISOString(),
+        statistic,
       };
 
       sendRequest(Method.GET, `stats/url/${uuid}`, queryParams).then((result) => {
@@ -175,7 +198,7 @@ const URLStats = () => {
         }
       });
     }
-  }, [dashboardRange, uuid]);
+  }, [dashboardRange, statistic, uuid]);
 
   const dataSource: IDatasource = useMemo(
     () => ({
@@ -203,10 +226,9 @@ const URLStats = () => {
     [uuid, dashboardRange]
   );
 
-  const [statistic, setStatistic] = useState<string>('average');
   return (
     <Container>
-      <Section>
+      <Section size='1'>
         <Title1>URL Statistics</Title1>
         <Breadcrumb>
           <BreadcrumbItem>
