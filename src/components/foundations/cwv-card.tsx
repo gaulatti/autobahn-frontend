@@ -58,14 +58,14 @@ const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalSt
         <Flex direction='column' justify='between'>
           <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>{name}</h4>
           <div>
-            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>{stats.desktop.value}</p>
+            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>{stats.mobile.value}</p>
             <BadgeDelta deltaType={classifyChange(stats.mobile.variation)} isIncreasePositive={false} size='xs'>
               {stats.mobile.variation}%
             </BadgeDelta>
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Mobile</h4>
           </div>
           <div>
-            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>{stats.mobile.value}</p>
+            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>{stats.desktop.value}</p>
             <BadgeDelta deltaType={classifyChange(stats.desktop.variation)} isIncreasePositive={false} size='xs'>
               {stats.desktop.variation}%
             </BadgeDelta>
