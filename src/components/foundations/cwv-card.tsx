@@ -72,7 +72,7 @@ const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalSt
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
           </div>
         </Flex>
-        <LineChart className='h-64' data={chartData} index='date' yAxisWidth={65} categories={['Mobile', 'Desktop']} colors={['indigo', 'cyan']} />
+        <LineChart curveType={'natural'} className='h-64' data={chartData} index='date' yAxisWidth={65} categories={['Mobile', 'Desktop']} colors={['indigo', 'cyan']} />
       </Flex>
     </Card>
   );

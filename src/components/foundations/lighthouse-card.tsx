@@ -43,7 +43,7 @@ const LighthouseScoreCard = ({ name, scores }: { name: string; scores: Lighthous
               {scores.mobile.variation}%
             </BadgeDelta>
           </Flex>
-          <CategoryBar values={chartRanges} colors={chartRangeColors} markerValue={scores.mobile.score} className='mt-3 flex-grow' />
+          <CategoryBar showAnimation={true} values={chartRanges} colors={chartRangeColors} markerValue={scores.mobile.score} className='mt-3 flex-grow' />
         </Flex>
         <Flex gap='3' className='mt-4'>
           <Flex direction='column' justify='between'>
@@ -53,7 +53,7 @@ const LighthouseScoreCard = ({ name, scores }: { name: string; scores: Lighthous
               {scores.desktop.variation}%
             </BadgeDelta>
           </Flex>
-          <CategoryBar values={chartRanges} colors={chartRangeColors} markerValue={scores.desktop.score} className='mt-3 flex-grow' />
+          <CategoryBar showAnimation={true} values={chartRanges} colors={chartRangeColors} markerValue={scores.desktop.score} className='mt-3 flex-grow' />
         </Flex>
       </Flex>
     </Card>
