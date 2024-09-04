@@ -266,18 +266,22 @@ const URLStats = () => {
               </Flex>
               <Divider />
             </Section>
-            <Title2>Lighthouse Scores ({statistic})</Title2>
-            <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
-              {scores.map((score) => (
-                <LighthouseScoreCard name={score.name} scores={score.scores} />
-              ))}
-            </Flex>
-            <Title2>Core Web Vitals ({statistic})</Title2>
-            <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
-              {cwvStats.map((stat) => (
-                <CoreWebVitalCard name={stat.name} stats={stat.stats} />
-              ))}
-            </Flex>
+            <Section size='1'>
+              <Title2>Lighthouse Scores ({statistic})</Title2>
+              <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
+                {scores.map((score) => (
+                  <LighthouseScoreCard name={score.name} scores={score.scores} />
+                ))}
+              </Flex>
+            </Section>
+            <Section size='1'>
+              <Title2>Core Web Vitals ({statistic})</Title2>
+              <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
+                {cwvStats.map((stat) => (
+                  <CoreWebVitalCard name={stat.name} stats={stat.stats} />
+                ))}
+              </Flex>
+            </Section>
             <Divider />
             <Section size='1'>
               <Title2>Executions List</Title2>
