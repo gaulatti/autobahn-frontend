@@ -11,7 +11,6 @@ import { TeamsAdmin } from '../../pages/admin/teams';
 import { CreateTeam } from '../../pages/admin/teams/create';
 import { UsersAdmin } from '../../pages/admin/users';
 import { ExecutionsList } from '../../pages/executions';
-import { ExecutionResults } from '../../pages/executions/results';
 import { ExecutionDetails } from '../../pages/executions/details';
 import { HomePublic } from '../../pages/public';
 import { getKickoffReady } from '../../state/selectors/lifecycle';
@@ -62,7 +61,6 @@ const AuthenticatedRouter = () => {
             <Route path='/schedules/create' element={<CreateSchedule />} />
             <Route path='/schedules' element={<SchedulesAdmin />} />
             <Route path='/executions' element={<ExecutionsList />} />
-            <Route path="/executions/:uuid" element={<ExecutionResults />} />
             <Route path="/executions/:uuid/desktop" element={<ExecutionDetails />} />
             <Route path="/executions/:uuid/mobile" element={<ExecutionDetails />} />
             <Route path="/stats/url/:uuid" element={<URLStats />} />

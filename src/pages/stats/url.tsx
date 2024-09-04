@@ -50,6 +50,7 @@ const URLStats = () => {
       initialSort: 'desc',
       sortingOrder: ['desc', 'asc'],
       cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      flex: 1,
     },
     {
       headerName: 'Status',
@@ -84,10 +85,14 @@ const URLStats = () => {
               case 3:
                 return 'Pleasantness Finished';
               case 4:
-                return 'Done';
+                return (
+                  <Link to={`/executions/${params?.data?.uuid}/desktop`} className='w-full'>
+                    View Results
+                  </Link>
+                );
               case 5:
                 return (
-                  <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
+                  <Button onClick={() => retryExecution(1, params?.data?.uuid)} className='w-full'>
                     Retry
                   </Button>
                 );
@@ -95,6 +100,7 @@ const URLStats = () => {
                 return 'Retrying';
             }
           },
+          flex: 1,
         },
         {
           field: 'status',
@@ -116,7 +122,11 @@ const URLStats = () => {
               case 3:
                 return 'Pleasantness Finished';
               case 4:
-                return 'Done';
+                return (
+                  <Link to={`/executions/${params?.data?.uuid}/mobile`} className='w-full'>
+                    View Results
+                  </Link>
+                );
               case 5:
                 return (
                   <Button onClick={() => retryExecution(0, params?.data?.uuid)} className='w-full'>
@@ -127,6 +137,7 @@ const URLStats = () => {
                 return 'Retrying';
             }
           },
+          flex: 1,
           cellStyle: (params) => {
             const color = params.value && semaphoreColors[params.value!.status];
             return {
@@ -140,36 +151,6 @@ const URLStats = () => {
           },
         },
       ],
-    },
-    {
-      field: 'uuid',
-      headerName: 'Results',
-      cellStyle: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      cellRenderer: (params: { value: any; data: any }) => {
-        /**
-         * If both heartbeats are failed, we don't want to display the link
-         */
-        const validHeartbeats = params.data?.heartbeats?.filter((i: { status: number }) => i.status != 5);
-        if (!validHeartbeats?.length) {
-          return;
-        }
-
-        /**
-         * To display the link, at least one of the heartbeats should be finished
-         */
-        const allowResults = validHeartbeats?.find((i: { status: number }) => i.status === 4);
-        return allowResults ? (
-          <Link to={`/executions/${params?.value}`} className='w-full'>
-            View Execution Results
-          </Link>
-        ) : (
-          <Spinner size='extra-tiny' />
-        );
-      },
     },
   ];
 
