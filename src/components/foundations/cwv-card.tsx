@@ -5,8 +5,8 @@ import { format } from 'date-fns';
 
 interface ChartData {
   date: string;
-  Mobile: number;
-  Desktop: number;
+  Mobile: number | null;
+  Desktop: number | null;
 }
 
 /**
@@ -35,8 +35,8 @@ const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
 
   const chartdata: ChartData[] = allDates.map((date: string) => ({
     date: format(new Date(date), 'M/d'),
-    Mobile: mobileDataPoints[date] || 0,
-    Desktop: desktopDataPoints[date] || 0,
+    Mobile: mobileDataPoints[date] || null,
+    Desktop: desktopDataPoints[date] || null,
   }));
 
   return chartdata;
@@ -72,7 +72,7 @@ const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalSt
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
           </div>
         </Flex>
-        <LineChart curveType={'natural'} className='h-64' data={chartData} index='date' yAxisWidth={65} categories={['Mobile', 'Desktop']} colors={['indigo', 'cyan']} />
+        <LineChart connectNulls={true} curveType={'natural'} className='h-64' data={chartData} index='date' yAxisWidth={65} categories={['Mobile', 'Desktop']} colors={['indigo', 'cyan']} />
       </Flex>
     </Card>
   );
