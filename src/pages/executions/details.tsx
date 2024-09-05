@@ -5,7 +5,6 @@ import { useLocation, useParams } from 'react-router-dom';
 import React2LighthouseViewer from 'react2-lighthouse-viewer';
 import { Method, useAPI } from '../../clients/api';
 import { Link } from '../../components/foundations/link';
-import { da } from 'date-fns/locale';
 
 const ExecutionDetails = () => {
   const { uuid } = useParams();
