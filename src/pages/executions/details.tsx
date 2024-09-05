@@ -1,5 +1,5 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Spinner, Title1 } from '@fluentui/react-components';
-import { Container, Section } from '@radix-ui/themes';
+import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Link as FluentLink, Spinner, Title1 } from '@fluentui/react-components';
+import { Container, Flex, Section } from '@radix-ui/themes';
 import { useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import React2LighthouseViewer from 'react2-lighthouse-viewer';
@@ -43,7 +43,7 @@ const ExecutionDetails = () => {
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <Link to={`/executions/${uuid}`}>{uuid}</Link>
+            {uuid}
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
@@ -56,6 +56,12 @@ const ExecutionDetails = () => {
               <Spinner size='huge' />
             </div>
           )}
+          <Section size='2'>
+            <Flex gap='3' justify='center'>
+              <FluentLink href='//google.com' target='_blank'>Download Original JSON</FluentLink>
+              <FluentLink href='//google.com' target='_blank'>Download Simplified JSON</FluentLink>
+            </Flex>
+          </Section>
           {report ? <React2LighthouseViewer json={report} /> : <></>}
         </section>
       </Section>
