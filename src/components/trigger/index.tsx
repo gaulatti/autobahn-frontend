@@ -2,7 +2,7 @@ import { Body1, Caption1, Card, CardFooter, CardHeader, CardPreview, Input, Labe
 import { Button, Flex } from '@radix-ui/themes';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { getCurrentTeam } from '../../state/selectors/teams';
 
@@ -25,7 +25,6 @@ const isValidHttpUrl = (url: string): boolean => {
  */
 const Trigger = (): JSX.Element => {
   const navigate = useNavigate();
-  const location = useLocation();
   const currentTeam = useSelector(getCurrentTeam)!;
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
