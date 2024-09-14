@@ -1,3 +1,6 @@
+import { Flex } from '@radix-ui/themes';
+import { TriggerAdHocButton } from '../trigger/trigger-button';
+
 /**
  * URLNavbar component.
  *
@@ -5,12 +8,15 @@
  * @param {any} props - The component props.
  * @returns {JSX.Element} - The rendered URLNavbar component.
  */
-const URLNavbar = (props: any) => {
+const URLNavbar = ({ uuid, url }: { uuid: string; url: string }): JSX.Element => {
   return (
-    <div className='bg-background border-b border-input px-4 py-2 flex items-center gap-2 w-full my-4'>
-      <GlobeIcon className='w-5 h-5 text-muted-foreground' />
-      <div className='flex-1 text-sm font-mono text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis'>{props.children}</div>
-    </div>
+    <Flex gap='2' align='center' className='my-4'>
+      <Flex gap='3' className='w-full'>
+        <GlobeIcon className='w-5 h-5 text-muted-foreground' />
+        <div className='flex-1 text-sm font-mono text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis'>{url}</div>
+      </Flex>
+      <TriggerAdHocButton uuid={uuid} url={url} />
+    </Flex>
   );
 };
 

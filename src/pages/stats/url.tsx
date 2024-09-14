@@ -219,11 +219,12 @@ const URLStats = () => {
           <BreadcrumbDivider />
           <BreadcrumbItem>Stats</BreadcrumbItem>
         </Breadcrumb>
-        {url ? (
+        {(url && uuid) ? (
           <>
-            <URLNavbar>{url}</URLNavbar>
+            <URLNavbar uuid={uuid} url={url} />
+            <Divider />
             <Section size='1'>
-              <Flex gap='3' justify='between' className='my-4'>
+              <Flex gap='3' justify='between'>
                 <Box>
                   <Field label='Statistic'>
                     <Select.Root
@@ -265,8 +266,8 @@ const URLStats = () => {
                   </Field>
                 </Box>
               </Flex>
-              <Divider />
             </Section>
+            <Divider />
             <Section size='1'>
               <Title2>Lighthouse Scores ({statistic})</Title2>
               <Flex direction='row' wrap='wrap' gap='3' className='my-4'>

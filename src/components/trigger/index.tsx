@@ -62,18 +62,15 @@ const Trigger = (): JSX.Element => {
       /**
        * Send request to trigger execution
        */
-      sendRequest(Method.POST, 'executions', { url: formElements.url.value, team: currentTeam.id }).then(() => {
+      sendRequest(Method.POST, 'executions', { url: formElements.url.value, team: currentTeam.id }).then((data: { url: string }) => {
         /**
          * Redirect to executions page after triggering execution
          */
-        if (location.pathname !== '/executions') {
-          navigate('/executions');
-        }
-
+        navigate(`/stats/url/${data.url}`);
         setIsLoading(false);
       });
     },
-    [navigate, currentTeam, location]
+    [navigate, currentTeam]
   );
 
   return (
