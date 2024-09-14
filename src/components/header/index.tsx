@@ -2,6 +2,7 @@ import { Tooltip } from '@fluentui/react-components';
 import { Hamburger } from '@fluentui/react-nav-preview';
 import { Container, Flex } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
+import { TeamSelector } from '../foundations/team-selector';
 import { Logo } from './logo';
 import { NavigationMenu } from './menu';
 import { UserPersona } from './persona';
@@ -61,6 +62,7 @@ const Header = () => {
             {renderHamburgerWithToolTip()}
             <Logo />
           </div>
+          <TeamSelector />
           <UserPersona />
         </Flex>
       </Container>

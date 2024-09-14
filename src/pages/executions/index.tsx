@@ -8,6 +8,9 @@ import { Method, sendRequest } from '../../clients/api';
 import { Link } from '../../components/foundations/link';
 import { Trigger } from '../../components/trigger';
 import { WebSocketManager } from '../../engines/sockets';
+import { useSelector } from 'react-redux';
+import { getCurrentTeam } from '../../state/selectors/teams';
+
 type TData = {
   uuid: string;
   url: string;
@@ -25,6 +28,11 @@ const ExecutionsList = () => {
   const [refreshCells, setRefreshCells] = useState<number>(0);
   const gridRef = useRef<AgGridReact>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  /**
+   * Represents the current team.
+   */
+  const currentTeam = useSelector(getCurrentTeam)!;
 
   const retryExecution = useCallback(async (mode: number, uuid: string) => {
     await sendRequest(Method.POST, `executions/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
@@ -46,7 +54,12 @@ const ExecutionsList = () => {
       field: 'created_at',
       headerName: 'Triggered',
       cellRenderer: (params: { data: TData }) => {
-        return params.data && moment(params.data!.created_at).fromNow();
+        return (
+          params.data &&
+          (moment().diff(params.data!.created_at, 'hours') < 24
+            ? moment(params.data!.created_at).fromNow()
+            : moment(params.data!.created_at).format('YYYY-MM-DD / HH:mm'))
+        );
       },
       filter: 'agDateColumnFilter',
       initialSort: 'desc',
@@ -61,6 +74,21 @@ const ExecutionsList = () => {
       valueGetter: (params) => params.data?.url,
       cellRenderer: (params: { value: { url: string; uuid: string } }) =>
         params.value && <Link to={`/stats/url/${params.value.uuid}`}>{params.value.url}</Link>,
+    },
+    {
+      headerName: 'Triggered By',
+      valueGetter: (params) => {
+        const { data } = params;
+        if (data) {
+          const { target, triggeredBy } = data;
+
+          if (target) {
+            return target.project.name;
+          } else {
+            return `${triggeredBy.user.name} ${triggeredBy.user.last_name}`;
+          }
+        }
+      },
     },
     {
       headerName: 'Status',
@@ -170,20 +198,23 @@ const ExecutionsList = () => {
         console.log(`Grid updated at ${refreshCells}`);
 
         setLoading(true);
-        const queryParams = {
-          sort: params.sortModel.map((sort) => `${sort.colId},${sort.sort}`).join(';'),
-          filters: JSON.stringify(params.filterModel),
-          startRow: params.startRow,
-          endRow: params.endRow,
-        };
+        if (currentTeam) {
+          const queryParams = {
+            sort: params.sortModel.map((sort) => `${sort.colId},${sort.sort}`).join(';'),
+            filters: JSON.stringify(params.filterModel),
+            startRow: params.startRow,
+            endRow: params.endRow,
+            team: currentTeam.id,
+          };
 
-        const result = await sendRequest(Method.GET, 'executions', queryParams);
+          const result = await sendRequest(Method.GET, 'executions', queryParams);
 
-        params.successCallback(result.pulses.rows, result.pulses.count);
-        setLoading(false);
+          params.successCallback(result.pulses.rows, result.pulses.count);
+          setLoading(false);
+        }
       },
     }),
-    [refreshCells]
+    [refreshCells, currentTeam]
   );
 
   return (

@@ -1,11 +1,10 @@
 import { Body1, Caption1, Card, CardFooter, CardHeader, CardPreview, Input, Label, Spinner, Title2 } from '@fluentui/react-components';
-import { Button, Flex, Select } from '@radix-ui/themes';
+import { Button, Flex } from '@radix-ui/themes';
 import { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
-import { setCurrentTeam } from '../../state/dispatchers/teams';
-import { getCurrentTeam, getTeams } from '../../state/selectors/teams';
+import { getCurrentTeam } from '../../state/selectors/teams';
 
 /**
  * Checks if the URL starts with 'http://' or 'https://'.
@@ -27,9 +26,7 @@ const isValidHttpUrl = (url: string): boolean => {
 const Trigger = (): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
-  const teams = useSelector(getTeams);
   const currentTeam = useSelector(getCurrentTeam)!;
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   /**
@@ -105,24 +102,6 @@ const Trigger = (): JSX.Element => {
         </CardPreview>
         <CardFooter>
           <Flex justify='between' className='w-full'>
-            <Select.Root
-              defaultValue={currentTeam.id.toString()}
-              onValueChange={(e) => {
-                dispatch(setCurrentTeam(Number(e)));
-              }}
-            >
-              <Select.Trigger />
-              <Select.Content>
-                <Select.Group>
-                  <Select.Label>Team</Select.Label>
-                  {teams.map((team) => (
-                    <Select.Item key={team.id} value={team.id.toString()}>
-                      {team.name}
-                    </Select.Item>
-                  ))}
-                </Select.Group>
-              </Select.Content>
-            </Select.Root>
             <Button type='submit'>Trigger</Button>
           </Flex>
         </CardFooter>

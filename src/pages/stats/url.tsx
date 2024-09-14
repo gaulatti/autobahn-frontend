@@ -54,6 +54,7 @@ const URLStats = () => {
     },
     {
       headerName: 'Status',
+      flex: 1,
       children: [
         {
           field: 'status',
@@ -63,6 +64,7 @@ const URLStats = () => {
             return params.data?.heartbeats?.find((i: { mode: number }) => i.mode == 1);
           },
           filter: true,
+          flex: 1,
           cellStyle: (params) => {
             const color = params.value && semaphoreColors[params.value!.status];
             return {
@@ -100,7 +102,6 @@ const URLStats = () => {
                 return 'Retrying';
             }
           },
-          flex: 1,
         },
         {
           field: 'status',
@@ -309,7 +310,6 @@ const URLStats = () => {
             <Spinner size='huge' />
           </div>
         )}
-        &rbrace;
       </Section>
     </Container>
   );
