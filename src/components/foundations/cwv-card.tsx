@@ -1,7 +1,7 @@
 import { Flex } from '@radix-ui/themes';
 import { BadgeDelta, Card } from '@tremor/react';
 import { format } from 'date-fns';
-import { CartesianGrid, Line, LineChart as RechartsLineChart, XAxis } from 'recharts';
+import { CartesianGrid, Label, Line, LineChart, ReferenceArea, XAxis } from 'recharts';
 import { ChartTooltip, ChartTooltipContent, type ChartConfig } from '../../components/ui/chart';
 import { classifyChange } from '../../utils/charts';
 import { ChartContainer } from '../ui/chart';
@@ -24,7 +24,17 @@ interface ChartData {
   mobile: number | null;
   desktop: number | null;
 }
-export function Component({ chartData }: { chartData: ChartData[] }): JSX.Element {
+export function Component({
+  chartData,
+  currentStat,
+  mobileStat,
+  desktopStat,
+}: {
+  chartData: ChartData[];
+  currentStat: string;
+  mobileStat: number;
+  desktopStat: number;
+}): JSX.Element {
   const [stickyTooltip, setStickyTooltip] = useState(false);
 
   /**
@@ -46,7 +56,7 @@ export function Component({ chartData }: { chartData: ChartData[] }): JSX.Elemen
 
   return (
     <ChartContainer config={chartConfig} className='w-full'>
-      <RechartsLineChart
+      <LineChart
         accessibilityLayer
         data={chartData}
         margin={{
@@ -66,9 +76,15 @@ export function Component({ chartData }: { chartData: ChartData[] }): JSX.Elemen
           cursor={true}
           content={<ChartTooltipContent labelKey='fullDate' />}
         />
-        <Line dataKey='desktop' type='monotone' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
-        <Line dataKey='mobile' type='monotone' stroke='var(--color-mobile)' strokeWidth={2} dot={false} />
-      </RechartsLineChart>
+        <ReferenceArea y1={mobileStat} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
+          <Label value={`Mobile ${currentStat}`} position='insideTopRight' />
+        </ReferenceArea>
+        <ReferenceArea y1={desktopStat} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
+          <Label value={`Desktop ${currentStat}`} position='insideBottomRight' />
+        </ReferenceArea>
+        <Line connectNulls={true} dataKey='desktop' type='monotone' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
+        <Line connectNulls={true} dataKey='mobile' type='monotone' stroke='var(--color-mobile)' strokeWidth={2} dot={false} />
+      </LineChart>
     </ChartContainer>
   );
 }
@@ -80,12 +96,12 @@ export type CoreWebVitalStats = {
   mobile: {
     value: number;
     variation: number;
-    datapoints: Record<string, { value: number, uuid: string}>;
+    datapoints: Record<string, { value: number; uuid: string }>;
   };
   desktop: {
     value: number;
     variation: number;
-    datapoints: Record<string, { value: number, uuid: string}>;
+    datapoints: Record<string, { value: number; uuid: string }>;
   };
 };
 
@@ -114,7 +130,7 @@ const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
  * @param {CoreWebVitalStats} stats - The statistics for the Core Web Vital.
  * @returns {JSX.Element} The rendered CoreWebVitalCard component.
  */
-const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalStats }): JSX.Element => {
+const CoreWebVitalCard = ({ name, stats, currentStat }: { name: string; stats: CoreWebVitalStats; currentStat: string }): JSX.Element => {
   const chartData = transformChartDatapoints(stats);
   return (
     <Card className='mx-auto flex-grow basis-full md:basis-1/2 lg:basis-1/3 max-w-full md:max-w-1/2 lg:max-w-1/3'>
@@ -136,7 +152,7 @@ const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalSt
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
           </div>
         </Flex>
-        <Component chartData={chartData} />
+        <Component chartData={chartData} currentStat={currentStat} mobileStat={stats.mobile.value} desktopStat={stats.desktop.value} />
       </Flex>
     </Card>
   );

@@ -279,7 +279,7 @@ const URLStats = () => {
               <Title2>Core Web Vitals ({statistic})</Title2>
               <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
                 {cwvStats.map((stat) => (
-                  <CoreWebVitalCard name={stat.name} stats={stat.stats} />
+                  <CoreWebVitalCard name={stat.name} stats={stat.stats} currentStat={statistic} />
                 ))}
               </Flex>
             </Section>
