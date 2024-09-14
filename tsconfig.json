@@ -4,7 +4,11 @@
     "strict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "references": [
     {
@@ -13,5 +17,6 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  
 }
