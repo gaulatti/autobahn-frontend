@@ -1,12 +1,19 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
-import {
+
+/**
+ * This is original from the source code.
+ * import {
   NameType,
   Payload,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent"
+ */
 
-import { cn } from "@/lib/utils"
+
+import { cn } from "../../lib/utils"
+import moment from 'moment'
+import { Flex, Link } from '@radix-ui/themes'
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
@@ -144,10 +151,17 @@ const ChartTooltipContent = React.forwardRef<
       const [item] = payload
       const key = `${labelKey || item.dataKey || item.name || "value"}`
       const itemConfig = getPayloadConfigFromPayload(config, item, key)
-      const value =
+      let value =
         !labelKey && typeof label === "string"
           ? config[label as keyof typeof config]?.label || label
           : itemConfig?.label
+
+      /**
+       * If the label key is 'fullDate', we'll format the date using moment.js.
+       */
+      if(labelKey == 'fullDate') {
+        value = moment(item.payload.fullDate).format('MMMM D, YYYY @ HH:mm')
+      }
 
       if (labelFormatter) {
         return (
@@ -177,6 +191,11 @@ const ChartTooltipContent = React.forwardRef<
     }
 
     const nestLabel = payload.length === 1 && indicator !== "dot"
+
+    /**
+     * As we need the uuid, we'll get it from the first one of the pair.
+     */
+    const uuid: string = payload[0]?.payload?.payload?.uuid
 
     return (
       <div
@@ -252,6 +271,7 @@ const ChartTooltipContent = React.forwardRef<
               </div>
             )
           })}
+          { uuid && <Flex gap='3'><Link href={`/executions/${uuid}/mobile`} target="_blank">View Mobile Details</Link><Link href={`/executions/${uuid}/desktop`} target="_blank">View Desktop Details</Link></Flex> }
         </div>
       </div>
     )

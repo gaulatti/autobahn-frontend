@@ -1,12 +1,76 @@
 import { Flex } from '@radix-ui/themes';
-import { BadgeDelta, Card, LineChart } from '@tremor/react';
-import { classifyChange } from '../../utils/charts';
+import { BadgeDelta, Card } from '@tremor/react';
 import { format } from 'date-fns';
+import { CartesianGrid, Line, LineChart as RechartsLineChart, XAxis } from 'recharts';
+import { ChartTooltip, ChartTooltipContent, type ChartConfig } from '../../components/ui/chart';
+import { classifyChange } from '../../utils/charts';
+import { ChartContainer } from '../ui/chart';
+import { useState } from 'react';
+import { CategoricalChartState } from 'recharts/types/chart/types';
+
+const chartConfig = {
+  desktop: {
+    label: 'Desktop',
+    color: 'hsl(var(--chart-1))',
+  },
+  mobile: {
+    label: 'Mobile',
+    color: 'hsl(var(--chart-2))',
+  },
+} satisfies ChartConfig;
 
 interface ChartData {
   date: string;
-  Mobile: number | null;
-  Desktop: number | null;
+  mobile: number | null;
+  desktop: number | null;
+}
+export function Component({ chartData }: { chartData: ChartData[] }): JSX.Element {
+  const [stickyTooltip, setStickyTooltip] = useState(false);
+
+  /**
+   * Avoid unintended state resets not related to the event itself (handled below)
+   */
+  const handleMouseDown = (_state: CategoricalChartState, event: any) => {
+    event.stopPropagation();
+    event.preventDefault();
+  };
+
+  /**
+   * Make the tooltip sticky on click.
+   */
+  const handleChartClick = (state: CategoricalChartState) => {
+    if (state && state.activePayload && state.activePayload.length > 0) {
+      setStickyTooltip(true);
+    }
+  };
+
+  return (
+    <ChartContainer config={chartConfig} className='w-full'>
+      <RechartsLineChart
+        accessibilityLayer
+        data={chartData}
+        margin={{
+          left: 12,
+          right: 12,
+        }}
+        onMouseDown={handleMouseDown}
+        onClick={handleChartClick}
+      >
+        <CartesianGrid vertical={false} />
+        <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
+        <ChartTooltip
+          wrapperStyle={{
+            pointerEvents: 'auto',
+          }}
+          trigger={stickyTooltip ? 'click' : 'hover'}
+          cursor={true}
+          content={<ChartTooltipContent labelKey='fullDate' />}
+        />
+        <Line dataKey='desktop' type='monotone' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
+        <Line dataKey='mobile' type='monotone' stroke='var(--color-mobile)' strokeWidth={2} dot={false} />
+      </RechartsLineChart>
+    </ChartContainer>
+  );
 }
 
 /**
@@ -16,12 +80,12 @@ export type CoreWebVitalStats = {
   mobile: {
     value: number;
     variation: number;
-    datapoints: Record<string, number>;
+    datapoints: Record<string, { value: number, uuid: string}>;
   };
   desktop: {
     value: number;
     variation: number;
-    datapoints: Record<string, number>;
+    datapoints: Record<string, { value: number, uuid: string}>;
   };
 };
 
@@ -29,18 +93,18 @@ const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
   const mobileDataPoints = input.mobile.datapoints;
   const desktopDataPoints = input.desktop.datapoints;
 
-  const allDates = Array.from(
-    new Set([...Object.keys(mobileDataPoints), ...Object.keys(desktopDataPoints)])
-  ).sort();
+  const allDates = Array.from(new Set([...Object.keys(mobileDataPoints), ...Object.keys(desktopDataPoints)])).sort();
 
   const chartdata: ChartData[] = allDates.map((date: string) => ({
     date: format(new Date(date), 'M/d'),
-    Mobile: mobileDataPoints[date] || null,
-    Desktop: desktopDataPoints[date] || null,
+    fullDate: date,
+    payload: { uuid: mobileDataPoints[date].uuid },
+    mobile: mobileDataPoints[date].value || null,
+    desktop: desktopDataPoints[date].value || null,
   }));
 
   return chartdata;
-}
+};
 
 /**
  * Renders a CoreWebVitalCard component.
@@ -72,7 +136,7 @@ const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalSt
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
           </div>
         </Flex>
-        <LineChart connectNulls={true} curveType={'natural'} className='h-64' data={chartData} index='date' yAxisWidth={65} categories={['Mobile', 'Desktop']} colors={['indigo', 'cyan']} />
+        <Component chartData={chartData} />
       </Flex>
     </Card>
   );
