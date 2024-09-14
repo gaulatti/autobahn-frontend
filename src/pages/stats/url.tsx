@@ -11,6 +11,7 @@ import { CoreWebVitalCard, CoreWebVitalStats } from '../../components/foundation
 import { LighthouseScore, LighthouseScoreCard } from '../../components/foundations/lighthouse-card';
 import { Link } from '../../components/foundations/link';
 import { URLNavbar } from '../../components/foundations/url-navbar';
+import { WebSocketManager } from '../../engines/sockets';
 
 const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', '#c0392b', '#f6b93b'];
 
@@ -28,6 +29,7 @@ const URLStats = () => {
   const [url, setUrl] = useState<string>();
   const [scores, setScores] = useState<{ name: string; scores: LighthouseScore }[]>([]);
   const [cwvStats, setCWVStats] = useState<{ name: string; stats: CoreWebVitalStats }[]>([]);
+  const [refreshCells, setRefreshCells] = useState<number>(0);
   const [dashboardRange, setDashboardRange] = useState<DateRangePickerValue>({
     from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
     to: new Date(),
@@ -35,6 +37,18 @@ const URLStats = () => {
 
   const retryExecution = useCallback(async (mode: number, uuid: string) => {
     await sendRequest(Method.POST, `executions/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
+  }, []);
+
+
+  /**
+   * This useEffect is used to listen to the WebSocketManager for REFRESH_EXECUTIONS_TABLE action
+   */
+  useEffect(() => {
+    WebSocketManager.getInstance().addListener((message: { action: string }) => {
+      if (message.action === 'REFRESH_EXECUTIONS_TABLE') {
+        setRefreshCells(Math.random());
+      }
+    });
   }, []);
 
   const gridRef = useRef<AgGridReact>(null);
@@ -188,6 +202,8 @@ const URLStats = () => {
 
       getRows: async (params: IGetRowsParams) => {
         if (uuid && dashboardRange.from && dashboardRange.to) {
+          console.log(`Grid updated at ${refreshCells}`);
+
           setLoadingExecutions(true);
           const queryParams = {
             sort: params.sortModel.map((sort) => `${sort.colId},${sort.sort}`).join(';'),
@@ -205,7 +221,7 @@ const URLStats = () => {
         }
       },
     }),
-    [uuid, dashboardRange]
+    [refreshCells, uuid, dashboardRange]
   );
 
   return (
