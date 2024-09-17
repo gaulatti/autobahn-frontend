@@ -4,6 +4,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react';
 import { useState } from 'react';
 import { StatisticSelector } from '../selectors/statistic';
 import { CoreWebVitalCard, CoreWebVitalStats } from './card';
+import { CoreWebVitalPlatformCard } from './platform-card';
 
 /**
  * CoreWebVitalCharts component displays Core Web Vitals statistics in a tabbed interface.
@@ -40,9 +41,10 @@ const CoreWebVitalCharts = ({ cwvStats }: { cwvStats: { name: string; stats: Cor
             </Flex>
           </TabPanel>
           <TabPanel>
-            <p className='mt-4 leading-6 text-tremor-default text-tremor-content dark:text-dark-tremor-content'>
-              Diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
-            </p>
+            <Flex gap='3'>
+              <CoreWebVitalPlatformCard platform='desktop' stats={cwvStats}/>
+              <CoreWebVitalPlatformCard platform='mobile' stats={cwvStats}  />
+            </Flex>
           </TabPanel>
         </TabPanels>
       </TabGroup>

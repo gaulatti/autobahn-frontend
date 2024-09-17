@@ -66,9 +66,9 @@ export function Component({
         onMouseDown={handleMouseDown}
         onClick={handleChartClick}
       >
-        <CartesianGrid vertical={true} />
+        <CartesianGrid vertical={true}/>
         <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
-        <YAxis tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
+        <YAxis axisLine={true} tickMargin={16} interval='preserveEnd' />
         <ChartTooltip
           wrapperStyle={{
             pointerEvents: 'auto',
