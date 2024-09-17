@@ -35,7 +35,7 @@ const CoreWebVitalCharts = ({ cwvStats }: { cwvStats: { name: string; stats: Cor
           <TabPanel>
             <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
               {cwvStats.map((stat) => (
-                <CoreWebVitalCard name={stat.name} stats={stat.stats} currentStat={statistic} />
+                <CoreWebVitalCard name={stat.name} stats={stat.stats} statistic={statistic} />
               ))}
             </Flex>
           </TabPanel>

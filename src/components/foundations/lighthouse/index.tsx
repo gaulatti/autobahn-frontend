@@ -27,7 +27,7 @@ const LighthouseCharts = ({ scores }: { scores: { name: string; scores: Lighthou
       </Flex>
       <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
         {scores.map((score) => (
-          <LighthouseScoreCard name={score.name} scores={score.scores} />
+          <LighthouseScoreCard key={score.name} name={score.name} scores={score.scores} statistic={statistic} />
         ))}
       </Flex>
     </>

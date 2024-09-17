@@ -67,8 +67,8 @@ export function Component({
         onClick={handleChartClick}
       >
         <CartesianGrid vertical={true} />
-        <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd'/>
-        <YAxis tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd'/>
+        <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
+        <YAxis tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
         <ChartTooltip
           wrapperStyle={{
             pointerEvents: 'auto',
@@ -96,12 +96,12 @@ export function Component({
  */
 export type CoreWebVitalStats = {
   mobile: {
-    value: number;
+    values: Record<string, number>;
     variation: number;
     datapoints: Record<string, { value: number; uuid: string }>;
   };
   desktop: {
-    value: number;
+    values: Record<string, number>;
     variation: number;
     datapoints: Record<string, { value: number; uuid: string }>;
   };
@@ -132,29 +132,34 @@ const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
  * @param {CoreWebVitalStats} stats - The statistics for the Core Web Vital.
  * @returns {JSX.Element} The rendered CoreWebVitalCard component.
  */
-const CoreWebVitalCard = ({ name, stats, currentStat }: { name: string; stats: CoreWebVitalStats; currentStat: string }): JSX.Element => {
+const CoreWebVitalCard = ({ name, stats, statistic }: { name: string; stats: CoreWebVitalStats; statistic: string }): JSX.Element => {
   const chartData = transformChartDatapoints(stats);
+
   return (
     <Card className='mx-auto flex-grow basis-full md:basis-1/2 lg:basis-1/3 max-w-full md:max-w-1/2 lg:max-w-1/3'>
       <Flex gap='3'>
         <Flex direction='column' justify='between'>
           <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>{name}</h4>
           <div>
-            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>{stats.mobile.value}</p>
+            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>
+              {stats.mobile.values[statistic]}
+            </p>
             <BadgeDelta deltaType={classifyChange(stats.mobile.variation)} isIncreasePositive={false} size='xs'>
               {stats.mobile.variation}%
             </BadgeDelta>
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Mobile</h4>
           </div>
           <div>
-            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>{stats.desktop.value}</p>
+            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>
+              {stats.desktop.values[statistic]}
+            </p>
             <BadgeDelta deltaType={classifyChange(stats.desktop.variation)} isIncreasePositive={false} size='xs'>
               {stats.desktop.variation}%
             </BadgeDelta>
             <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
           </div>
         </Flex>
-        <Component chartData={chartData} currentStat={currentStat} mobileStat={stats.mobile.value} desktopStat={stats.desktop.value} />
+        <Component chartData={chartData} currentStat={statistic} mobileStat={stats.mobile.values[statistic]} desktopStat={stats.desktop.values[statistic]} />
       </Flex>
     </Card>
   );

@@ -11,11 +11,16 @@ import { Link } from '../../components/foundations/link';
 import { PulsesTable } from '../../components/foundations/pulses';
 import { URLNavbar } from '../../components/foundations/url-navbar';
 import { ErrorMessage } from '../../components/foundations/error';
+import { WebSocketManager } from '../../engines/sockets';
 
 /**
  * URLStats component displays statistics for a specific URL.
  */
 const URLStats = () => {
+  /**
+   *
+   */
+  const [refreshStats, setRefreshStats] = useState(0);
   /**
    * Get the URL UUID from the route parameters.
    */
@@ -61,7 +66,19 @@ const URLStats = () => {
       }
     };
     fetchData();
-  }, [dashboardRange, uuid]);
+  }, [dashboardRange, uuid, refreshStats]);
+
+
+  /**
+   * This useEffect is used to listen to the WebSocketManager for REFRESH_EXECUTIONS_TABLE action
+   */
+  useEffect(() => {
+    WebSocketManager.getInstance().addListener((message: { action: string }) => {
+      if (message.action === 'REFRESH_EXECUTIONS_TABLE') {
+        setRefreshStats(Math.random());
+      }
+    });
+  }, []);
 
   return (
     <Container>

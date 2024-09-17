@@ -24,7 +24,7 @@ interface StatisticSelectorProps {
  * - 'max': The maximum value.
  * - 'min': The minimum value.
  */
-const availableStats = ['average', 'p99', 'p90', 'p50', 'max', 'min'];
+const availableStats = ['avg', 'p99', 'p90', 'p50', 'max', 'min'];
 
 /**
  * StatisticSelector component allows users to select a statistical measure from a dropdown.
