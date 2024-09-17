@@ -1,6 +1,6 @@
 import { Flex } from '@radix-ui/themes';
 import { BadgeDelta, Card, CategoryBar, Color } from '@tremor/react';
-import { classifyChange } from '../../utils/charts';
+import { classifyChange } from '../../../utils/charts';
 
 /**
  * The ranges for the chart.

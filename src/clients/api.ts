@@ -1,12 +1,24 @@
+import { DateRangePickerValue } from '@tremor/react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { LighthouseScore } from '../components/foundations/lighthouse/card';
+import { CoreWebVitalStats } from '../components/foundations/cwv/card';
 
 export enum Method {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
+}
+
+/**
+ * Interface representing the URL statistics result.
+ */
+export interface URLStatsResult {
+  url: string;
+  scores: { name: string; scores: LighthouseScore }[];
+  cwvStats: { name: string; stats: CoreWebVitalStats }[];
 }
 
 /**
@@ -25,19 +37,28 @@ const sendRequest = async (method: Method, url: string = '', data?: any) => {
       Authorization: `Bearer ${tokens!.idToken}`,
     },
   };
-
-  if (method === Method.GET) {
-    const response = await axios.get(fullURL, {params: data, ...config});
+  try {
+    let response;
+    switch (method) {
+      case Method.GET:
+        response = await axios.get(fullURL, { params: data, ...config });
+        break;
+      case Method.POST:
+        response = await axios.post(fullURL, data, config);
+        break;
+      case Method.PUT:
+        response = await axios.put(fullURL, data, config);
+        break;
+      case Method.DELETE:
+        response = await axios.delete(fullURL, config);
+        break;
+      default:
+        throw new Error(`Unsupported HTTP method: ${method}`);
+    }
     return response.data;
-  } else if (method === Method.POST) {
-    const response = await axios.post(fullURL, data, config);
-    return response.data;
-  } else if (method === Method.PUT) {
-    const response = await axios.put(fullURL, data, config);
-    return response.data;
-  } else if (method === Method.DELETE) {
-    const response = await axios.delete(fullURL, config);
-    return response.data;
+  } catch (error) {
+    console.error(`Error in sendRequest (${method} ${url}):`, error);
+    throw error;
   }
 };
 
@@ -74,4 +95,44 @@ const useAPI = (method: Method, dependencies: any[], url?: string, postData?: an
   return { data, loading, error };
 };
 
-export { sendRequest, useAPI };
+/**
+ * Fetches the URL statistics based on the UUID and date range.
+ * @param uuid - The unique identifier for the URL.
+ * @param dashboardRange - The date range for the dashboard.
+ * @returns A Promise that resolves to the URL statistics result.
+ */
+const fetchURLStats = async (
+  uuid: string,
+  dashboardRange: DateRangePickerValue
+): Promise<URLStatsResult> => {
+  if (dashboardRange.from && dashboardRange.to) {
+    const queryParams = {
+      from: dashboardRange.from.toISOString(),
+      to: dashboardRange.to.toISOString(),
+      statistic: 'p90',
+    };
+
+    try {
+      const result = await sendRequest(
+        Method.GET,
+        `stats/url/${uuid}`,
+        queryParams
+      );
+
+      const {
+        urlRecord: { url },
+        scores,
+        cwvStats,
+      } = result;
+
+      return { url, scores, cwvStats };
+    } catch (error) {
+      console.error('Error fetching URL statistics:', error);
+      throw error;
+    }
+  } else {
+    throw new Error('Invalid date range: "from" and "to" dates are required');
+  }
+};
+
+export { sendRequest, useAPI, fetchURLStats };

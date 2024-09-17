@@ -1,10 +1,10 @@
 import { Flex } from '@radix-ui/themes';
 import { BadgeDelta, Card } from '@tremor/react';
 import { format } from 'date-fns';
-import { CartesianGrid, Label, Line, LineChart, ReferenceArea, XAxis } from 'recharts';
-import { ChartTooltip, ChartTooltipContent, type ChartConfig } from '../../components/ui/chart';
-import { classifyChange } from '../../utils/charts';
-import { ChartContainer } from '../ui/chart';
+import { CartesianGrid, Label, Line, LineChart, ReferenceArea, XAxis, YAxis } from 'recharts';
+import { ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from '../../ui/chart';
+import { classifyChange } from '../../../utils/charts';
+import { ChartContainer } from '../../ui/chart';
 import { useState } from 'react';
 import { CategoricalChartState } from 'recharts/types/chart/types';
 
@@ -66,8 +66,9 @@ export function Component({
         onMouseDown={handleMouseDown}
         onClick={handleChartClick}
       >
-        <CartesianGrid vertical={false} />
-        <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
+        <CartesianGrid vertical={true} />
+        <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd'/>
+        <YAxis tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd'/>
         <ChartTooltip
           wrapperStyle={{
             pointerEvents: 'auto',
@@ -82,6 +83,7 @@ export function Component({
         <ReferenceArea y1={desktopStat} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
           <Label value={`Desktop ${currentStat}`} position='insideBottomRight' />
         </ReferenceArea>
+        <ChartLegend content={<ChartLegendContent />} />
         <Line connectNulls={true} dataKey='desktop' type='monotone' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
         <Line connectNulls={true} dataKey='mobile' type='monotone' stroke='var(--color-mobile)' strokeWidth={2} dot={false} />
       </LineChart>
