@@ -1,10 +1,9 @@
 import { Title2 } from '@fluentui/react-components';
-import { Box, Flex } from '@radix-ui/themes';
+import { Flex } from '@radix-ui/themes';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react';
-import { useState } from 'react';
-import { StatisticSelector } from '../selectors/statistic';
-import { CoreWebVitalCard, CoreWebVitalStats } from './card';
+import { CoreWebVitalCard, CoreWebVitalStats } from './metric-card';
 import { CoreWebVitalPlatformCard } from './platform-card';
+import { CoreWebVitalStatistics } from './statistics';
 
 /**
  * CoreWebVitalCharts component displays Core Web Vitals statistics in a tabbed interface.
@@ -17,34 +16,31 @@ import { CoreWebVitalPlatformCard } from './platform-card';
  * @returns {JSX.Element} The rendered CoreWebVitalCharts component.
  */
 const CoreWebVitalCharts = ({ cwvStats }: { cwvStats: { name: string; stats: CoreWebVitalStats }[] }) => {
-  const [statistic, setStatistic] = useState<string>('p90');
-
   return (
     <>
-      <Flex>
-        <Title2 className='w-full'>Core Web Vitals</Title2>
-        <Box>
-          <StatisticSelector callback={setStatistic} statistic={statistic} />
-        </Box>
-      </Flex>
+      <Title2 className='w-full'>Core Web Vitals</Title2>
       <TabGroup>
         <TabList className='mt-4'>
           <Tab>By Metric</Tab>
           <Tab>By Platform</Tab>
+          <Tab>Statistics</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
             <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
               {cwvStats.map((stat) => (
-                <CoreWebVitalCard name={stat.name} stats={stat.stats} statistic={statistic} />
+                <CoreWebVitalCard name={stat.name} stats={stat.stats} />
               ))}
             </Flex>
           </TabPanel>
           <TabPanel>
             <Flex gap='3'>
-              <CoreWebVitalPlatformCard platform='desktop' stats={cwvStats}/>
-              <CoreWebVitalPlatformCard platform='mobile' stats={cwvStats}  />
+              <CoreWebVitalPlatformCard platform='desktop' stats={cwvStats} />
+              <CoreWebVitalPlatformCard platform='mobile' stats={cwvStats} />
             </Flex>
+          </TabPanel>
+          <TabPanel>
+            <CoreWebVitalStatistics cwvStats={cwvStats} />
           </TabPanel>
         </TabPanels>
       </TabGroup>

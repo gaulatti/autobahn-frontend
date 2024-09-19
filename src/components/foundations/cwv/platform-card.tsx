@@ -1,6 +1,6 @@
 import { Card } from '@tremor/react';
 import { capitalize } from '../../../lib/utils';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '../../../components/ui/chart';
 import { format } from 'date-fns';
 import { useState } from 'react';
@@ -170,7 +170,8 @@ const CoreWebVitalPlatformCard = ({ platform, stats }: { platform: 'mobile' | 'd
             content={<ChartTooltipContent labelKey='fullDate' />}
           />
           <CartesianGrid vertical={true} />
-          <XAxis dataKey='date' tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => value.slice(0, 3)} />
+          <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
+          <YAxis axisLine={true} tickMargin={16} interval='preserveEnd' />
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator='dot' />} />
           <Area
             connectNulls={true}

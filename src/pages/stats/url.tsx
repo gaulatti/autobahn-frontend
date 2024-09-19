@@ -10,7 +10,7 @@ import { LighthouseCharts } from '../../components/foundations/lighthouse';
 import { Link } from '../../components/foundations/link';
 import { PulsesTable } from '../../components/foundations/pulses';
 import { URLNavbar } from '../../components/foundations/url-navbar';
-import { ErrorMessage } from '../../components/foundations/error';
+import { ErrorMessage } from '../../components/foundations/message';
 import { WebSocketManager } from '../../engines/sockets';
 
 /**

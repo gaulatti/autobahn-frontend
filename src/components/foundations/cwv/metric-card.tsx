@@ -1,4 +1,4 @@
-import { Flex } from '@radix-ui/themes';
+import { Flex, Section } from '@radix-ui/themes';
 import { BadgeDelta, Card } from '@tremor/react';
 import { format } from 'date-fns';
 import { CartesianGrid, Label, Line, LineChart, ReferenceArea, XAxis, YAxis } from 'recharts';
@@ -7,6 +7,7 @@ import { classifyChange } from '../../../utils/charts';
 import { ChartContainer } from '../../ui/chart';
 import { useState } from 'react';
 import { CategoricalChartState } from 'recharts/types/chart/types';
+import { InfoMessage } from '../message';
 
 const chartConfig = {
   desktop: {
@@ -24,17 +25,7 @@ interface ChartData {
   mobile: number | null;
   desktop: number | null;
 }
-export function Component({
-  chartData,
-  currentStat,
-  mobileStat,
-  desktopStat,
-}: {
-  chartData: ChartData[];
-  currentStat: string;
-  mobileStat: number;
-  desktopStat: number;
-}): JSX.Element {
+export function Component({ chartData, mobileStat, desktopStat }: { chartData: ChartData[]; mobileStat: number; desktopStat: number }): JSX.Element {
   const [stickyTooltip, setStickyTooltip] = useState(false);
 
   /**
@@ -55,7 +46,7 @@ export function Component({
   };
 
   return (
-    <ChartContainer config={chartConfig} className='w-full'>
+    <ChartContainer config={chartConfig} className='w-full my-4'>
       <LineChart
         accessibilityLayer
         data={chartData}
@@ -66,7 +57,7 @@ export function Component({
         onMouseDown={handleMouseDown}
         onClick={handleChartClick}
       >
-        <CartesianGrid vertical={true}/>
+        <CartesianGrid vertical={true} />
         <XAxis dataKey='date' tickLine={true} axisLine={true} tickMargin={8} interval='preserveEnd' />
         <YAxis axisLine={true} tickMargin={16} interval='preserveEnd' />
         <ChartTooltip
@@ -78,10 +69,10 @@ export function Component({
           content={<ChartTooltipContent labelKey='fullDate' />}
         />
         <ReferenceArea y1={mobileStat} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
-          <Label value={`Mobile ${currentStat}`} position='insideTopRight' />
+          <Label value={`Mobile p90`} position='insideTopRight' />
         </ReferenceArea>
         <ReferenceArea y1={desktopStat} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
-          <Label value={`Desktop ${currentStat}`} position='insideBottomRight' />
+          <Label value={`Desktop p90`} position='insideBottomRight' />
         </ReferenceArea>
         <ChartLegend content={<ChartLegendContent />} />
         <Line connectNulls={true} dataKey='desktop' type='monotone' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
@@ -132,36 +123,41 @@ const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
  * @param {CoreWebVitalStats} stats - The statistics for the Core Web Vital.
  * @returns {JSX.Element} The rendered CoreWebVitalCard component.
  */
-const CoreWebVitalCard = ({ name, stats, statistic }: { name: string; stats: CoreWebVitalStats; statistic: string }): JSX.Element => {
+const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalStats }): JSX.Element => {
   const chartData = transformChartDatapoints(stats);
-
   return (
-    <Card className='mx-auto flex-grow basis-full md:basis-1/2 lg:basis-1/3 max-w-full md:max-w-1/2 lg:max-w-1/3'>
-      <Flex gap='3'>
-        <Flex direction='column' justify='between'>
-          <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>{name}</h4>
-          <div>
-            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>
-              {stats.mobile.values[statistic]}
-            </p>
-            <BadgeDelta deltaType={classifyChange(stats.mobile.variation)} isIncreasePositive={false} size='xs'>
-              {stats.mobile.variation}%
-            </BadgeDelta>
-            <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Mobile</h4>
-          </div>
-          <div>
-            <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>
-              {stats.desktop.values[statistic]}
-            </p>
-            <BadgeDelta deltaType={classifyChange(stats.desktop.variation)} isIncreasePositive={false} size='xs'>
-              {stats.desktop.variation}%
-            </BadgeDelta>
-            <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
-          </div>
-        </Flex>
-        <Component chartData={chartData} currentStat={statistic} mobileStat={stats.mobile.values[statistic]} desktopStat={stats.desktop.values[statistic]} />
-      </Flex>
-    </Card>
+    <>
+        <Card className='mx-auto flex-grow basis-full md:basis-1/2 lg:basis-1/3 max-w-full md:max-w-1/2 lg:max-w-1/3'>
+      {!!Object.keys(stats.mobile.datapoints).length && !!Object.keys(stats.desktop.datapoints).length ? (
+          <Flex gap='3'>
+            <Flex direction='column'>
+              <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>{name}</h4>
+              <Section size='1'>
+                <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>
+                  {stats.mobile.datapoints[Object.keys(stats.mobile.datapoints).pop()!].value}
+                </p>
+                <BadgeDelta deltaType={classifyChange(stats.mobile.variation)} isIncreasePositive={false} size='xs'>
+                  {stats.mobile.variation}%
+                </BadgeDelta>
+                <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Mobile</h4>
+              </Section>
+              <Section size='1'>
+                <p className='text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold mr-4 mb-2'>
+                  {stats.desktop.datapoints[Object.keys(stats.desktop.datapoints).pop()!].value}
+                </p>
+                <BadgeDelta deltaType={classifyChange(stats.desktop.variation)} isIncreasePositive={false} size='xs'>
+                  {stats.desktop.variation}%
+                </BadgeDelta>
+                <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
+              </Section>
+            </Flex>
+            <Component chartData={chartData} mobileStat={stats.mobile.values['p90']} desktopStat={stats.desktop.values['p90']} />
+          </Flex>
+      ) : (
+        <InfoMessage>No <b>{name}</b> data yet for this URL</InfoMessage>
+      )}
+      </Card>
+    </>
   );
 };
 

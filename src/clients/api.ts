@@ -3,7 +3,7 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { LighthouseScore } from '../components/foundations/lighthouse/card';
-import { CoreWebVitalStats } from '../components/foundations/cwv/card';
+import { CoreWebVitalStats } from '../components/foundations/cwv/metric-card';
 
 export enum Method {
   GET = 'GET',
