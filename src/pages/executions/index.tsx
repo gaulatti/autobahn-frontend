@@ -10,6 +10,7 @@ import { Trigger } from '../../components/trigger';
 import { WebSocketManager } from '../../engines/sockets';
 import { useSelector } from 'react-redux';
 import { getCurrentTeam } from '../../state/selectors/teams';
+import { useDarkMode } from '../../hooks/useDarkMode';
 
 type TData = {
   uuid: string;
@@ -28,6 +29,7 @@ const ExecutionsList = () => {
   const [refreshCells, setRefreshCells] = useState<number>(0);
   const gridRef = useRef<AgGridReact>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { isDarkMode } = useDarkMode();
 
   /**
    * Represents the current team.
@@ -231,7 +233,7 @@ const ExecutionsList = () => {
           </BreadcrumbItem>
         </Breadcrumb>
         <Trigger />
-        <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
+        <div className={`ag-theme-quartz${isDarkMode ? '-dark' : ''} w-full`} style={{ width: '100%', height: 500 }}>
           <AgGridReact
             datasource={dataSource}
             ref={gridRef}

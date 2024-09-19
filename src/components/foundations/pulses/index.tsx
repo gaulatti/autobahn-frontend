@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Method, sendRequest } from '../../../clients/api';
 import { WebSocketManager } from '../../../engines/sockets';
 import { Link } from '../link';
+import { useDarkMode } from '../../../hooks/useDarkMode';
 
 const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', '#c0392b', '#f6b93b'];
 
@@ -47,6 +48,7 @@ type TData = {
 const PulsesTable = ({ uuid, dashboardRange }: { uuid: string; dashboardRange: DateRangePickerValue }): JSX.Element => {
   const [loadingPulses, setLoadingPulses] = useState<boolean>(false);
   const [refreshCells, setRefreshCells] = useState<number>(0);
+  const { isDarkMode } = useDarkMode();
 
   /**
    * This function is used to retry the heartbeat for a pulse.
@@ -215,7 +217,7 @@ const PulsesTable = ({ uuid, dashboardRange }: { uuid: string; dashboardRange: D
 
   return (
     <Flex className='my-4'>
-      <div className='ag-theme-quartz w-full' style={{ width: '100%', height: 500 }}>
+      <div className={`ag-theme-quartz${isDarkMode ? '-dark' : ''} w-full`} style={{ width: '100%', height: 500 }}>
         <AgGridReact
           datasource={dataSource}
           rowModelType='infinite'
