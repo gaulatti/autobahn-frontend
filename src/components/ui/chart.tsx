@@ -195,7 +195,7 @@ const ChartTooltipContent = React.forwardRef<
     /**
      * As we need the uuid, we'll get it from the first one of the pair.
      */
-    const uuid: string = payload[0]?.payload?.payload?.uuid
+    const uuid: string = payload[0]?.payload?.payload?.uuid || payload[0]?.payload?.uuid
 
     return (
       <div

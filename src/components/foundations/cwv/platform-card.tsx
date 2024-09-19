@@ -1,6 +1,31 @@
 import { Card } from '@tremor/react';
-import { AreaChart } from '@tremor/react';
 import { capitalize } from '../../../lib/utils';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '../../../components/ui/chart';
+import { format } from 'date-fns';
+import { useState } from 'react';
+import { CategoricalChartState } from 'recharts/types/chart/types';
+
+const chartConfig = {
+  TTFB: {
+    label: 'TTFB',
+  },
+  FCP: {
+    label: 'FCP',
+  },
+  DCL: {
+    label: 'DCL',
+  },
+  SI: {
+    label: 'SI',
+  },
+  LCP: {
+    label: 'LCP',
+  },
+  TTI: {
+    label: 'TTI',
+  },
+} satisfies ChartConfig;
 
 /**
  * Metric data point object.
@@ -83,7 +108,8 @@ const transformData = (inputData: MetricStats[]): TransformedData => {
       Object.entries(platformData.datapoints).forEach(([date, data]) => {
         if (!dataPointMap[date]) {
           dataPointMap[date] = {
-            date,
+            fullDate: date,
+            date: format(new Date(date), 'M/d'),
             uuid: data.uuid,
           };
         }
@@ -102,27 +128,104 @@ const transformData = (inputData: MetricStats[]): TransformedData => {
 
 const CoreWebVitalPlatformCard = ({ platform, stats }: { platform: 'mobile' | 'desktop'; stats: MetricStats[] }) => {
   const transformedData = transformData(stats);
+  const [stickyTooltip, setStickyTooltip] = useState(false);
+
+  /**
+   * Avoid unintended state resets not related to the event itself (handled below)
+   */
+  const handleMouseDown = (_state: CategoricalChartState, event: any) => {
+    event.stopPropagation();
+    event.preventDefault();
+  };
+
+  /**
+   * Make the tooltip sticky on click.
+   */
+  const handleChartClick = (state: CategoricalChartState) => {
+    if (state && state.activePayload && state.activePayload.length > 0) {
+      setStickyTooltip(true);
+    }
+  };
+
   return (
     <Card className='w-full my-2'>
       <h3 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>{capitalize(platform)}</h3>
-      <AreaChart
-        className='mt-4 max-h-96'
-        curveType='natural'
-        connectNulls={true}
-        data={transformedData[platform].datapoints}
-        index='date'
-        yAxisWidth={65}
-        categories={['TTFB', 'DCL', 'LCP', 'FCP', 'SI', 'TTI']}
-        colors={['indigo', 'cyan', 'red', 'green', 'yellow', 'blue']}
-        showAnimation={true}
-        showGridLines={true}
-        showYAxis={true}
-        showXAxis={true}
-        enableLegendSlider={true}
-        xAxisLabel='Date'
-        showLegend={true}
-        valueFormatter={(value) => `${value}ms`}
-      />
+      <ChartContainer config={chartConfig} className='my-4'>
+        <AreaChart
+          accessibilityLayer
+          onMouseDown={handleMouseDown}
+          onClick={handleChartClick}
+          data={transformedData[platform].datapoints}
+          margin={{
+            left: 12,
+            right: 12,
+          }}
+        >
+          <ChartTooltip
+            wrapperStyle={{
+              pointerEvents: 'auto',
+            }}
+            trigger={stickyTooltip ? 'click' : 'hover'}
+            cursor={true}
+            content={<ChartTooltipContent labelKey='fullDate' />}
+          />
+          <CartesianGrid vertical={true} />
+          <XAxis dataKey='date' tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => value.slice(0, 3)} />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent indicator='dot' />} />
+          <Area
+            connectNulls={true}
+            dataKey='TTFB'
+            type='natural'
+            fill='hsl(var(--chart-1))'
+            fillOpacity={0.4}
+            strokeWidth={2}
+            stroke='hsl(var(--chart-1))'
+            stackId='a'
+          />
+          <Area
+            connectNulls={true}
+            dataKey='FCP'
+            type='natural'
+            fill='hsl(var(--chart-4))'
+            fillOpacity={0.4}
+            strokeWidth={2}
+            stroke='hsl(var(--chart-4))'
+            stackId='a'
+          />
+          <Area
+            connectNulls={true}
+            dataKey='DCL'
+            type='natural'
+            fill='hsl(var(--chart-2))'
+            fillOpacity={0.4}
+            strokeWidth={2}
+            stroke='hsl(var(--chart-2))'
+            stackId='a'
+          />
+          <Area
+            connectNulls={true}
+            dataKey='LCP'
+            type='natural'
+            fill='hsl(var(--chart-3))'
+            fillOpacity={0.4}
+            strokeWidth={2}
+            stroke='hsl(var(--chart-3))'
+            stackId='a'
+          />
+          <Area connectNulls={true} dataKey='SI' type='natural' fill='red' fillOpacity={0.4} strokeWidth={2} stroke='red' stackId='a' />
+          <Area
+            connectNulls={true}
+            dataKey='TTI'
+            type='natural'
+            fill='hsl(var(--chart-5))'
+            fillOpacity={0.4}
+            strokeWidth={2}
+            stroke='hsl(var(--chart-5))'
+            stackId='a'
+          />
+          <ChartLegend content={<ChartLegendContent />} />
+        </AreaChart>
+      </ChartContainer>
     </Card>
   );
 };
