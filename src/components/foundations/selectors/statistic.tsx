@@ -1,5 +1,5 @@
-import { Field } from '@fluentui/react-components';
-import { Select } from '@radix-ui/themes';
+import * as Label from '@radix-ui/react-label';
+import { Box, Select } from '@radix-ui/themes';
 
 /**
  * Props for the StatisticSelector component.
@@ -41,7 +41,10 @@ const availableStats = ['avg', 'p99', 'p90', 'p50', 'max', 'min'];
  * />
  */
 const StatisticSelector: React.FC<StatisticSelectorProps> = ({ callback, statistic }) => (
-  <Field label='Statistic'>
+  <Box>
+    <Label.Root className='LabelRoot' htmlFor='dateRangePicker'>
+      Date Range
+    </Label.Root>
     <Select.Root
       value={statistic}
       onValueChange={(e) => {
@@ -60,7 +63,7 @@ const StatisticSelector: React.FC<StatisticSelectorProps> = ({ callback, statist
         </Select.Group>
       </Select.Content>
     </Select.Root>
-  </Field>
+  </Box>
 );
 
 export { StatisticSelector };

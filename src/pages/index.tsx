@@ -1,8 +1,8 @@
-import { Divider } from '@fluentui/react-components';
 import { Container, Section } from '@radix-ui/themes';
 import { Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Sankey, Tooltip } from 'recharts';
 import { HistoryScoreChart } from '../components/charts';
 import { Trigger } from '../components/trigger';
+import { Divider } from '@tremor/react';
 
 const data = [
   {

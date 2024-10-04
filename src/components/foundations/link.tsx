@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Link as FluentLink } from '@fluentui/react-components';
-
+import { Link as RadixLink } from '@radix-ui/themes';
 /**
  * Represents a link component.
  *
@@ -12,7 +11,11 @@ import { Link as FluentLink } from '@fluentui/react-components';
  */
 const Link = (props: any) => {
   const navigate = useNavigate();
-  return <FluentLink onClick={() => navigate(props.to)}>{props.children}</FluentLink>;
+  return (
+    <RadixLink style={{ cursor: 'pointer' }} onClick={() => navigate(props.to)}>
+      {props.children}
+    </RadixLink>
+  );
 };
 
 export { Link };

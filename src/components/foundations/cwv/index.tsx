@@ -1,35 +1,48 @@
-import { Title2 } from '@fluentui/react-components';
-import { Flex } from '@radix-ui/themes';
+import { Flex, Heading } from '@radix-ui/themes';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react';
 import { CoreWebVitalCard, CoreWebVitalStats } from './metric-card';
 import { CoreWebVitalPlatformCard } from './platform-card';
 import { CoreWebVitalStatistics } from './statistics';
+import { Baseline, CoreWebVitalBaselines } from './baselines';
 
 /**
- * CoreWebVitalCharts component displays Core Web Vitals statistics in a tabbed interface.
+ * CoreWebVitals component displays Core Web Vitals statistics in a tabbed interface.
  *
  * @param {Object} props - The component props.
  * @param {Array} props.cwvStats - An array of objects containing Core Web Vitals statistics.
  * @param {string} props.cwvStats[].name - The name of the Core Web Vital metric.
  * @param {CoreWebVitalStats} props.cwvStats[].stats - The statistics for the Core Web Vital metric.
  *
- * @returns {JSX.Element} The rendered CoreWebVitalCharts component.
+ * @returns {JSX.Element} The rendered CoreWebVitals component.
  */
-const CoreWebVitalCharts = ({ cwvStats }: { cwvStats: { name: string; stats: CoreWebVitalStats }[] }) => {
+const CoreWebVitals = ({
+  targetUUID,
+  cwvStats,
+  baselines,
+  callback,
+}: {
+  targetUUID?: string;
+  cwvStats: { name: string; stats: CoreWebVitalStats }[];
+  baselines?: Baseline[];
+  callback?: () => void;
+}): JSX.Element => {
   return (
     <>
-      <Title2 className='w-full'>Core Web Vitals</Title2>
+      <Heading as='h2' className='w-full'>
+        Core Web Vitals
+      </Heading>
       <TabGroup>
         <TabList className='mt-4'>
           <Tab>By Metric</Tab>
           <Tab>By Platform</Tab>
           <Tab>Statistics</Tab>
+          {targetUUID && baselines ? <Tab>Baselines</Tab> : <></>}
         </TabList>
         <TabPanels>
           <TabPanel>
             <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
               {cwvStats.map((stat) => (
-                <CoreWebVitalCard name={stat.name} stats={stat.stats} />
+                <CoreWebVitalCard name={stat.name} stats={stat.stats} baselines={baselines} />
               ))}
             </Flex>
           </TabPanel>
@@ -42,10 +55,15 @@ const CoreWebVitalCharts = ({ cwvStats }: { cwvStats: { name: string; stats: Cor
           <TabPanel>
             <CoreWebVitalStatistics cwvStats={cwvStats} />
           </TabPanel>
+          {targetUUID && baselines && (
+            <TabPanel>
+              <CoreWebVitalBaselines targetUUID={targetUUID} cwvStats={cwvStats} baselines={baselines} callback={callback} />
+            </TabPanel>
+          )}
         </TabPanels>
       </TabGroup>
     </>
   );
 };
 
-export { CoreWebVitalCharts };
+export { CoreWebVitals };

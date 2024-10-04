@@ -1,31 +1,28 @@
-import { useSelector } from "react-redux";
-import { getFeatureFlags } from "../state/selectors/featureFlags";
-import { FeatureFlag } from '../models/feature_flag';
+import { useSelector } from 'react-redux';
+import { getFeatureFlags } from '../state/selectors/featureFlags';
 
 /**
- * Feature Flags. Used to determine if a specific component
- * or feature is available to be used outside development.
+ * Custom hook to retrieve feature flags from the Redux store and check if a specific feature is enabled.
+ *
+ * @returns A function that takes a feature flag name and returns a boolean indicating whether the feature is enabled.
+ *
+ * @example
+ * const isFeatureEnabled = useFeatureFlags();
+ * const isNewFeatureEnabled = isFeatureEnabled('newFeature');
  */
-const useFeatureFlags = () => {
+const useFeatureFlags = (): ((flagName: string) => boolean) => {
   /**
-   * Get Feature Flags from Redux.
-   *
-   * They should have been initialized as part
-   * of the kickoff workflow.
+   * Retrieve the feature flags from the Redux store.
    */
   const featureFlags = useSelector(getFeatureFlags);
 
   /**
-   * Expose the value of a specific Feature Flag.
-   *
-   * If the Feature Flag does not exist, it'll
-   * fallback to false.
+   * Return a function that takes a feature flag name and returns a boolean indicating whether the feature is enabled.
    */
-  const isFeatureEnabled = (key: string): boolean => {
-    return !!featureFlags.find((f: FeatureFlag) => f.key === key)?.is_enabled;
+  return (flagName: string): boolean => {
+    const feature = featureFlags.find((flag) => flag.key === flagName);
+    return feature ? feature.is_enabled : false;
   };
-
-  return { isFeatureEnabled };
 };
 
 export { useFeatureFlags };

@@ -1,11 +1,11 @@
-import { Body1, Caption1, Card, CardFooter, CardHeader, CardPreview, Input, Label, Spinner, Title2 } from '@fluentui/react-components';
-import { Button, Flex } from '@radix-ui/themes';
+import { Button, Flex, Heading, Spinner, Text } from '@radix-ui/themes';
+import { RiSearchLine } from '@remixicon/react';
+import { Card, TextInput } from '@tremor/react';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Method, sendRequest } from '../../clients/api';
 import { getCurrentTeam } from '../../state/selectors/teams';
-
 /**
  * Checks if the URL starts with 'http://' or 'https://'.
  * @param {string} url - The URL to validate.
@@ -65,7 +65,7 @@ const Trigger = (): JSX.Element => {
         /**
          * Redirect to executions page after triggering execution
          */
-        navigate(`/stats/url/${data.url}`);
+        navigate(`/urls/${data.url}`);
         setIsLoading(false);
       });
     },
@@ -75,32 +75,17 @@ const Trigger = (): JSX.Element => {
   return (
     <form onSubmit={handleSubmit}>
       <Card className='w-full my-4'>
-        {isLoading && (
-          <div className='spinner-overlay'>
-            <Spinner size='huge' />
-          </div>
-        )}
-        <CardHeader
-          header={
-            <Body1>
-              <Title2>Trigger Execution</Title2>
-            </Body1>
-          }
-          description={<Caption1>This will execute Lighthouse against a user-specified URL</Caption1>}
-        />
-        <CardPreview>
-          <Body1 className='p-4'>
-            <Label htmlFor='url' className='flex' size='small'>
-              Website URL
-            </Label>
-            <Input id='url' type='url' required size='large' className='w-full' onInput={sanitizeUrl} />
-          </Body1>
-        </CardPreview>
-        <CardFooter>
+        <Flex direction='column' gap='3'>
+          <Heading as='h2'>Trigger Ad-Hoc Pulse</Heading>
+          <Text as='label' size='2'>
+            This will execute Lighthouse against a user-specified URL
+          </Text>
+          <TextInput id='url' className='my-4' icon={RiSearchLine} required placeholder='Website URL...' onInput={sanitizeUrl} />
           <Flex justify='between' className='w-full'>
             <Button type='submit'>Trigger</Button>
+            {isLoading && <Spinner size='3' />}
           </Flex>
-        </CardFooter>
+        </Flex>
       </Card>
     </form>
   );

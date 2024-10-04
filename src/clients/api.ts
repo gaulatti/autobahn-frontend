@@ -2,8 +2,9 @@ import { DateRangePickerValue } from '@tremor/react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { LighthouseScore } from '../components/foundations/lighthouse/card';
+import { Baseline } from '../components/foundations/cwv/baselines';
 import { CoreWebVitalStats } from '../components/foundations/cwv/metric-card';
+import { LighthouseScore } from '../components/foundations/lighthouse/card';
 
 export enum Method {
   GET = 'GET',
@@ -17,6 +18,16 @@ export enum Method {
  */
 export interface URLStatsResult {
   url: string;
+  scores: { name: string; scores: LighthouseScore }[];
+  cwvStats: { name: string; stats: CoreWebVitalStats }[];
+}
+
+/**
+ * Interface representing the Target statistics result.
+ */
+export interface TargetStatsResult {
+  name: string;
+  baselines: Baseline[];
   scores: { name: string; scores: LighthouseScore }[];
   cwvStats: { name: string; stats: CoreWebVitalStats }[];
 }
@@ -101,10 +112,7 @@ const useAPI = (method: Method, dependencies: any[], url?: string, postData?: an
  * @param dashboardRange - The date range for the dashboard.
  * @returns A Promise that resolves to the URL statistics result.
  */
-const fetchURLStats = async (
-  uuid: string,
-  dashboardRange: DateRangePickerValue
-): Promise<URLStatsResult> => {
+const fetchURLStats = async (uuid: string, dashboardRange: DateRangePickerValue): Promise<URLStatsResult> => {
   if (dashboardRange.from && dashboardRange.to) {
     const queryParams = {
       from: dashboardRange.from.toISOString(),
@@ -113,11 +121,7 @@ const fetchURLStats = async (
     };
 
     try {
-      const result = await sendRequest(
-        Method.GET,
-        `stats/url/${uuid}`,
-        queryParams
-      );
+      const result = await sendRequest(Method.GET, `urls/${uuid}/stats`, queryParams);
 
       const {
         urlRecord: { url },
@@ -135,4 +139,38 @@ const fetchURLStats = async (
   }
 };
 
-export { sendRequest, useAPI, fetchURLStats };
+/**
+ * Fetches the Target statistics based on the UUID and date range.
+ * @param uuid - The unique identifier for the Target.
+ * @param dashboardRange - The date range for the dashboard.
+ * @returns A Promise that resolves to the Target statistics result.
+ */
+const fetchTargetStats = async (uuid: string, dashboardRange: DateRangePickerValue): Promise<TargetStatsResult> => {
+  if (dashboardRange.from && dashboardRange.to) {
+    const queryParams = {
+      from: dashboardRange.from.toISOString(),
+      to: dashboardRange.to.toISOString(),
+      statistic: 'p90',
+    };
+
+    try {
+      const result = await sendRequest(Method.GET, `targets/${uuid}/stats`, queryParams);
+
+      const {
+        target: { name, baselines },
+        scores,
+        cwvStats,
+      } = result;
+
+      return { name, baselines, scores, cwvStats };
+    } catch (error) {
+      console.error('Error fetching URL statistics:', error);
+      throw error;
+    }
+  } else {
+    throw new Error('Invalid date range: "from" and "to" dates are required');
+  }
+};
+
+export { fetchTargetStats, fetchURLStats, sendRequest, useAPI };
+

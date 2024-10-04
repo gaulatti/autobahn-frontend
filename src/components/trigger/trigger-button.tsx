@@ -21,8 +21,8 @@ const TriggerAdHocButton = ({ url, uuid }: { url: string; uuid: string }) => {
       /**
        * Redirect to executions page after triggering execution
        */
-      if (location.pathname !== `/stats/url/${uuid}`) {
-        navigate(`/stats/url/${uuid}`);
+      if (location.pathname !== `/urls/${uuid}`) {
+        navigate(`/urls/${uuid}`);
       } else {
         //TODO: refresh table
       }
@@ -30,8 +30,8 @@ const TriggerAdHocButton = ({ url, uuid }: { url: string; uuid: string }) => {
   }, [url, currentTeam, location, navigate, uuid]);
 
   return (
-    <Flex gap='3' align='center' className='bg-background px-4 py-2 my-4'>
-      <Button onClick={handleClick}>Trigger Execution</Button>
+    <Flex gap='3' align='center' className='px-4 py-2 my-4'>
+      <Button onClick={handleClick}>Trigger Pulse</Button>
     </Flex>
   );
 };

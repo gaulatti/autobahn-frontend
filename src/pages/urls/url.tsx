@@ -1,26 +1,38 @@
+import { Container, Flex, Heading, Section } from '@radix-ui/themes';
+import { DateRangePickerValue, Divider } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Field, Spinner, Title1, Title2 } from '@fluentui/react-components';
-import { Box, Container, Flex, Section } from '@radix-ui/themes';
-import { DateRangePicker, DateRangePickerValue, Divider } from '@tremor/react';
 
 import { fetchURLStats, URLStatsResult } from '../../clients/api';
-import { CoreWebVitalCharts } from '../../components/foundations/cwv';
+import { CoreWebVitals } from '../../components/foundations/cwv';
 import { LighthouseCharts } from '../../components/foundations/lighthouse';
 import { Link } from '../../components/foundations/link';
-import { PulsesTable } from '../../components/foundations/pulses';
-import { URLNavbar } from '../../components/foundations/url-navbar';
 import { ErrorMessage } from '../../components/foundations/message';
+import { PulsesTable } from '../../components/foundations/pulses';
+import { DateRangeSelector } from '../../components/foundations/selectors/date-range';
+import { OverlaySpinner } from '../../components/foundations/spinners';
+import { URLNavbar } from '../../components/foundations/url-navbar';
 import { WebSocketManager } from '../../engines/sockets';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '../../components/ui/breadcrumb';
 
 /**
- * URLStats component displays statistics for a specific URL.
+ * URLStats component fetches and displays statistics for a specific URL.
+ *
+ * This component:
+ * - Retrieves the URL UUID from the route parameters.
+ * - Manages state for URL statistics, date range, loading, and error states.
+ * - Fetches URL statistics when the component mounts or when dependencies change.
+ * - Listens for WebSocket messages to refresh the statistics.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered component.
  */
-const URLStats = () => {
+const URLStats = (): JSX.Element => {
   /**
-   *
+   * State to manage the refresh of the URL statistics.
    */
   const [refreshStats, setRefreshStats] = useState(0);
+
   /**
    * Get the URL UUID from the route parameters.
    */
@@ -68,7 +80,6 @@ const URLStats = () => {
     fetchData();
   }, [dashboardRange, uuid, refreshStats]);
 
-
   /**
    * This useEffect is used to listen to the WebSocketManager for REFRESH_EXECUTIONS_TABLE action
    */
@@ -83,20 +94,24 @@ const URLStats = () => {
   return (
     <Container>
       <Section size='1'>
-        <Title1>URL Statistics</Title1>
+        <Heading as='h1'>URL Statistics</Heading>
         <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to='/'>Home</Link>
-          </BreadcrumbItem>
-          <BreadcrumbDivider />
-          <BreadcrumbItem>Stats</BreadcrumbItem>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <Link to='/'>Home</Link>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <Link to='/urls'>URLs</Link>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>URL Statistics</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
         </Breadcrumb>
 
-        {loading && (
-          <div className='spinner-overlay'>
-            <Spinner size='huge' />
-          </div>
-        )}
+        {loading && <OverlaySpinner />}
 
         {error && <ErrorMessage>Error: {error}</ErrorMessage>}
 
@@ -106,24 +121,20 @@ const URLStats = () => {
             <Divider />
             <Section size='1'>
               <Flex gap='3' justify='between'>
-                <Box>
-                  <Field label='Date Range'>
-                    <DateRangePicker className='mx-auto max-w-sm' enableSelect={false} value={dashboardRange} onValueChange={setDashboardRange} />
-                  </Field>
-                </Box>
+                <DateRangeSelector dateRange={dashboardRange} setDateRange={setDashboardRange} />
               </Flex>
             </Section>
             <Divider />
             <Section size='1'>
-              <CoreWebVitalCharts cwvStats={result.cwvStats} />
+              <CoreWebVitals cwvStats={result.cwvStats} />
             </Section>
             <Divider />
             <Section size='1'>
               <LighthouseCharts scores={result.scores} />
             </Section>
             <Section size='1'>
-              <Title2>Pulses List</Title2>
-              <PulsesTable uuid={uuid} dashboardRange={dashboardRange} />
+              <Heading as='h2'>Pulses</Heading>
+              <PulsesTable urlUUID={uuid} dashboardRange={dashboardRange} />
             </Section>
           </>
         )}

@@ -1,22 +1,25 @@
-import { Spinner } from '@fluentui/react-components';
 import { useSelector } from 'react-redux';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useAuthStatus } from '../../hooks/useAuth';
 import { Home } from '../../pages';
-import { ProjectsAdmin } from '../../pages/admin/projects';
-import { CreateProject } from '../../pages/admin/projects/create';
-import { SchedulesAdmin } from '../../pages/admin/schedules';
-import { CreateSchedule } from '../../pages/admin/schedules/create';
+import { NotFound } from '../../pages/404';
 import { TeamsAdmin } from '../../pages/admin/teams';
 import { CreateTeam } from '../../pages/admin/teams/create';
 import { UsersAdmin } from '../../pages/admin/users';
 import { ExecutionsList } from '../../pages/executions';
 import { ExecutionDetails } from '../../pages/executions/details';
+import { ProjectsList } from '../../pages/projects';
+import { ProjectDetails } from '../../pages/projects/project';
+import { SchedulesList } from '../../pages/projects/schedules';
 import { HomePublic } from '../../pages/public';
+import { TargetsList } from '../../pages/targets';
+import { TargetDetails } from '../../pages/targets/target';
+import { UrlsList } from '../../pages/urls';
 import { getKickoffReady } from '../../state/selectors/lifecycle';
 import { getTeams } from '../../state/selectors/teams';
+import { OverlaySpinner } from '../foundations/spinners';
 import { Header } from '../header';
-import { URLStats } from '../../pages/stats/url';
+import { URLStats } from '../../pages/urls/url';
 
 /**
  * Renders the authenticated router component.
@@ -48,29 +51,34 @@ const AuthenticatedRouter = () => {
    * is authenticated and the kickoff is ready.
    */
   if (isAuthenticated && isLoaded && isKickoffReady) {
-    return <>
-      <Header />
-      <main className='flex justify-center'>
-        {teams.length ? (
-          <Routes>
-            <Route path='/admin/projects/create' element={<CreateProject />} />
-            <Route path='/admin/projects' element={<ProjectsAdmin />} />
-            <Route path='/admin/teams/create' element={<CreateTeam />} />
-            <Route path='/admin/teams' element={<TeamsAdmin />} />
-            <Route path='/admin/users' element={<UsersAdmin />} />
-            <Route path='/schedules/create' element={<CreateSchedule />} />
-            <Route path='/schedules' element={<SchedulesAdmin />} />
-            <Route path='/executions' element={<ExecutionsList />} />
-            <Route path="/executions/:uuid/desktop" element={<ExecutionDetails />} />
-            <Route path="/executions/:uuid/mobile" element={<ExecutionDetails />} />
-            <Route path="/stats/url/:uuid" element={<URLStats />} />
-            <Route path='/' element={<Home />} />
-          </Routes>
-        ) : (
-          <>no teams</>
-        )}
-      </main>
-    </>;
+    return (
+      <>
+        <Header />
+        <main className='flex justify-center'>
+          {teams.length ? (
+            <Routes>
+              <Route path='/pulses' element={<ExecutionsList />} />
+              <Route path='/pulses/:uuid/desktop' element={<ExecutionDetails />} />
+              <Route path='/pulses/:uuid/mobile' element={<ExecutionDetails />} />
+              <Route path='/urls/' element={<UrlsList />} />
+              <Route path='/urls/:uuid' element={<URLStats />} />
+              <Route path='/targets/:uuid' element={<TargetDetails />} />
+              <Route path='/targets/' element={<TargetsList />} />
+              <Route path='/projects/:uuid/schedules' element={<SchedulesList />} />
+              <Route path='/projects/:uuid' element={<ProjectDetails />} />
+              <Route path='/projects/' element={<ProjectsList />} />
+              <Route path='/admin/teams/create' element={<CreateTeam />} />
+              <Route path='/admin/teams' element={<TeamsAdmin />} />
+              <Route path='/admin/users' element={<UsersAdmin />} />
+              <Route path='/' element={<Home />} />
+              <Route path='*' element={<NotFound />} />
+            </Routes>
+          ) : (
+            <>no teams</>
+          )}
+        </main>
+      </>
+    );
   }
 
   /**
@@ -94,11 +102,7 @@ const AuthenticatedRouter = () => {
    * Renders a loading spinner if the user is not authenticated
    * or the kickoff is not ready.
    */
-  return (
-    <div className='flex justify-center items-center h-screen'>
-      <Spinner size='huge' />
-    </div>
-  );
+  return <OverlaySpinner />;
 };
 
 export { AuthenticatedRouter };

@@ -1,158 +1,152 @@
-import { Tooltip } from '@fluentui/react-components';
-import { Board20Regular, DocumentCatchUp20Regular, PeopleTeam20Regular, PersonLightbulb20Regular, TaskListSquareRtl20Regular } from '@fluentui/react-icons';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  Hamburger,
-  NavCategory,
-  NavCategoryItem,
-  NavDivider,
-  NavDrawer,
-  NavDrawerBody,
-  NavDrawerHeader,
-  NavItem,
-  NavSectionHeader,
-  NavSubItem,
-  NavSubItemGroup,
-} from '@fluentui/react-nav-preview';
-import { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { createSearchParams, useNavigate } from 'react-router-dom';
-import { useAuthStatus } from '../../hooks/useAuth';
-import { getTeams } from '../../state/selectors/teams';
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from '../../components/ui/navigation-menu';
+import { cn } from '../../lib/utils';
+import { useFeatureFlags } from '../../hooks/useFeatureFlags';
 
 /**
- * Represents the navigation menu component.
- * @param isOpen - A boolean indicating whether the menu is open or not.
- * @param setIsOpen - A function to set the state of the menu.
- * @returns The JSX element representing the navigation menu.
+ * `ListItem` is a React functional component that renders a list item (`<li>`) containing a navigation link.
+ * The link is styled with various utility classes and supports hover and focus states.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} [props.className] - Additional class names to apply to the link element.
+ * @param {string} props.title - The title text to display inside the link.
+ * @param {React.ReactNode} props.children - The content to display inside the link, typically a description or additional text.
+ * @param {React.Ref<HTMLAnchorElement>} ref - A ref to the anchor element.
+ *
+ * @returns {JSX.Element} The rendered list item with a navigation link.
  */
-const NavigationMenu = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  const navigate = useNavigate();
-  const { currentUser } = useAuthStatus();
-  const teams = useSelector(getTeams);
-
-  /**
-   * Handles the click event for the header component.
-   * Closes the overlay drawer if the click target is the backdrop and the drawer is open.
-   * @param event - The click event.
-   */
-  const handleClick = useCallback(
-    (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (target.classList.contains('fui-OverlayDrawer__backdrop') && isOpen) {
-        setIsOpen(false);
-      }
-    },
-    [isOpen, setIsOpen]
+const ListItem = React.forwardRef<React.ElementRef<'a'>, React.ComponentPropsWithoutRef<'a'>>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+            className
+          )}
+          {...props}
+        >
+          <div className='text-sm font-medium leading-none'>{title}</div>
+          <p className='line-clamp-2 text-sm leading-snug text-muted-foreground'>{children}</p>
+        </a>
+      </NavigationMenuLink>
+    </li>
   );
+});
+
+/**
+ * Menu component that renders a navigation menu with various items.
+ *
+ * This component uses the `useNavigate` hook to handle navigation events
+ * and the `useFeatureFlags` hook to conditionally render menu items based
+ * on feature flags.
+ *
+ * @component
+ * @example
+ * return (
+ *   <Menu />
+ * )
+ *
+ * @returns {JSX.Element} The rendered navigation menu.
+ */
+const Menu = (): JSX.Element => {
+  /**
+   * The hook that allows us to navigate to different pages.
+   */
+  const navigate = useNavigate();
 
   /**
-   * Handles the click event for the header component.
+   * The hook that allows us to check if a feature flag is enabled.
    */
-  useEffect(() => {
-    /**
-     * Add event listener.
-     */
-    document.addEventListener('click', handleClick);
-
-    /**
-     * Clean up event listener on component unmount.
-     */
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, [handleClick]);
+  const isFeatureEnabled = useFeatureFlags();
 
   /**
-   * Renders a hamburger icon with a tooltip for navigation.
-   * @returns The JSX element representing the hamburger icon with tooltip.
+   * Handles the navigation event for menu items.
+   *
+   * @param event - The mouse event triggered by clicking the anchor element.
+   * @param pathname - The path to navigate to.
    */
-  const renderHamburgerWithToolTip = () => {
-    return (
-      <Tooltip content='Navigation' relationship='label'>
-        <Hamburger onClick={() => setIsOpen(!isOpen)} />
-      </Tooltip>
-    );
+  const handleNavigate = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, pathname: string) => {
+    event.preventDefault();
+    navigate(pathname);
   };
 
-  /**
-   * Handles the navigation when a button is clicked.
-   *
-   * @param event - The click event.
-   * @param path - The path to navigate to.
-   */
-  const handleNavigate = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, pathname: string, params?: Record<string, string>) => {
-      event.preventDefault();
-      setIsOpen(false);
-      navigate({
-        pathname,
-        search: params && createSearchParams(params).toString(),
-      });
-    },
-    [navigate, setIsOpen]
-  );
-
   return (
-    <NavDrawer defaultSelectedValue='2' defaultSelectedCategoryValue='1' open={isOpen}>
-      <NavDrawerHeader>{renderHamburgerWithToolTip()}</NavDrawerHeader>
-      <NavDrawerBody>
-        {!!teams.length && (
-          <>
-            <NavItem icon={<Board20Regular />} value='1' onClick={(event) => handleNavigate(event, '/')}>
-              Dashboard
-            </NavItem>
-            <NavSectionHeader>Executions</NavSectionHeader>
-            <NavItem icon={<TaskListSquareRtl20Regular />} value='1' onClick={(event) => handleNavigate(event, '/executions')}>
-              Executions List
-            </NavItem>
-            <NavSectionHeader>Management</NavSectionHeader>
-            <NavCategory value='2'>
-              <NavCategoryItem icon={<PersonLightbulb20Regular />}>Users</NavCategoryItem>
-              <NavSubItemGroup>
-                <NavSubItem value='3' onClick={(event) => handleNavigate(event, '/admin/users')}>
-                  Users List
-                </NavSubItem>
-              </NavSubItemGroup>
-            </NavCategory>
-            <NavCategory value='5'>
-              <NavCategoryItem icon={<DocumentCatchUp20Regular />}>Projects</NavCategoryItem>
-              <NavSubItemGroup>
-                <NavSubItem value='6' onClick={(event) => handleNavigate(event, '/admin/projects')}>
-                  Projects List
-                </NavSubItem>
-                <NavSubItem value='7' onClick={(event) => handleNavigate(event, '/admin/projects/create')}>
-                  Create New
-                </NavSubItem>
-              </NavSubItemGroup>
-            </NavCategory>
-            <NavCategory value='8'>
-              <NavCategoryItem icon={<PeopleTeam20Regular />}>Teams</NavCategoryItem>
-              <NavSubItemGroup>
-                <NavSubItem value='9' onClick={(event) => handleNavigate(event, '/admin/teams')}>
-                  Teams List
-                </NavSubItem>
-                <NavSubItem value='10' onClick={(event) => handleNavigate(event, '/admin/teams/create')}>
-                  Create New
-                </NavSubItem>
-              </NavSubItemGroup>
-            </NavCategory>
-            <NavDivider />
-          </>
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Assessments</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className='grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+              <li
+                className='row-span-3 rounded-md'
+                style={{
+                  backgroundImage: 'url(/charts.jpg)',
+                  backgroundSize: 'cover',
+                }}
+              >
+                <NavigationMenuLink asChild>
+                  <a
+                    className='flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md'
+                    onClick={(e) => handleNavigate(e, '/pulses')}
+                    href='#'
+                  >
+                    <div className='mb-2 mt-4 text-lg font-medium'>Pulses</div>
+                    <p className='text-sm leading-tight text-muted-foreground'>Detailed list of all the pulses</p>
+                  </a>
+                </NavigationMenuLink>
+              </li>
+              <ListItem href='#' onClick={(e) => handleNavigate(e, '/urls')} title='URLs'>
+                Inventory of the all the URLs analyzed by the Assessment Engine
+              </ListItem>
+              <ListItem href='#' onClick={(e) => handleNavigate(e, '/targets')} title='Targets'>
+                Target multi-url based pulses.
+              </ListItem>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        {isFeatureEnabled('engine') && (
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Engine</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className='grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+                <li
+                  className='row-span-3 rounded-md'
+                  style={{
+                    backgroundImage: 'url(/engine.png)',
+                    backgroundSize: 'cover',
+                  }}
+                >
+                  <NavigationMenuLink asChild>
+                    <a
+                      className='flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md'
+                      href='#'
+                      onClick={(e) => handleNavigate(e, '/projects')}
+                    >
+                      <div className='mb-2 mt-4 text-lg font-medium'>Projects</div>
+                      <p className='text-sm leading-tight text-muted-foreground'>Assessment Projects Management</p>
+                    </a>
+                  </NavigationMenuLink>
+                </li>
+                <ListItem href='#' onClick={(e) => handleNavigate(e, '/plugins')} title='Plugins'>
+                  Mechanisms to perform assessment analysis or discovery
+                </ListItem>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
         )}
-        <NavSectionHeader>
-          {currentUser?.name} {currentUser?.last_name}
-        </NavSectionHeader>
-        {!!teams.length && (
-          <NavSubItem value='11' onClick={(event) => handleNavigate(event, '/settings')}>
-            Settings
-          </NavSubItem>
-        )}
-        <NavSubItem value='12' onClick={(event) => handleNavigate(event, '/logout')}>
-          Logout
-        </NavSubItem>
-      </NavDrawerBody>
-    </NavDrawer>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 };
 
-export { NavigationMenu };
+export { Menu };

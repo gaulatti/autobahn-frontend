@@ -1,5 +1,4 @@
-import { Title2 } from '@fluentui/react-components';
-import { Box, Flex } from '@radix-ui/themes';
+import { Flex, Heading } from '@radix-ui/themes';
 import { useState } from 'react';
 import { StatisticSelector } from '../selectors/statistic';
 import { LighthouseScore, LighthouseScoreCard } from './card';
@@ -20,10 +19,12 @@ const LighthouseCharts = ({ scores }: { scores: { name: string; scores: Lighthou
   return (
     <>
       <Flex>
-        <Title2 className='w-full'>Lighthouse Scores</Title2>
-        <Box>
-          <StatisticSelector callback={setStatistic} statistic={statistic} />
-        </Box>
+        <Flex direction='column' justify='center' className='w-full'>
+          <Heading as='h2'>
+            Lighthouse Scores
+          </Heading>
+        </Flex>
+        <StatisticSelector callback={setStatistic} statistic={statistic} />
       </Flex>
       <Flex direction='row' wrap='wrap' gap='3' className='my-4'>
         {scores.map((score) => (

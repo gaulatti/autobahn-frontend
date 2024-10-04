@@ -8,6 +8,7 @@ import { ChartContainer } from '../../ui/chart';
 import { useState } from 'react';
 import { CategoricalChartState } from 'recharts/types/chart/types';
 import { InfoMessage } from '../message';
+import { Baseline } from './baselines';
 
 const chartConfig = {
   desktop: {
@@ -25,7 +26,7 @@ interface ChartData {
   mobile: number | null;
   desktop: number | null;
 }
-export function Component({ chartData, mobileStat, desktopStat }: { chartData: ChartData[]; mobileStat: number; desktopStat: number }): JSX.Element {
+export function Component({ chartData, baselines = [], name }: { chartData: ChartData[]; baselines?: Baseline[]; name: string }): JSX.Element {
   const [stickyTooltip, setStickyTooltip] = useState(false);
 
   /**
@@ -44,6 +45,14 @@ export function Component({ chartData, mobileStat, desktopStat }: { chartData: C
       setStickyTooltip(true);
     }
   };
+
+  /**
+   * Find the baselines for desktop and mobile.
+   */
+  const desktopBaseline = baselines.filter((baseline) => baseline.mode === 1).map(item => parseInt((item as Record<string, any>)[name.toLowerCase()])).find(Boolean);
+  const mobileBaseline = baselines.filter((baseline) => baseline.mode === 0).map(item => parseInt((item as Record<string, any>)[name.toLowerCase()])).find(Boolean);
+
+  console.log({ desktopBaseline, mobileBaseline, name });
 
   return (
     <ChartContainer config={chartConfig} className='w-full my-4'>
@@ -68,12 +77,17 @@ export function Component({ chartData, mobileStat, desktopStat }: { chartData: C
           cursor={true}
           content={<ChartTooltipContent labelKey='fullDate' />}
         />
-        <ReferenceArea y1={mobileStat} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
-          <Label value={`Mobile p90`} position='insideTopRight' />
-        </ReferenceArea>
-        <ReferenceArea y1={desktopStat} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
-          <Label value={`Desktop p90`} position='insideBottomRight' />
-        </ReferenceArea>
+        {mobileBaseline && (
+          <ReferenceArea y1={mobileBaseline} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
+            <Label value={`Mobile Threshold`} position='insideTopRight' />
+          </ReferenceArea>
+        )}
+        {desktopBaseline && (
+          <ReferenceArea y1={desktopBaseline} stroke='red' strokeOpacity={0.2} fillOpacity={0.1} fill='red'>
+            <Label value={`Desktop Threshold`} position='insideBottomRight' />
+          </ReferenceArea>
+        )}
+
         <ChartLegend content={<ChartLegendContent />} />
         <Line connectNulls={true} dataKey='desktop' type='monotone' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
         <Line connectNulls={true} dataKey='mobile' type='monotone' stroke='var(--color-mobile)' strokeWidth={2} dot={false} />
@@ -123,12 +137,12 @@ const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
  * @param {CoreWebVitalStats} stats - The statistics for the Core Web Vital.
  * @returns {JSX.Element} The rendered CoreWebVitalCard component.
  */
-const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalStats }): JSX.Element => {
+const CoreWebVitalCard = ({ name, stats, baselines }: { name: string; stats: CoreWebVitalStats; baselines?: Baseline[] }): JSX.Element => {
   const chartData = transformChartDatapoints(stats);
   return (
     <>
-        <Card className='mx-auto flex-grow basis-full md:basis-1/2 lg:basis-1/3 max-w-full md:max-w-1/2 lg:max-w-1/3'>
-      {!!Object.keys(stats.mobile.datapoints).length && !!Object.keys(stats.desktop.datapoints).length ? (
+      <Card className='mx-auto flex-grow basis-full md:basis-1/2 lg:basis-1/3 max-w-full md:max-w-1/2 lg:max-w-1/3'>
+        {!!Object.keys(stats.mobile.datapoints).length && !!Object.keys(stats.desktop.datapoints).length ? (
           <Flex gap='3'>
             <Flex direction='column'>
               <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>{name}</h4>
@@ -151,11 +165,13 @@ const CoreWebVitalCard = ({ name, stats }: { name: string; stats: CoreWebVitalSt
                 <h4 className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'>Desktop</h4>
               </Section>
             </Flex>
-            <Component chartData={chartData} mobileStat={stats.mobile.values['p90']} desktopStat={stats.desktop.values['p90']} />
+            <Component name={name} chartData={chartData} baselines={baselines} />
           </Flex>
-      ) : (
-        <InfoMessage>No <b>{name}</b> data yet for this URL</InfoMessage>
-      )}
+        ) : (
+          <InfoMessage>
+            No <b>{name}</b> data yet for this URL
+          </InfoMessage>
+        )}
       </Card>
     </>
   );

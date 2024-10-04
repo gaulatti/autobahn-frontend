@@ -1,10 +1,10 @@
-import { Button, Card } from '@fluentui/react-components';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { SVGProps, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { JSX } from 'react/jsx-runtime';
 import { useAuthStatus } from '../../hooks/useAuth';
 import background from '../../assets/background.svg';
+import { Button, Card } from '@tremor/react';
 const loginWithGoogle = () => {
   signInWithRedirect({ provider: 'Google' });
 };

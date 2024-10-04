@@ -1,4 +1,3 @@
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -6,6 +5,14 @@ import { Provider } from 'react-redux';
 import App from './App.tsx';
 import { config } from './config.ts';
 import { getStore } from './state/index.ts';
+
+/**
+ * This is important. It enables the OAuth listener for the Auth module.
+ *
+ * For some reason this is not required in local development, but it is
+ * required in production.
+ */
+import 'aws-amplify/auth/enable-oauth-listener';
 
 /**
  * Configures Amplify with the provided configuration.
@@ -22,10 +29,8 @@ const { store } = getStore();
  */
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-      <FluentProvider theme={webLightTheme}>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </FluentProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );

@@ -1,4 +1,3 @@
-import { Persona } from '@fluentui/react-components';
 import { url } from 'gravatar';
 import { useEffect, useState } from 'react';
 import { useAuthStatus } from '../../hooks/useAuth';
@@ -25,7 +24,7 @@ const UserPersona = () => {
     avatar &&
     currentUser && (
       <div className='user-menu'>
-        <Persona
+        {/* <Persona
           name={`${currentUser.name} ${currentUser.last_name}`}
           secondaryText={currentUser.email}
           presence={{ status: 'available' }}
@@ -34,7 +33,7 @@ const UserPersona = () => {
               src: `https:${avatar}`,
             },
           }}
-        />
+        /> */}
       </div>
     )
   );

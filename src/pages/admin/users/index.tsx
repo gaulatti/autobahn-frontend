@@ -1,8 +1,8 @@
-import { Breadcrumb, BreadcrumbDivider, BreadcrumbItem, Title1 } from '@fluentui/react-components';
-import { Container, Section } from '@radix-ui/themes';
+import { Container, Heading, Section } from '@radix-ui/themes';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { Link } from '../../../components/foundations/link';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbSeparator } from '../../../components/ui/breadcrumb';
 const UsersAdmin = () => {
   type TData = {
     mail: string;
@@ -25,16 +25,16 @@ const UsersAdmin = () => {
   return (
     <Container>
       <Section size='1'>
-        <Title1 className='text-left'>Users</Title1>
+        <Heading as="h1" className='text-left'>Users</Heading>
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to='/'>Home</Link>
           </BreadcrumbItem>
-          <BreadcrumbDivider />
+          <BreadcrumbSeparator />
           <BreadcrumbItem>
             <Link to='/admin'>Admin</Link>
           </BreadcrumbItem>
-          <BreadcrumbDivider />
+          <BreadcrumbSeparator />
           <BreadcrumbItem>
             <b>Users</b>
           </BreadcrumbItem>

@@ -1,7 +1,6 @@
 import { Table } from '@radix-ui/themes';
 import { CoreWebVitalStats } from './metric-card';
 
-
 /**
  * An array of available statistical measures.
  *

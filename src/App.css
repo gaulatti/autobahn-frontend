@@ -41,8 +41,8 @@ h1,
   background-position: center;
 }
 
-.logo-link {
-  margin-left: 1rem;
+button.bg-background {
+  background-color: transparent;
 }
 
 .spinner-overlay {
