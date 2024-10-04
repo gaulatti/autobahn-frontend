@@ -21,7 +21,11 @@ const useFeatureFlags = (): ((flagName: string) => boolean) => {
    */
   return (flagName: string): boolean => {
     const feature = featureFlags.find((flag) => flag.key === flagName);
-    return feature ? feature.is_enabled : false;
+
+    /**
+     * By now, allowing everything. By now.
+     */
+    return feature ? feature.is_enabled : true;
   };
 };
 
