@@ -15,9 +15,9 @@ const ExecutionDetails = () => {
     return pathname.split('/').pop();
   }, [pathname]);
 
-  const { data, loading } = useAPI(Method.GET, [], `executions/${uuid}/${viewportMode}`);
-  const { data: dataJson } = useAPI(Method.GET, [], `executions/${uuid}/${viewportMode}/json`);
-  const { data: dataJsonMinified } = useAPI(Method.GET, [], `executions/${uuid}/${viewportMode}/json?minified`);
+  const { data, loading } = useAPI(Method.GET, [], `pulses/${uuid}/${viewportMode}`);
+  const { data: dataJson } = useAPI(Method.GET, [], `pulses/${uuid}/${viewportMode}/json`);
+  const { data: dataJsonMinified } = useAPI(Method.GET, [], `pulses/${uuid}/${viewportMode}/json?minified`);
 
   /**
    * The parsed report data from the API response.

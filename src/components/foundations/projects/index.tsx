@@ -109,7 +109,7 @@ const ProjectsTable = ({ refresh }: { refresh: number }): JSX.Element => {
 
         const result = await sendRequest(Method.GET, 'projects', queryParams);
 
-        params.successCallback(result.projects.rows, result.projects.count);
+        params.successCallback(result.rows, result.count);
         setLoading(false);
       },
     }),

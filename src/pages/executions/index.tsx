@@ -8,7 +8,7 @@ import { Trigger } from '../../components/trigger';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '../../components/ui/breadcrumb';
 
 /**
- * ExecutionsList component renders the executions page with a date range selector and a table of pulses.
+ * ExecutionsList component renders the pulses page with a date range selector and a table of pulses.
  *
  * @component
  * @returns {JSX.Element} The rendered component.

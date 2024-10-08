@@ -52,7 +52,7 @@ const URLsTable = ({ targetUUID }: { targetUUID?: string }): JSX.Element => {
       /**
        * Send request to trigger execution
        */
-      sendRequest(Method.POST, 'executions', { url, team: currentTeam.id }).then(() => {
+      sendRequest(Method.POST, 'pulses', { url, team: currentTeam.id }).then(() => {
         /**
          * Redirect to executions page after triggering execution
          */
@@ -117,7 +117,7 @@ const URLsTable = ({ targetUUID }: { targetUUID?: string }): JSX.Element => {
 
         const result = await sendRequest(Method.GET, url, queryParams);
 
-        params.successCallback(result.urls.rows, result.urls.count);
+        params.successCallback(result.rows, result.count);
         setLoading(false);
       },
     }),

@@ -74,7 +74,7 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
    * This function is used to retry the heartbeat for a pulse.
    */
   const retryHeartbeat = useCallback(async (mode: number, uuid: string) => {
-    await sendRequest(Method.POST, `executions/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
+    await sendRequest(Method.POST, `pulses/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
   }, []);
 
   const colDefs: (ColDef | ColGroupDef)[] = [
@@ -97,17 +97,17 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
     },
     {
       headerName: 'Triggered For',
-      field: 'triggeredBy',
+      field: 'membership',
       sortable: true,
       filter: false,
-      cellRenderer: (params: { data: { target?: { name: string; uuid: string }; triggeredBy?: { user: { name: string; last_name: string } } } }) => {
+      cellRenderer: (params: { data: { target?: { name: string; uuid: string }; membership?: { user: { name: string; last_name: string } } } }) => {
         const { data } = params;
         if (data) {
-          const { target, triggeredBy } = data;
+          const { target, membership } = data;
           if (target) {
             return isFeatureFlagEnabled('engine') ? <Link to={`/targets/${target.uuid}`}>{target.name}</Link> : target.name;
           } else {
-            return `${triggeredBy?.user.name} ${triggeredBy?.user.last_name}`;
+            return `${membership?.user.name} ${membership?.user.last_name}`;
           }
         }
       },
@@ -248,7 +248,7 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
       rowCount: undefined,
 
       getRows: async (params: IGetRowsParams) => {
-        const url = targetUUID ? `targets/${targetUUID}/pulses` : urlUUID ? `urls/${urlUUID}/executions` : 'executions';
+        const url = targetUUID ? `targets/${targetUUID}/pulses` : urlUUID ? `urls/${urlUUID}/pulses` : 'pulses';
         if (dashboardRange.from && dashboardRange.to) {
           console.log(`Grid updated at ${refreshCells}`);
 
@@ -265,7 +265,7 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
 
           const result = await sendRequest(Method.GET, url, queryParams);
 
-          params.successCallback(result.pulses.rows, result.pulses.count);
+          params.successCallback(result.rows, result.count);
           setLoadingPulses(false);
         }
       },

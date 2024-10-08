@@ -125,7 +125,7 @@ const SchedulesTable = ({ projectUUID, refresh }: { projectUUID: string; refresh
         };
 
         const result = await sendRequest(Method.GET, `projects/${projectUUID}/schedules`, queryParams);
-        params.successCallback(result.schedules, result.schedules.length);
+        params.successCallback(result, result.length);
         setLoading(false);
       },
     }),

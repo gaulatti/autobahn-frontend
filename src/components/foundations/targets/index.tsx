@@ -73,7 +73,7 @@ const TargetsTable = ({ refresh }: { refresh: number }): JSX.Element => {
 
         const result = await sendRequest(Method.GET, 'targets', queryParams);
 
-        params.successCallback(result.targets.rows, result.targets.count);
+        params.successCallback(result.rows, result.count);
         setLoading(false);
       },
     }),

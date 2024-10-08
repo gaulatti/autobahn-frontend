@@ -41,7 +41,7 @@ export interface TargetStatsResult {
  */
 const sendRequest = async (method: Method, url: string = '', data?: any) => {
   const { tokens } = await fetchAuthSession();
-  const fullURL = window.location.origin.includes('localhost') ? `http://localhost:3000${url}` : `${import.meta.env.VITE_API_FQDN}${url}`;
+  const fullURL = window.location.origin.includes('localhost') ? `http://localhost:3000/${url}` : `${import.meta.env.VITE_API_FQDN}${url}`;
 
   const config = {
     headers: {
@@ -52,6 +52,7 @@ const sendRequest = async (method: Method, url: string = '', data?: any) => {
     let response;
     switch (method) {
       case Method.GET:
+        console.log(fullURL)
         response = await axios.get(fullURL, { params: data, ...config });
         break;
       case Method.POST:
