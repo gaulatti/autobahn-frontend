@@ -41,7 +41,7 @@ export interface TargetStatsResult {
  */
 const sendRequest = async (method: Method, url: string = '', data?: any) => {
   const { tokens } = await fetchAuthSession();
-  const fullURL = `${import.meta.env.VITE_API_FQDN}${url}`;
+  const fullURL = window.location.origin.includes('localhost') ? `http://localhost:3000${url}` : `${import.meta.env.VITE_API_FQDN}${url}`;
 
   const config = {
     headers: {
