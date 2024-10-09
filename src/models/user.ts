@@ -6,7 +6,7 @@ export type User = {
   sub?: string;
   memberships?: Membership[];
   name: string;
-  last_name: string;
+  lastName: string;
   email: string;
   user_preferences?: UserPreference[];
   deleted_at?: Date;

@@ -18,7 +18,7 @@ function* checkSession(): unknown {
    * If the user is authenticated, fetch the user attributes and dispatch the login action.
    */
   if (userSub && !isKickoffReady) {
-    const { sub: id, family_name: last_name, given_name: name, email } = yield fetchUserAttributes();
+    const { sub: id, family_name: lastName, given_name: name, email } = yield fetchUserAttributes();
 
     const { accessToken } = tokens;
 
@@ -30,8 +30,8 @@ function* checkSession(): unknown {
     /**
      * If all required attributes are available, dispatch the login action.
      */
-    if (id && name && last_name && email) {
-      yield put(loginDispatcher({ id, name, last_name, email }));
+    if (id && name && lastName && email) {
+      yield put(loginDispatcher({ id, name, lastName, email }));
     }
   } else {
     /**

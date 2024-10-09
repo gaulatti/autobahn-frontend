@@ -25,7 +25,7 @@ const UserPersona = () => {
     currentUser && (
       <div className='user-menu'>
         {/* <Persona
-          name={`${currentUser.name} ${currentUser.last_name}`}
+          name={`${currentUser.name} ${currentUser.lastName}`}
           secondaryText={currentUser.email}
           presence={{ status: 'available' }}
           avatar={{

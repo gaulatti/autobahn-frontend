@@ -100,14 +100,14 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
       field: 'membership',
       sortable: true,
       filter: false,
-      cellRenderer: (params: { data: { target?: { name: string; uuid: string }; membership?: { user: { name: string; last_name: string } } } }) => {
+      cellRenderer: (params: { data: { target?: { name: string; uuid: string }; membership?: { user: { name: string; lastName: string } } } }) => {
         const { data } = params;
         if (data) {
           const { target, membership } = data;
           if (target) {
             return isFeatureFlagEnabled('engine') ? <Link to={`/targets/${target.uuid}`}>{target.name}</Link> : target.name;
           } else {
-            return `${membership?.user.name} ${membership?.user.last_name}`;
+            return `${membership?.user.name} ${membership?.user.lastName}`;
           }
         }
       },
