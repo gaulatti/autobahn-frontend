@@ -1,12 +1,11 @@
 import { Flex, Section } from '@radix-ui/themes';
 import { BadgeDelta, Card } from '@tremor/react';
-import { format } from 'date-fns';
-import { CartesianGrid, Label, Line, LineChart, ReferenceArea, XAxis, YAxis } from 'recharts';
-import { ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from '../../ui/chart';
-import { classifyChange } from '../../../utils/charts';
-import { ChartContainer } from '../../ui/chart';
+import moment from 'moment';
 import { useState } from 'react';
+import { CartesianGrid, Label, Line, LineChart, ReferenceArea, XAxis, YAxis } from 'recharts';
 import { CategoricalChartState } from 'recharts/types/chart/types';
+import { classifyChange } from '../../../utils/charts';
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from '../../ui/chart';
 import { InfoMessage } from '../message';
 import { Baseline } from './baselines';
 
@@ -49,8 +48,14 @@ export function Component({ chartData, baselines = [], name }: { chartData: Char
   /**
    * Find the baselines for desktop and mobile.
    */
-  const desktopBaseline = baselines.filter((baseline) => baseline.mode === 1).map(item => parseInt((item as Record<string, any>)[name.toLowerCase()])).find(Boolean);
-  const mobileBaseline = baselines.filter((baseline) => baseline.mode === 0).map(item => parseInt((item as Record<string, any>)[name.toLowerCase()])).find(Boolean);
+  const desktopBaseline = baselines
+    .filter((baseline) => baseline.mode === 1)
+    .map((item) => parseInt((item as Record<string, any>)[name.toLowerCase()]))
+    .find(Boolean);
+  const mobileBaseline = baselines
+    .filter((baseline) => baseline.mode === 0)
+    .map((item) => parseInt((item as Record<string, any>)[name.toLowerCase()]))
+    .find(Boolean);
 
   console.log({ desktopBaseline, mobileBaseline, name });
 
@@ -115,18 +120,21 @@ export type CoreWebVitalStats = {
 const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
   const mobileDataPoints = input.mobile.datapoints;
   const desktopDataPoints = input.desktop.datapoints;
-
   const allDates = Array.from(new Set([...Object.keys(mobileDataPoints), ...Object.keys(desktopDataPoints)])).sort();
 
-  const chartdata: ChartData[] = allDates.map((date: string) => ({
-    date: format(new Date(date), 'M/d'),
-    fullDate: date,
-    payload: { uuid: mobileDataPoints[date].uuid },
-    mobile: mobileDataPoints[date].value || null,
-    desktop: desktopDataPoints[date].value || null,
-  }));
+  console.log({ allDates });
 
-  return chartdata;
+  const chartData: ChartData[] = allDates.map((date: string) => {
+    return {
+      date: moment(date).format('YYYY-MM-DD'),
+      fullDate: date,
+      payload: { uuid: mobileDataPoints[date].uuid },
+      mobile: mobileDataPoints[date].value || null,
+      desktop: desktopDataPoints[date].value || null,
+    };
+  });
+
+  return chartData;
 };
 
 /**

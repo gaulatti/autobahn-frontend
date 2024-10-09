@@ -5,6 +5,7 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTool
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { CategoricalChartState } from 'recharts/types/chart/types';
+import moment from 'moment';
 
 const chartConfig = {
   TTFB: {
@@ -109,7 +110,7 @@ const transformData = (inputData: MetricStats[]): TransformedData => {
         if (!dataPointMap[date]) {
           dataPointMap[date] = {
             fullDate: date,
-            date: format(new Date(date), 'M/d'),
+            date: moment(date).format('YYYY-MM-DD'),
             uuid: data.uuid,
           };
         }

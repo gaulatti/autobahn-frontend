@@ -19,7 +19,7 @@ const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', 
  */
 type TData = {
   uuid: string;
-  created_at: string;
+  createdAt: string;
   results: string;
   heartbeats: { mode: number; status: number; retries: number }[];
 };
@@ -79,14 +79,14 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
 
   const colDefs: (ColDef | ColGroupDef)[] = [
     {
-      field: 'created_at',
+      field: 'createdAt',
       headerName: 'Triggered',
       cellRenderer: (params: { data: TData }) => {
         return (
           params.data &&
-          (moment().diff(params.data!.created_at, 'hours') < 24
-            ? moment(params.data!.created_at).fromNow()
-            : moment(params.data!.created_at).format('YYYY-MM-DD / HH:mm'))
+          (moment().diff(params.data!.createdAt, 'hours') < 24
+            ? moment(params.data!.createdAt).fromNow()
+            : moment(params.data!.createdAt).format('YYYY-MM-DD / HH:mm'))
         );
       },
       filter: 'agDateColumnFilter',
