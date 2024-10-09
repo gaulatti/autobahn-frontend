@@ -23,7 +23,7 @@ const SchedulesList = () => {
   /**
    * Fetch the targets from the API
    */
-  const { data } = useAPI(Method.GET, [], '/targets');
+  const { data } = useAPI(Method.GET, [], 'targets');
 
   /**
    * Represents the timestamp to trigger a refresh of the schedules table.
