@@ -52,7 +52,6 @@ const sendRequest = async (method: Method, url: string = '', data?: any) => {
     let response;
     switch (method) {
       case Method.GET:
-        console.log(fullURL)
         response = await axios.get(fullURL, { params: data, ...config });
         break;
       case Method.POST:
@@ -125,7 +124,7 @@ const fetchURLStats = async (uuid: string, dashboardRange: DateRangePickerValue)
       const result = await sendRequest(Method.GET, `urls/${uuid}/stats`, queryParams);
 
       const {
-        urlRecord: { url },
+        url: { url },
         scores,
         cwvStats,
       } = result;
