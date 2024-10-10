@@ -44,7 +44,7 @@ const CreateProject = ({ callback }: { callback: () => void }): JSX.Element => {
         name: { value: string };
       };
 
-      sendRequest(Method.POST, `projects`, { name: formElements.name.value, team: currentTeam.id }).then(() => {
+      sendRequest(Method.POST, `projects`, { name: formElements.name.value, teamId: currentTeam.id }).then(() => {
         if (callback) {
           callback();
         }

@@ -46,7 +46,7 @@ const CreateSchedule = ({
         cron: { value: string };
       };
 
-      sendRequest(Method.POST, `projects/${projectUUID}/schedules`, { target: target, cron: formElements.cron.value }).then(() => {
+      sendRequest(Method.POST, `projects/${projectUUID}/schedules`, { targetId: target, cron: formElements.cron.value }).then(() => {
         if (callback) {
           callback();
         }

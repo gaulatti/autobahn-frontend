@@ -3,7 +3,7 @@ export type Invitation = {
   email: string;
   token: string;
   status: string;
-  deleted_at: Date;
+  deletedAt: Date;
   createdAt: Date;
   updatedAt: Date;
 };

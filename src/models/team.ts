@@ -7,7 +7,7 @@ export type Team = {
   memberships: Membership[];
   invitations: Invitation[];
   status: string;
-  deleted_at: Date;
+  deletedAt: Date;
   createdAt: Date;
   updatedAt: Date;
   selected: boolean;

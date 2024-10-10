@@ -25,7 +25,7 @@ const useFeatureFlags = (): ((flagName: string) => boolean) => {
     /**
      * By now, allowing everything. By now.
      */
-    return feature ? feature.is_enabled : true;
+    return feature ? feature.isEnabled : true;
   };
 };
 

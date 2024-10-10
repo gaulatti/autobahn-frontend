@@ -74,7 +74,7 @@ const SchedulesList = () => {
               <Heading as='h2'>Schedules List</Heading>
             </Box>
             <Box>
-              <CreateSchedule targets={data?.targets} projectUUID={uuid!} callback={handleRefresh} />
+              <CreateSchedule targets={data} projectUUID={uuid!} callback={handleRefresh} />
             </Box>
           </Flex>
           <SchedulesTable projectUUID={uuid!} refresh={refreshTimestamp} />

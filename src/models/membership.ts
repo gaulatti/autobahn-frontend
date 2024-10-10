@@ -7,7 +7,7 @@ export type Membership = {
   role: string;
   status: string;
   team: Team;
-  deleted_at: Date;
+  deletedAt: Date;
   createdAt: Date;
   updatedAt: Date;
 };

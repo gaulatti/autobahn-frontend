@@ -75,12 +75,12 @@ const SchedulesTable = ({ projectUUID, refresh }: { projectUUID: string; refresh
       },
     },
     {
-      field: 'next_execution',
+      field: 'nextExecution',
       headerName: 'Next Execution',
       sortable: true,
       filter: true,
       flex: 1,
-      valueGetter: (params) => params.data?.next_execution,
+      valueGetter: (params) => params.data?.nextExecution,
       cellRenderer: (params: { value: string }) => {
         return params.value && moment(params.value).format('YYYY-MM-DD / HH:mm');
       },

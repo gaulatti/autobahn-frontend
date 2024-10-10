@@ -8,8 +8,8 @@ export type User = {
   name: string;
   lastName: string;
   email: string;
-  user_preferences?: UserPreference[];
-  deleted_at?: Date;
+  userPreferences?: UserPreference[];
+  deletedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 };
