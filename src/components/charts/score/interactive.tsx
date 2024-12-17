@@ -1,3 +1,0 @@
-const HistoryInteractiveChart = () => <></>;
-
-export { HistoryInteractiveChart };
