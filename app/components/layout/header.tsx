@@ -58,7 +58,7 @@ const Header = () => {
       <HeaderBackground>
         <Container>
           <HeaderContent>
-            <Logo to='/'>madonna</Logo>
+            <Logo to='/'>autobahn</Logo>
             <MainContent>
               <StripeBox>
                 <Stripe color='#d95107CC' />

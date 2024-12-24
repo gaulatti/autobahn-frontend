@@ -2,7 +2,7 @@ import { Button, Flex, Text } from '@radix-ui/themes';
 import type { Route } from './+types/home';
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Madonna' }];
+  return [{ title: 'Autobahn' }];
 }
 
 export default function Home() {
