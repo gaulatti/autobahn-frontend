@@ -148,8 +148,8 @@ const Menu = () => {
                 <MenuLink to='/' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
                   HOME
                 </MenuLink>
-                <MenuLink to='/assessments' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
-                  ASSESSMENTS
+                <MenuLink to='/pulses' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
+                  PULSES
                 </MenuLink>
                 <MenuLink to='/projects' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
                   PROJECTS

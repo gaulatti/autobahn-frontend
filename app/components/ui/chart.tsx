@@ -271,7 +271,7 @@ const ChartTooltipContent = React.forwardRef<
               </div>
             )
           })}
-          { uuid && <Flex gap='3'><Link href={`/assessments/${uuid}/mobile`} target="_blank">View Mobile Details</Link><Link href={`/assessments/${uuid}/desktop`} target="_blank">View Desktop Details</Link></Flex> }
+          { uuid && <Flex gap='3'><Link href={`/pulses/${uuid}/mobile`} target="_blank">View Mobile Details</Link><Link href={`/pulses/${uuid}/desktop`} target="_blank">View Desktop Details</Link></Flex> }
         </div>
       </div>
     )
