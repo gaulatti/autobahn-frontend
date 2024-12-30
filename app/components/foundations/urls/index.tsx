@@ -19,8 +19,8 @@ import { Link } from '../link';
  * @remarks
  * - The component fetches data from the server using a custom data source.
  * - It uses `useSelector` to get the current team and `useNavigate` for navigation.
- * - The table columns include URL, Targets, and Trigger assessment buttons.
- * - The `handleClick` function triggers an assessment and navigates to the assessment page.
+ * - The table columns include URL, Targets, and Trigger pulse buttons.
+ * - The `handleClick` function triggers an pulse and navigates to the pulse page.
  * - The `dataSource` is memoized to optimize performance.
  *
  * @example
@@ -50,11 +50,11 @@ const URLsTable = ({ targetUUID }: { targetUUID?: string }): JSX.Element => {
   const handleClick = useCallback(
     (url: string, uuid: string) => {
       /**
-       * Send request to trigger assessment
+       * Send request to trigger pulse
        */
       sendRequest(Method.POST, 'pulses', { url, teamId: currentTeam?.id }).then(() => {
         /**
-         * Redirect to pulses page after triggering assessment
+         * Redirect to pulses page after triggering pulse
          */
         if (location.pathname !== `/urls/${uuid}`) {
           navigator(`/urls/${uuid}`);

@@ -1,3 +1,5 @@
+import { Footer } from '@/components/layout/footer';
+import { Flex } from '@radix-ui/themes';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router';
 import { Header } from '~/components/layout/header';
@@ -23,10 +25,13 @@ const PrivateLayout = (): JSX.Element => {
 
   if (isAuthenticated && isLoaded && isKickoffReady) {
     return (
-      <>
-        <Header />
-        <Outlet />
-      </>
+      <Flex direction='column' justify='between' style={{ minHeight: '100vh' }}>
+        <main>
+          <Header />
+          <Outlet />
+        </main>
+        <Footer />
+      </Flex>
     );
   }
 
