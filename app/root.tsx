@@ -1,3 +1,5 @@
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+
 import { Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { Amplify, ResourcesConfig } from 'aws-amplify';
@@ -5,8 +7,13 @@ import { Provider } from 'react-redux';
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { Route } from './+types/root';
 import stylesheet from './app.css?url';
-// import { useDarkMode } from './hooks/useDarkMode';
+import { useDarkMode } from './hooks/useDarkMode';
 import { getStore } from './state';
+
+/**
+ * AG Grid Community Module Registry.
+ */
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 /**
  * This is important. It enables the OAuth listener for the Auth module.
@@ -56,14 +63,7 @@ Amplify.configure(config);
 const { store } = getStore();
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  // const { isDarkMode } = useDarkMode();
-
-  /**
-   * The appearance prop is used to set the theme of the application, by now
-   * we are only doing light, dark mode is not implemented yet.
-   *
-   * To implement add: appearance={isDarkMode ? 'dark' : 'light'} to Theme.
-   */
+  const { isDarkMode } = useDarkMode();
 
   return (
     <html lang='en'>
@@ -76,7 +76,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <Provider store={store}>
-          <Theme accentColor='orange' grayColor='sand' radius='large'>
+          <Theme appearance={isDarkMode ? 'dark' : 'light'} accentColor='orange' grayColor='sand' radius='large'>
             {children}
             <ScrollRestoration />
             <Scripts />

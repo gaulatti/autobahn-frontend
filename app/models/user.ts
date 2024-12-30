@@ -4,7 +4,7 @@ import { UserPreference } from './user_preference';
 export type User = {
   id?: string;
   sub: string;
-  given_name: string;
+  name: string;
   last_name: string;
   email: string;
   memberships?: Membership[];

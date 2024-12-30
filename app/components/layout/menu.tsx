@@ -4,7 +4,9 @@ import styled from '@emotion/styled';
 import { MixerVerticalIcon } from '@radix-ui/react-icons';
 import { Avatar, Container, DropdownMenu, Flex, IconButton } from '@radix-ui/themes';
 import { forwardRef } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
+import { currentUser as currentUserSelector } from '../../state/selectors/auth';
 
 const MenuBackground = styled.section`
   height: 50px;
@@ -95,40 +97,43 @@ const ListItem = forwardRef<React.ElementRef<'a'>, React.ComponentPropsWithoutRe
 });
 
 const SettingsMenu = () => {
+  const currentUser = useSelector(currentUserSelector);
   const navigate = useNavigate();
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <IconButton>
-          <MixerVerticalIcon />
-        </IconButton>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <Flex gap='2' className='m-3'>
-          <Avatar src='https://avatars.githubusercontent.com/u/4602751?v=4' fallback='J' />
-          <Flex direction='column'>
-            <b>Javier</b>
-            <small>jack@gaulatti.com</small>
+    currentUser && (
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <IconButton>
+            <MixerVerticalIcon />
+          </IconButton>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <Flex gap='2' className='m-3'>
+            <Avatar src='https://avatars.githubusercontent.com/u/4602751?v=4' fallback='J' />
+            <Flex direction='column'>
+              <b>{currentUser.name}</b>
+              <small>{currentUser.email}</small>
+            </Flex>
           </Flex>
-        </Flex>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Item onClick={() => navigate('/preferences')}>Preferences</DropdownMenu.Item>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger>Settings</DropdownMenu.SubTrigger>
-          <DropdownMenu.SubContent>
-            <DropdownMenu.Item onClick={() => navigate('/admin')}>Admin Panel</DropdownMenu.Item>
-            <DropdownMenu.Item onClick={() => navigate('/users')}>Users</DropdownMenu.Item>
-            <DropdownMenu.Item onClick={() => navigate('/teams')}>Teams</DropdownMenu.Item>
-          </DropdownMenu.SubContent>
-        </DropdownMenu.Sub>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Item onClick={() => navigate('/preferences')}>Preferences</DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Sub>
+            <DropdownMenu.SubTrigger>Settings</DropdownMenu.SubTrigger>
+            <DropdownMenu.SubContent>
+              <DropdownMenu.Item onClick={() => navigate('/admin')}>Admin Panel</DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => navigate('/users')}>Users</DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => navigate('/teams')}>Teams</DropdownMenu.Item>
+            </DropdownMenu.SubContent>
+          </DropdownMenu.Sub>
 
-        <DropdownMenu.Separator />
-        <DropdownMenu.Item  onClick={() => navigate('/logout')} color='red'>
-          Exit
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Item onClick={() => navigate('/logout')} color='red'>
+            Exit
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    )
   );
 };
 
@@ -142,6 +147,21 @@ const Menu = () => {
               <NavigationMenuItem>
                 <MenuLink to='/' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
                   HOME
+                </MenuLink>
+                <MenuLink to='/assessments' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
+                  ASSESSMENTS
+                </MenuLink>
+                <MenuLink to='/projects' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
+                  PROJECTS
+                </MenuLink>
+                <MenuLink to='/urls' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
+                  URLS
+                </MenuLink>
+                <MenuLink to='/targets' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
+                  TARGETS
+                </MenuLink>
+                <MenuLink to='/plugins' className={({ isActive, isPending }) => (isPending ? 'pending' : isActive ? 'active' : '')}>
+                  PLUGINS
                 </MenuLink>
               </NavigationMenuItem>
             </section>
