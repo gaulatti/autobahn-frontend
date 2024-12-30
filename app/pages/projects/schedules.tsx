@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { Method, useAPI } from '../../clients/api';
-import { EngineHero } from '../../components/foundations/engine/hero';
 import { Link } from '../../components/foundations/link';
 import { SchedulesTable } from '../../components/foundations/schedules';
 import { CreateSchedule } from '../../components/foundations/schedules/create';

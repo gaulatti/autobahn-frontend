@@ -1,8 +1,6 @@
 import { Box, Container, Flex, Heading, Section } from '@radix-ui/themes';
-import { Divider } from '@tremor/react';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { EngineHero } from '../../components/foundations/engine/hero';
 import { Link } from '../../components/foundations/link';
 import { TargetsTable } from '../../components/foundations/targets';
 import { CreateTarget } from '../../components/foundations/targets/create';

@@ -1,8 +1,6 @@
 import { Box, Container, Flex, Heading, Section } from '@radix-ui/themes';
-import { Divider } from '@tremor/react';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { EngineHero } from '../../components/foundations/engine/hero';
 import { Link } from '../../components/foundations/link';
 import { ProjectsTable } from '../../components/foundations/projects';
 import { CreateProject } from '../../components/foundations/projects/create';
@@ -25,8 +23,6 @@ import { getCurrentTeam } from '../../state/selectors/teams';
  * This component includes:
  * - A heading for the projects page.
  * - Breadcrumb navigation.
- * - A hero section.
- * - A divider.
  * - A section containing a heading for the projects list, a button to create a new project, and the projects table.
  *
  * The component uses a state `refreshTimestamp` to trigger a refresh of the projects table.
