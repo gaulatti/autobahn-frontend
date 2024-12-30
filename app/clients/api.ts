@@ -1,3 +1,7 @@
+import { Baseline } from '@/components/foundations/cwv/baselines';
+import { CoreWebVitalStats } from '@/components/foundations/cwv/metric-card';
+import { LighthouseScore } from '@/components/foundations/lighthouse/card';
+import { DateRangePickerValue } from '@tremor/react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -8,6 +12,25 @@ export enum Method {
   PUT = 'PUT',
   PATCH = 'PATCH',
   DELETE = 'DELETE',
+}
+
+/**
+ * Interface representing the URL statistics result.
+ */
+export interface URLStatsResult {
+  url: string;
+  scores: { name: string; scores: LighthouseScore }[];
+  cwvStats: { name: string; stats: CoreWebVitalStats }[];
+}
+
+/**
+ * Interface representing the Target statistics result.
+ */
+export interface TargetStatsResult {
+  name: string;
+  baselines: Baseline[];
+  scores: { name: string; scores: LighthouseScore }[];
+  cwvStats: { name: string; stats: CoreWebVitalStats }[];
 }
 
 /**
@@ -88,4 +111,70 @@ const useAPI = (method: Method, dependencies: any[], url?: string, postData?: an
   return { data, loading, error };
 };
 
-export { sendRequest, useAPI };
+/**
+ * Fetches the URL statistics based on the UUID and date range.
+ * @param uuid - The unique identifier for the URL.
+ * @param dashboardRange - The date range for the dashboard.
+ * @returns A Promise that resolves to the URL statistics result.
+ */
+const fetchURLStats = async (uuid: string, dashboardRange: DateRangePickerValue): Promise<URLStatsResult> => {
+  if (dashboardRange.from && dashboardRange.to) {
+    const queryParams = {
+      from: new Date(dashboardRange.from!.setHours(0, 0, 0, 0)).toISOString(),
+      to: new Date(dashboardRange.to!.setHours(23, 59, 59, 999)).toISOString(),
+      statistic: 'p90',
+    };
+
+    try {
+      const result = await sendRequest(Method.GET, `urls/${uuid}/stats`, queryParams);
+
+      const {
+        url: { url },
+        scores,
+        cwvStats,
+      } = result;
+
+      return { url, scores, cwvStats };
+    } catch (error) {
+      console.error('Error fetching URL statistics:', error);
+      throw error;
+    }
+  } else {
+    throw new Error('Invalid date range: "from" and "to" dates are required');
+  }
+};
+
+/**
+ * Fetches the Target statistics based on the UUID and date range.
+ * @param uuid - The unique identifier for the Target.
+ * @param dashboardRange - The date range for the dashboard.
+ * @returns A Promise that resolves to the Target statistics result.
+ */
+const fetchTargetStats = async (uuid: string, dashboardRange: DateRangePickerValue): Promise<TargetStatsResult> => {
+  if (dashboardRange.from && dashboardRange.to) {
+    const queryParams = {
+      from: dashboardRange.from.toISOString(),
+      to: dashboardRange.to.toISOString(),
+      statistic: 'p90',
+    };
+
+    try {
+      const result = await sendRequest(Method.GET, `targets/${uuid}/stats`, queryParams);
+
+      const {
+        target: { name, baselines },
+        scores,
+        cwvStats,
+      } = result;
+
+      return { name, baselines, scores, cwvStats };
+    } catch (error) {
+      console.error('Error fetching URL statistics:', error);
+      throw error;
+    }
+  } else {
+    throw new Error('Invalid date range: "from" and "to" dates are required');
+  }
+};
+
+export { fetchTargetStats, fetchURLStats, sendRequest, useAPI };
