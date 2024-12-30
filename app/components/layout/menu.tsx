@@ -3,7 +3,8 @@ import { cn } from '@/lib/utils';
 import styled from '@emotion/styled';
 import { MixerVerticalIcon } from '@radix-ui/react-icons';
 import { Avatar, Container, DropdownMenu, Flex, IconButton } from '@radix-ui/themes';
-import { forwardRef } from 'react';
+import gravatarUrl from 'gravatar-url';
+import { forwardRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
 import { currentUser as currentUserSelector } from '../../state/selectors/auth';
@@ -98,6 +99,11 @@ const ListItem = forwardRef<React.ElementRef<'a'>, React.ComponentPropsWithoutRe
 
 const SettingsMenu = () => {
   const currentUser = useSelector(currentUserSelector);
+  const avatarUrl = useMemo(() => {
+    if (currentUser?.email) {
+      return gravatarUrl(currentUser.email);
+    }
+  }, [currentUser]);
   const navigate = useNavigate();
   return (
     currentUser && (
@@ -109,7 +115,7 @@ const SettingsMenu = () => {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <Flex gap='2' className='m-3'>
-            <Avatar src='https://avatars.githubusercontent.com/u/4602751?v=4' fallback='J' />
+            <Avatar src={avatarUrl} fallback='J' />
             <Flex direction='column'>
               <b>{currentUser.name}</b>
               <small>{currentUser.email}</small>
