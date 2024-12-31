@@ -106,12 +106,12 @@ export type CoreWebVitalStats = {
   mobile: {
     values: Record<string, number>;
     variation: number;
-    datapoints: Record<string, { value: number; uuid: string }>;
+    datapoints: Record<string, { value: number; slug: string }>;
   };
   desktop: {
     values: Record<string, number>;
     variation: number;
-    datapoints: Record<string, { value: number; uuid: string }>;
+    datapoints: Record<string, { value: number; slug: string }>;
   };
 };
 
@@ -124,7 +124,7 @@ const transformChartDatapoints = (input: CoreWebVitalStats): ChartData[] => {
   const chartdata: ChartData[] = allDates.map((date: string) => ({
     date: moment(date).format('YYYY-MM-DD'),
     fullDate: date,
-    payload: { uuid: mobileDataPoints[date].uuid },
+    payload: { slug: mobileDataPoints[date].slug },
     mobile: mobileDataPoints[date].value || null,
     desktop: desktopDataPoints[date].value || null,
   }));

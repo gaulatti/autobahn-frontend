@@ -8,14 +8,14 @@ import { TriggerAdHocButton } from '../trigger/trigger-button';
  * @param {any} props - The component props.
  * @returns {JSX.Element} - The rendered URLNavbar component.
  */
-const URLNavbar = ({ uuid, url }: { uuid: string; url: string }): JSX.Element => {
+const URLNavbar = ({ slug, url }: { slug: string; url: string }): JSX.Element => {
   return (
     <Flex gap='2' align='center' className='my-4'>
       <Flex gap='3' className='w-full'>
         <GlobeIcon className='w-5 h-5 text-muted-foreground' />
         <div className='flex-1 text-sm font-mono text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis'>{url}</div>
       </Flex>
-      <TriggerAdHocButton uuid={uuid} url={url} />
+      <TriggerAdHocButton slug={slug} url={url} />
     </Flex>
   );
 };

@@ -55,9 +55,9 @@ const SchedulesTable = ({ projectUUID, refresh }: { projectUUID: string; refresh
       sortable: true,
       filter: true,
       flex: 1,
-      cellRenderer: (params: { data: { target: { uuid: string; name: string } } }) => {
+      cellRenderer: (params: { data: { target: { slug: string; name: string } } }) => {
         if (params.data?.target) {
-          return <Link to={`/targets/${params.data?.target?.uuid}/`}>{params.data?.target?.name}</Link>;
+          return <Link to={`/targets/${params.data?.target?.slug}/`}>{params.data?.target?.name}</Link>;
         }
       },
     },
@@ -90,7 +90,7 @@ const SchedulesTable = ({ projectUUID, refresh }: { projectUUID: string; refresh
       headerName: 'Actions',
       sortable: false,
       filter: false,
-      cellRenderer: (params: { value: { uuid: string; cron: string } }) =>
+      cellRenderer: (params: { value: { slug: string; cron: string } }) =>
         params.value && (
           <Button
             size='1'
@@ -99,7 +99,7 @@ const SchedulesTable = ({ projectUUID, refresh }: { projectUUID: string; refresh
             /**
              * Not yet. Will come in a new PR.
              */
-            // onClick={() => handleClick(params.value.uuid, params.value.cron)}
+            // onClick={() => handleClick(params.value.slug, params.value.cron)}
           >
             Trigger Pulse
           </Button>

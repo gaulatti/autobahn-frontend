@@ -36,7 +36,7 @@ const URLStats = (): JSX.Element => {
   /**
    * Get the URL UUID from the route parameters.
    */
-  const { uuid } = useParams<{ uuid: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   /**
    * State to hold the result of the URL statistics.
@@ -62,11 +62,11 @@ const URLStats = (): JSX.Element => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      if (uuid) {
+      if (slug) {
         setLoading(true);
         setError(null);
         try {
-          const data = await fetchURLStats(uuid, dashboardRange);
+          const data = await fetchURLStats(slug, dashboardRange);
           if (data) {
             setResult(data);
           }
@@ -78,7 +78,7 @@ const URLStats = (): JSX.Element => {
       }
     };
     fetchData();
-  }, [dashboardRange, uuid, refreshStats]);
+  }, [dashboardRange, slug, refreshStats]);
 
   /**
    * This useEffect is used to listen to the SSEManager for REFRESH_PULSES_TABLE action
@@ -115,9 +115,9 @@ const URLStats = (): JSX.Element => {
 
         {error && <ErrorMessage>Error: {error}</ErrorMessage>}
 
-        {result && uuid && (
+        {result && slug && (
           <>
-            <URLNavbar uuid={uuid} url={result.url} />
+            <URLNavbar slug={slug} url={result.url} />
             <Divider />
             <Section size='1'>
               <Flex gap='3' justify='between'>
@@ -134,7 +134,7 @@ const URLStats = (): JSX.Element => {
             </Section>
             <Section size='1'>
               <Heading as='h2'>Pulses List</Heading>
-              <PulsesTable urlUUID={uuid} dashboardRange={dashboardRange} />
+              <PulsesTable urlUUID={slug} dashboardRange={dashboardRange} />
             </Section>
           </>
         )}

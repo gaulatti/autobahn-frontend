@@ -64,8 +64,9 @@ const Trigger = (): JSX.Element => {
       sendRequest(Method.POST, 'pulses', { url: formElements.url.value, teamId: currentTeam.id }).then((data: { url: string }) => {
         /**
          * Redirect to executions page after triggering execution
+         * TODO: REDIRECT TO Playlists page
          */
-        navigate(`/urls/${data.url}`);
+        // navigate(`/urls/${data.url}`);
         setIsLoading(false);
       });
     },

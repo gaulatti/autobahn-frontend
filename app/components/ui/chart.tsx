@@ -193,9 +193,9 @@ const ChartTooltipContent = React.forwardRef<
     const nestLabel = payload.length === 1 && indicator !== "dot"
 
     /**
-     * As we need the uuid, we'll get it from the first one of the pair.
+     * As we need the slug, we'll get it from the first one of the pair.
      */
-    const uuid: string = payload[0]?.payload?.payload?.uuid || payload[0]?.payload?.uuid
+    const slug: string = payload[0]?.payload?.payload?.slug || payload[0]?.payload?.slug
 
     return (
       <div
@@ -271,7 +271,7 @@ const ChartTooltipContent = React.forwardRef<
               </div>
             )
           })}
-          { uuid && <Flex gap='3'><Link href={`/pulses/${uuid}/mobile`} target="_blank">View Mobile Details</Link><Link href={`/pulses/${uuid}/desktop`} target="_blank">View Desktop Details</Link></Flex> }
+          { slug && <Flex gap='3'><Link href={`/pulses/${slug}/mobile`} target="_blank">View Mobile Details</Link><Link href={`/pulses/${slug}/desktop`} target="_blank">View Desktop Details</Link></Flex> }
         </div>
       </div>
     )

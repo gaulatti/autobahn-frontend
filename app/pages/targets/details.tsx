@@ -56,7 +56,7 @@ const TargetDetails = (): JSX.Element => {
   /**
    * Get the URL UUID from the route parameters.
    */
-  const { uuid } = useParams<{ uuid: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   /**
    * State to hold the result of the URL statistics.
@@ -95,11 +95,11 @@ const TargetDetails = (): JSX.Element => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      if (uuid) {
+      if (slug) {
         setLoading(true);
         setError(null);
         try {
-          const data = await fetchTargetStats(uuid, dashboardRange);
+          const data = await fetchTargetStats(slug, dashboardRange);
           if (data) {
             setResult(data);
           }
@@ -111,7 +111,7 @@ const TargetDetails = (): JSX.Element => {
       }
     };
     fetchData();
-  }, [dashboardRange, uuid, refresh]);
+  }, [dashboardRange, slug, refresh]);
 
   return (
     <Container>
@@ -137,7 +137,7 @@ const TargetDetails = (): JSX.Element => {
 
         {error && <ErrorMessage>Error: {error}</ErrorMessage>}
 
-        {result && uuid && (
+        {result && slug && (
           <>
             <Divider />
             <Section size='1'>
@@ -147,7 +147,7 @@ const TargetDetails = (): JSX.Element => {
             </Section>
             <Divider />
             <Section size='1'>
-              <CoreWebVitals targetUUID={uuid} cwvStats={result.cwvStats} baselines={result.baselines} callback={refreshCallback} />
+              <CoreWebVitals targetUUID={slug} cwvStats={result.cwvStats} baselines={result.baselines} callback={refreshCallback} />
             </Section>
             <Divider />
             <Section size='1'>
@@ -155,11 +155,11 @@ const TargetDetails = (): JSX.Element => {
             </Section>
             <Section size='1'>
               <Heading as='h2'>URLs List</Heading>
-              <URLsTable targetUUID={uuid} />
+              <URLsTable targetUUID={slug} />
             </Section>
             <Section size='1'>
               <Heading as='h2'>Pulses List</Heading>
-              <PulsesTable targetUUID={uuid} dashboardRange={dashboardRange} />
+              <PulsesTable targetUUID={slug} dashboardRange={dashboardRange} />
             </Section>
           </>
         )}

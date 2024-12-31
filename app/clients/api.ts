@@ -113,11 +113,11 @@ const useAPI = (method: Method, dependencies: any[], url?: string, postData?: an
 
 /**
  * Fetches the URL statistics based on the UUID and date range.
- * @param uuid - The unique identifier for the URL.
+ * @param slug - The unique identifier for the URL.
  * @param dashboardRange - The date range for the dashboard.
  * @returns A Promise that resolves to the URL statistics result.
  */
-const fetchURLStats = async (uuid: string, dashboardRange: DateRangePickerValue): Promise<URLStatsResult> => {
+const fetchURLStats = async (slug: string, dashboardRange: DateRangePickerValue): Promise<URLStatsResult> => {
   if (dashboardRange.from && dashboardRange.to) {
     const queryParams = {
       from: new Date(dashboardRange.from!.setHours(0, 0, 0, 0)).toISOString(),
@@ -126,7 +126,7 @@ const fetchURLStats = async (uuid: string, dashboardRange: DateRangePickerValue)
     };
 
     try {
-      const result = await sendRequest(Method.GET, `urls/${uuid}/stats`, queryParams);
+      const result = await sendRequest(Method.GET, `urls/${slug}/stats`, queryParams);
 
       const {
         url: { url },
@@ -146,11 +146,11 @@ const fetchURLStats = async (uuid: string, dashboardRange: DateRangePickerValue)
 
 /**
  * Fetches the Target statistics based on the UUID and date range.
- * @param uuid - The unique identifier for the Target.
+ * @param slug - The unique identifier for the Target.
  * @param dashboardRange - The date range for the dashboard.
  * @returns A Promise that resolves to the Target statistics result.
  */
-const fetchTargetStats = async (uuid: string, dashboardRange: DateRangePickerValue): Promise<TargetStatsResult> => {
+const fetchTargetStats = async (slug: string, dashboardRange: DateRangePickerValue): Promise<TargetStatsResult> => {
   if (dashboardRange.from && dashboardRange.to) {
     const queryParams = {
       from: dashboardRange.from.toISOString(),
@@ -159,7 +159,7 @@ const fetchTargetStats = async (uuid: string, dashboardRange: DateRangePickerVal
     };
 
     try {
-      const result = await sendRequest(Method.GET, `targets/${uuid}/stats`, queryParams);
+      const result = await sendRequest(Method.GET, `targets/${slug}/stats`, queryParams);
 
       const {
         target: { name, baselines },

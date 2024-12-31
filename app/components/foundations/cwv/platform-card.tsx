@@ -31,7 +31,7 @@ const chartConfig = {
  * Metric data point object.
  */
 interface MetricDataPoint {
-  uuid: string;
+  slug: string;
   value: number;
 }
 
@@ -60,7 +60,7 @@ interface MetricStats {
  */
 interface TransformedDataPoint {
   date: string;
-  uuid: string;
+  slug: string;
   [metric: string]: number | string | null;
 }
 
@@ -110,7 +110,7 @@ const transformData = (inputData: MetricStats[]): TransformedData => {
           dataPointMap[date] = {
             fullDate: date,
             date: moment(date).format('YYYY-MM-DD'),
-            uuid: data.uuid,
+            slug: data.slug,
           };
         }
         dataPointMap[date][metricName.toUpperCase()] = data.value || null;

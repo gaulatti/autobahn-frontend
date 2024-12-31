@@ -14,12 +14,12 @@ const SchedulesList = () => {
   /**
    * Get the URL UUID from the route parameters.
    */
-  const { uuid } = useParams<{ uuid: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   /**
    * TODO: Fetch the project from the API
    */
-  // const { data: projectData } = useAPI(Method.GET, [], `projects/${uuid}`);
+  // const { data: projectData } = useAPI(Method.GET, [], `projects/${slug}`);
 
   /**
    * Represents the current team.
@@ -61,7 +61,7 @@ const SchedulesList = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <Link to={`/projects/${uuid}`}>Project Name</Link>
+                <Link to={`/projects/${slug}`}>Project Name</Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -81,11 +81,11 @@ const SchedulesList = () => {
             </Box>
             {currentTeam && (
               <Box>
-                <CreateSchedule targets={data} projectUUID={uuid!} callback={handleRefresh} />
+                <CreateSchedule targets={data} projectUUID={slug!} callback={handleRefresh} />
               </Box>
             )}
           </Flex>
-          <SchedulesTable projectUUID={uuid!} refresh={refreshTimestamp} />
+          <SchedulesTable projectUUID={slug!} refresh={refreshTimestamp} />
         </Section>
       </Container>
     )

@@ -48,7 +48,7 @@ const URLsTable = ({ targetUUID }: { targetUUID?: string }): JSX.Element => {
    * Handle form submission
    */
   const handleClick = useCallback(
-    (url: string, uuid: string) => {
+    (url: string, slug: string) => {
       /**
        * Send request to trigger pulse
        */
@@ -56,8 +56,8 @@ const URLsTable = ({ targetUUID }: { targetUUID?: string }): JSX.Element => {
         /**
          * Redirect to pulses page after triggering pulse
          */
-        if (location.pathname !== `/urls/${uuid}`) {
-          navigator(`/urls/${uuid}`);
+        if (location.pathname !== `/urls/${slug}`) {
+          navigator(`/urls/${slug}`);
         }
       });
     },
@@ -76,20 +76,20 @@ const URLsTable = ({ targetUUID }: { targetUUID?: string }): JSX.Element => {
       initialSort: 'desc',
       sortingOrder: ['desc', 'asc'],
       valueGetter: (params) => params.data,
-      cellRenderer: (params: { value: { url: string; uuid: string } }) => params.value && <Link to={`/urls/${params.value.uuid}`}>{params.value.url}</Link>,
+      cellRenderer: (params: { value: { url: string; slug: string } }) => params.value && <Link to={`/urls/${params.value.slug}`}>{params.value.url}</Link>,
     },
   ];
 
   if (currentTeam) {
     colDefs.push({
-      field: 'uuid',
+      field: 'slug',
       headerName: 'Trigger',
       sortable: false,
       filter: false,
       valueGetter: (params) => params.data,
-      cellRenderer: (params: { value: { url: string; uuid: string } }) =>
+      cellRenderer: (params: { value: { url: string; slug: string } }) =>
         params.value && (
-          <Button size='1' variant='surface' className='my-2' onClick={() => handleClick(params.value.url, params.value.uuid)}>
+          <Button size='1' variant='surface' className='my-2' onClick={() => handleClick(params.value.url, params.value.slug)}>
             Trigger Pulse
           </Button>
         ),

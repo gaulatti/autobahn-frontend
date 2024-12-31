@@ -31,8 +31,8 @@ const TargetsTable = ({ refresh }: { refresh: number }): JSX.Element => {
       sortable: true,
       filter: true,
       valueGetter: (params) => params.data,
-      cellRenderer: (params: { value: { url: string; uuid: string; name: string } }) =>
-        params.value && <Link to={`/targets/${params.value.uuid}`}>{params.value.name}</Link>,
+      cellRenderer: (params: { value: { url: string; slug: string; name: string } }) =>
+        params.value && <Link to={`/targets/${params.value.slug}`}>{params.value.name}</Link>,
     },
     {
       headerName: 'Stage',

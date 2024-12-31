@@ -8,16 +8,16 @@ import { OverlaySpinner } from '../../components/foundations/spinners';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from '../../components/ui/breadcrumb';
 
 const PulseDetails = () => {
-  const { uuid } = useParams();
+  const { slug } = useParams();
   const { pathname } = useLocation();
 
   const viewportMode = useMemo(() => {
     return pathname.split('/').pop();
   }, [pathname]);
 
-  const { data, loading } = useAPI(Method.GET, [], `pulses/${uuid}/${viewportMode}`);
-  const { data: dataJson } = useAPI(Method.GET, [], `pulses/${uuid}/${viewportMode}/json`);
-  const { data: dataJsonMinified } = useAPI(Method.GET, [], `pulses/${uuid}/${viewportMode}/json?minified`);
+  const { data, loading } = useAPI(Method.GET, [], `pulses/${slug}/${viewportMode}`);
+  const { data: dataJson } = useAPI(Method.GET, [], `pulses/${slug}/${viewportMode}/json`);
+  const { data: dataJsonMinified } = useAPI(Method.GET, [], `pulses/${slug}/${viewportMode}/json?minified`);
 
   return (
     <Container>
@@ -34,14 +34,14 @@ const PulseDetails = () => {
             {data?.target && (
               <>
                 <BreadcrumbItem>
-                  <Link to={`/targets/${data.target.uuid}`}>{data.target.name}</Link>
+                  <Link to={`/targets/${data.target.slug}`}>{data.target.name}</Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
               </>
             )}
             <BreadcrumbItem>{data?.target ? <>Pulses</> : <Link to='/pulses'>Pulses</Link>}</BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>{uuid}</BreadcrumbItem>
+            <BreadcrumbItem>{slug}</BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <b>Results ({viewportMode})</b>

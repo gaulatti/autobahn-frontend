@@ -17,7 +17,7 @@ const semaphoreColors = ['#7f8c8d', '#f6b93b', '#27ae60', '#27ae60', '#27ae60', 
  * Represents the data for a pulse.
  */
 type TData = {
-  uuid: string;
+  slug: string;
   createdAt: string;
   results: string;
   heartbeats: { mode: number; status: number; retries: number }[];
@@ -38,7 +38,7 @@ type TData = {
  *
  * @example
  * // Example usage of PulsesTable component
- * <PulsesTable urlUUID="some-uuid" dashboardRange={{ from: new Date(), to: new Date() }} />
+ * <PulsesTable urlUUID="some-slug" dashboardRange={{ from: new Date(), to: new Date() }} />
  *
  * @remarks
  * - The component uses AgGridReact for rendering the table.
@@ -67,8 +67,8 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
   /**
    * This function is used to retry the heartbeat for a pulse.
    */
-  const retryHeartbeat = useCallback(async (mode: number, uuid: string) => {
-    await sendRequest(Method.PATCH, `pulses/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
+  const retryHeartbeat = useCallback(async (mode: number, slug: string) => {
+    await sendRequest(Method.PATCH, `pulses/${slug}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
   }, []);
 
   /**
@@ -103,14 +103,14 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
     //   field: 'membership',
     //   sortable: true,
     //   filter: false,
-    //   cellRenderer: (params: { data: { schedule?: { project: { uuid: string; name: string } }; membership?: { user: { sub: string } } } }) => {
+    //   cellRenderer: (params: { data: { schedule?: { project: { slug: string; name: string } }; membership?: { user: { sub: string } } } }) => {
     //     const { data } = params;
     //     if (data) {
     //       const { schedule, membership } = data;
 
     //       if (schedule) {
     //         const { project } = schedule;
-    //         return isFeatureFlagEnabled('engine') ? <Link to={`/projects/${project.uuid}`}>{project.name}</Link> : project.name;
+    //         return isFeatureFlagEnabled('engine') ? <Link to={`/projects/${project.slug}`}>{project.name}</Link> : project.name;
     //       } else {
     //         const splitSub: string[] = membership?.user.sub.split('-') || [];
     //         return splitSub.shift();
@@ -146,7 +146,7 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
               textAlign: 'center',
             };
           },
-          cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
+          cellRenderer: (params: { value: { status: number; retries: number }; data: { slug: string } }) => {
             switch (params.value?.status) {
               case 0:
                 return 'Pending';
@@ -158,13 +158,13 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
                 return 'Pleasantness Finished';
               case 4:
                 return (
-                  <Link to={`/pulses/${params?.data?.uuid}/desktop`} className='w-full'>
+                  <Link to={`/pulses/${params?.data?.slug}/desktop`} className='w-full'>
                     View Results
                   </Link>
                 );
               case 5:
                 return (
-                  <Button size='1' variant='surface' className='my-2 w-full' onClick={() => retryHeartbeat(1, params?.data?.uuid)}>
+                  <Button size='1' variant='surface' className='my-2 w-full' onClick={() => retryHeartbeat(1, params?.data?.slug)}>
                     Retry
                   </Button>
                 );
@@ -181,7 +181,7 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
           valueGetter: (params) => {
             return params.data?.heartbeats?.find((i: { mode: number }) => i.mode == 0);
           },
-          cellRenderer: (params: { value: { status: number; retries: number }; data: { uuid: string } }) => {
+          cellRenderer: (params: { value: { status: number; retries: number }; data: { slug: string } }) => {
             switch (params.value?.status) {
               case 0:
                 return 'Pending';
@@ -193,13 +193,13 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
                 return 'Pleasantness Finished';
               case 4:
                 return (
-                  <Link to={`/pulses/${params?.data?.uuid}/mobile`} className='w-full'>
+                  <Link to={`/pulses/${params?.data?.slug}/mobile`} className='w-full'>
                     View Results
                   </Link>
                 );
               case 5:
                 return (
-                  <Button size='1' variant='surface' className='my-2 w-full' onClick={() => retryHeartbeat(0, params?.data?.uuid)}>
+                  <Button size='1' variant='surface' className='my-2 w-full' onClick={() => retryHeartbeat(0, params?.data?.slug)}>
                     Retry
                   </Button>
                 );
@@ -235,12 +235,12 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
       flex: 1,
       filter: true,
       valueGetter: (params) => params.data,
-      cellRenderer: (params: { value: { url: { url: string; uuid: string }; target: { name: string; uuid: string } } }) => {
+      cellRenderer: (params: { value: { url: { url: string; slug: string }; target: { name: string; slug: string } } }) => {
         if (params.value) {
           if (targetUUID || !params.value.target) {
-            return <Link to={`/urls/${params.value.url.uuid}`}>{params.value.url.url}</Link>;
+            return <Link to={`/urls/${params.value.url.slug}`}>{params.value.url.url}</Link>;
           } else {
-            return <Link to={`/targets/${params.value.target.uuid}`}>{params.value.target.name}</Link>;
+            return <Link to={`/targets/${params.value.target.slug}`}>{params.value.target.name}</Link>;
           }
         }
       },

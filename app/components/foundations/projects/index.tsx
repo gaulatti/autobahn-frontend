@@ -61,8 +61,8 @@ const ProjectsTable = ({ refresh }: { refresh: number }): JSX.Element => {
       sortable: true,
       filter: true,
       flex: 1,
-      cellRenderer: (params: { data: { uuid: string; name: string } }) => {
-        return params.data && <Link to={`/projects/${params.data.uuid}`}>{params.data.name}</Link>;
+      cellRenderer: (params: { data: { slug: string; name: string } }) => {
+        return params.data && <Link to={`/projects/${params.data.slug}`}>{params.data.name}</Link>;
       },
     },
     {
@@ -71,7 +71,7 @@ const ProjectsTable = ({ refresh }: { refresh: number }): JSX.Element => {
       filter: true,
       cellClass: 'button-holder',
       cellStyle: { display: 'flex', justifyContent: 'center', padding: '1rem' },
-      cellRenderer: (params: { data?: { uuid: string } }) => {
+      cellRenderer: (params: { data?: { slug: string } }) => {
         return (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
@@ -81,7 +81,7 @@ const ProjectsTable = ({ refresh }: { refresh: number }): JSX.Element => {
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-              <DropdownMenu.Item onClick={() => navigate(`/projects/${params.data?.uuid}/schedules`)}>View Schedules</DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => navigate(`/projects/${params.data?.slug}/schedules`)}>View Schedules</DropdownMenu.Item>
               {currentTeam && (
                 <>
                   <DropdownMenu.Separator />

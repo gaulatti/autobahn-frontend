@@ -22,7 +22,7 @@ export type Baseline = {
  * It renders a popover with a form to input the new baseline value and save it.
  *
  * @param {Object} props - The properties object.
- * @param {string} props.uuid - The unique identifier for the target.
+ * @param {string} props.slug - The unique identifier for the target.
  * @param {number} [props.value] - The current baseline value (optional).
  * @param {string} props.stat - The statistic name for which the baseline is being set.
  * @param {boolean} [props.isMobile] - Flag indicating if the view is on a mobile device (optional).
@@ -31,13 +31,13 @@ export type Baseline = {
  * @returns {JSX.Element} The rendered UpdateBaselinePopover component.
  */
 const UpdateBaselinePopover = ({
-  uuid,
+  slug,
   value,
   stat,
   isMobile,
   callback,
 }: {
-  uuid: string;
+  slug: string;
   value?: number;
   stat: string;
   isMobile?: boolean;
@@ -52,16 +52,16 @@ const UpdateBaselinePopover = ({
         value: { value: string };
       };
 
-      sendRequest(Method.PATCH, `targets/${uuid}/baselines`, { stat, value: formElements.value.value, isMobile }).then(() => {
+      sendRequest(Method.PATCH, `targets/${slug}/baselines`, { stat, value: formElements.value.value, isMobile }).then(() => {
         if (callback) {
           callback();
         }
       });
     },
-    [callback, isMobile, stat, uuid]
+    [callback, isMobile, stat, slug]
   );
 
-  return uuid ? (
+  return slug ? (
     <Popover.Root>
       <Popover.Trigger>
         <Button>Update Baseline</Button>
@@ -154,7 +154,7 @@ const CoreWebVitalBaselines = ({
               <Table.Cell>{(stat.stats.mobile.values['p90'] * 1.1).toFixed(0)}</Table.Cell>
               {currentTeam && featureFlagEnabled('setBaselines') && (
                 <Table.Cell>
-                  <UpdateBaselinePopover uuid={targetUUID} stat={stat.name} isMobile={true} callback={callback} />
+                  <UpdateBaselinePopover slug={targetUUID} stat={stat.name} isMobile={true} callback={callback} />
                 </Table.Cell>
               )}
             </Table.Row>
@@ -185,7 +185,7 @@ const CoreWebVitalBaselines = ({
               <Table.Cell>{(stat.stats.desktop.values['p90'] * 1.1).toFixed(0)}</Table.Cell>
               {currentTeam && featureFlagEnabled('setBaselines') && (
                 <Table.Cell>
-                  <UpdateBaselinePopover uuid={targetUUID} stat={stat.name} isMobile={false} callback={callback} />
+                  <UpdateBaselinePopover slug={targetUUID} stat={stat.name} isMobile={false} callback={callback} />
                 </Table.Cell>
               )}
             </Table.Row>
