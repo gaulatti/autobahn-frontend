@@ -1,13 +1,13 @@
 import { Button, Flex } from '@radix-ui/themes';
-import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
+import { ColDef, ColGroupDef, colorSchemeDark, IDatasource, IGetRowsParams, themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
+import moment from 'moment';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Method, sendRequest } from '../../../clients/api';
 import { useDarkMode } from '../../../hooks/useDarkMode';
 import { getCurrentTeam } from '../../../state/selectors/teams';
 import { Link } from '../link';
-import moment from 'moment';
 
 /**
  * SchedulesTable component renders a table displaying schedules for a given project.
@@ -132,10 +132,16 @@ const SchedulesTable = ({ projectUUID, refresh }: { projectUUID: string; refresh
     [currentTeam?.id, projectUUID, refresh]
   );
 
+  /**
+   * Represents the grid theme based on the dark mode state.
+   */
+  const gridTheme = isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz;
+
   return (
     <Flex className='my-4'>
-      <div className={`ag-theme-quartz${isDarkMode ? '-dark' : ''} w-full`} style={{ width: '100%', height: 500 }}>
+      <div style={{ width: '100%', height: 500 }}>
         <AgGridReact
+          theme={gridTheme}
           datasource={dataSource}
           rowModelType='infinite'
           loading={loading}

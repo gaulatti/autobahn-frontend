@@ -1,6 +1,6 @@
 import { Button, Flex } from '@radix-ui/themes';
 import { DateRangePickerValue } from '@tremor/react';
-import { ColDef, ColGroupDef, IDatasource, IGetRowsParams } from 'ag-grid-community';
+import { ColDef, ColGroupDef, colorSchemeDark, IDatasource, IGetRowsParams, themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -70,6 +70,11 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
   const retryHeartbeat = useCallback(async (mode: number, uuid: string) => {
     await sendRequest(Method.PATCH, `pulses/${uuid}/${mode === 0 ? 'mobile' : 'desktop'}/retry`);
   }, []);
+
+  /**
+   * Represents the grid theme based on the dark mode state.
+   */
+  const gridTheme = isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz;
 
   const colDefs: (ColDef | ColGroupDef)[] = [
     {
@@ -288,8 +293,9 @@ const PulsesTable = ({ targetUUID, urlUUID, dashboardRange }: { targetUUID?: str
 
   return (
     <Flex className='my-4'>
-      <div className={`ag-theme-quartz${isDarkMode ? '-dark' : ''} w-full`} style={{ width: '100%', height: 500 }}>
+      <div style={{ width: '100%', height: 500 }}>
         <AgGridReact
+          theme={gridTheme}
           datasource={dataSource}
           rowModelType='infinite'
           loading={loadingPulses}
