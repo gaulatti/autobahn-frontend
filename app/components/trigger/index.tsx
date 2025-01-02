@@ -77,7 +77,7 @@ const Trigger = (): JSX.Element => {
     <form onSubmit={handleSubmit}>
       <Card className='w-full my-4'>
         <Flex direction='column' gap='3'>
-          <Heading as='h2'>Trigger Ad-Hoc Pulse</Heading>
+          <Heading as='h2'>Trigger Ad-Hoc Playlist</Heading>
           <Text as='label' size='2'>
             This will execute Lighthouse against a user-specified URL
           </Text>
