@@ -31,7 +31,7 @@ const TriggerAdHocButton = ({ url, slug }: { url: string; slug: string }) => {
 
   return currentTeam && (
     <Flex gap='3' align='center' className='px-4 py-2 my-4'>
-      <Button onClick={handleClick}>Trigger Pulse</Button>
+      <Button onClick={handleClick}>Trigger Playlist</Button>
     </Flex>
   );
 };

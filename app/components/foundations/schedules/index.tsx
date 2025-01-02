@@ -101,7 +101,7 @@ const SchedulesTable = ({ projectUUID, refresh }: { projectUUID: string; refresh
              */
             // onClick={() => handleClick(params.value.slug, params.value.cron)}
           >
-            Trigger Pulse
+            Trigger Playlist
           </Button>
         ),
     },

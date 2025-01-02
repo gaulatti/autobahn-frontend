@@ -90,7 +90,7 @@ const URLsTable = ({ targetUUID }: { targetUUID?: string }): JSX.Element => {
       cellRenderer: (params: { value: { url: string; slug: string } }) =>
         params.value && (
           <Button size='1' variant='surface' className='my-2' onClick={() => handleClick(params.value.url, params.value.slug)}>
-            Trigger Pulse
+            Trigger Playlist
           </Button>
         ),
     });
